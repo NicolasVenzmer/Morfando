@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -6,11 +6,28 @@ import {
   Image,
   Pressable,
   SafeAreaView,
+  TextInput,
+  BackHandler,
 } from 'react-native';
-import {RadioButton} from 'react-native-paper';
 
-const SignUp = ({navigation}) => {
-  const [value, setValue] = React.useState("first");
+const CompletarSignUp = ({navigation}) => {
+  const [email, onChangeEmail] = React.useState(null);
+  const [password, onChangePassword] = React.useState(null);
+
+  function handleBackButtonClick() {
+    navigation.goBack();
+    return true;
+  }
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    return () => {
+      BackHandler.removeEventListener(
+        'hardwareBackPress',
+        handleBackButtonClick,
+      );
+    };
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -27,37 +44,41 @@ const SignUp = ({navigation}) => {
         <Text style={styles.buttonHeaderSignUpTextStyle}>Sign-up</Text>
         <View style={styles.textUnderline} />
       </View>
+      <Pressable
+        style={styles.backLogoPressable}
+        onPress={() => handleBackButtonClick()}>
+        <Image
+          style={styles.backLogo}
+          source={require('../assets/Icons/back_icon.png')}
+        />
+      </Pressable>
       <View style={styles.boxContainer}>
-        <RadioButton.Group
-          onValueChange={value => setValue(value)}
-          value={value}>
-          <RadioButton.Item
-            style={{flexDirection: 'row-reverse'}}
-            color="#E14852"
-            label="Tengo Restaurante(s)"
-            value="first"
-          />
-          <RadioButton.Item
-            style={{flexDirection: 'row-reverse'}}
-            color="#E14852"
-            label="Tengo hambre"
-            value="second"
-          />
-        </RadioButton.Group>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeEmail}
+          value={email}
+          placeholder="Email"
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangePassword}
+          value={password}
+          secureTextEntry={true}
+          placeholder="Password"
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangePassword}
+          value={password}
+          secureTextEntry={true}
+          placeholder="Repita la Password"
+        />
       </View>
-      {value === 'first' ? (
-        <Pressable
-          style={styles.buttonStyle}
-          onPress={() => navigation.navigate('CompletarSignUp')}>
-          <Text style={styles.buttonTextStyle}>Siguiente</Text>
-        </Pressable>
-      ) : (
-        <Pressable
-          style={styles.buttonStyle}
-          onPress={() => navigation.navigate('CompletarSignUp')}>
-          <Text style={styles.buttonTextStyle}>Siguiente</Text>
-        </Pressable>
-      )}
+      <Pressable
+        style={styles.buttonStyle}
+        onPress={() => navigation.navigate('Home')}>
+        <Text style={styles.buttonTextStyle}>Registrarme</Text>
+      </Pressable>
     </SafeAreaView>
   );
 };
@@ -68,6 +89,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'ff0000',
+  },
+  backLogoPressable: {
+    alignSelf: 'flex-start',
+    top: 20,
+    left: 40,
+  },
+  backLogo: {
+    width: 15,
+    height: 15,
+  },
+  input: {
+    width: '90%',
+    height: 40,
+    margin: 12,
+    borderBottomColor: 'grey', // Add this to specify bottom border color
+    borderBottomWidth: 1,
+    padding: 10,
   },
   header: {
     backgroundColor: 'white',
@@ -80,10 +118,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   boxContainer: {
-    backgroundColor: 'white',
     alignItems: 'flex-start',
     justifyContent: 'center',
-    top: 50,
+    top: 40,
     width: '80%',
     height: 150,
     borderRadius: 30,
@@ -140,4 +177,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUp;
+export default CompletarSignUp;
