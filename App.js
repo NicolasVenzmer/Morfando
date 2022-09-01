@@ -1,6 +1,5 @@
 import React from 'react';
 import RootNavigator from './src/navigation/RootNavigation';
-import {Provider as PaperProvider} from 'react-native-paper';
 
 const App = () => {
   return (
