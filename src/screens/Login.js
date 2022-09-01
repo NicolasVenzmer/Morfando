@@ -8,7 +8,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 
-const SignUp = ({navigation}) => {
+const Login = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -16,15 +16,14 @@ const SignUp = ({navigation}) => {
           style={styles.tinyLogo}
           source={require('../assets/logo_icon.png')}
         />
+        <Text style={styles.buttonHeaderLoginTextStyle}>Login</Text>
+        <View style={styles.textUnderline} />
         <Pressable
           style={styles.buttonTextPressable}
-          onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.buttonHeaderLoginTextStyle}>Login</Text>
+          onPress={() => navigation.navigate('SignUp')}>
+          <Text style={styles.buttonHeaderSignUpTextStyle}>Sign-up</Text>
         </Pressable>
-        <Text style={styles.buttonHeaderSignUpTextStyle}>Sign-up</Text>
-        <View style={styles.textUnderline} />
       </View>
-      <View style={styles.boxContainer}></View>
       <Pressable
         style={styles.buttonStyle}
         onPress={() => navigation.navigate('Home')}>
@@ -51,26 +50,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  boxContainer: {
-    backgroundColor: 'white',
-    top: 50,
-    width: '80%',
-    height: 150,
-    borderRadius: 30,
-  },
   textUnderline: {
     backgroundColor: '#E14852',
     width: 90,
     height: 2,
     position: 'absolute',
     bottom: 0,
-    right: 45,
-  },
-  setUpViewButton: {
-    bottom: 0,
-    position: 'relative',
-    justifyContent: 'center',
-    alignItems: 'center',
+    left: 45,
   },
   buttonStyle: {
     position: 'absolute',
@@ -89,20 +75,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonHeaderLoginTextStyle: {
+    position: 'absolute',
     color: 'black',
+    bottom: 10,
+    left: 70,
     fontWeight: '400',
   },
   buttonHeaderSignUpTextStyle: {
-    position: 'absolute',
-    bottom: 10,
-    right: 70,
+    color: 'black',
+    fontWeight: '400',
+  },
+  buttonHeaderTextStyle: {
     color: 'black',
     fontWeight: '400',
   },
   buttonTextPressable: {
     position: 'absolute',
     bottom: 10,
-    left: 70,
+    right: 70,
   },
   logo: {
     width: 155,
@@ -110,4 +100,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUp;
+export default Login;
