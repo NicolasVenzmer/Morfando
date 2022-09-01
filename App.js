@@ -1,17 +1,10 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Text, View} from 'react-native';
+import RootNavigator from './src/navigation/RootNavigation';
 
 const App = () => {
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <Text>Morfando</Text>
-    </View>
-  );
+  return <RootNavigator />;
 };
+
 export default App;
+
+// PARA LEVANTAR LA APLICACION -> npx react-native run-android
