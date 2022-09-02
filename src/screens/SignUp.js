@@ -54,7 +54,7 @@ const SignUp = ({navigation}) => {
       ) : (
         <Pressable
           style={styles.buttonStyle}
-          onPress={() => navigation.navigate('CompletarSignUp')}>
+          onPress={() => navigation.navigate('Home')}>
           <Text style={styles.buttonTextStyle}>Siguiente</Text>
         </Pressable>
       )}
