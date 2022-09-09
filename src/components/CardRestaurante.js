@@ -1,5 +1,6 @@
 import React from 'react';
-import Icon from 'react-native-vector-icons/FontAwesome';
+
+import Feather from 'react-native-vector-icons/Feather';
 import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
 
 const CardRestaurante = ({restaurante}) => {
@@ -7,7 +8,6 @@ const CardRestaurante = ({restaurante}) => {
     <View style={styles.boxContainer}>
       <View style={{flexDirection: 'row', height: 20}}>
         <Text style={styles.buttonHeaderCard}>{restaurante.title}</Text>
-
         <Pressable
           style={{
             top: 10,
@@ -15,7 +15,7 @@ const CardRestaurante = ({restaurante}) => {
             alignSelf: 'flex-end',
           }}
           onPress={''}>
-          <Icon name="trash" size={20} color="#E14852" />
+          <Feather name="trash-2" style={{color: '#E14852', fontSize: 20}} />
         </Pressable>
       </View>
       <Image style={styles.cardImage} source={restaurante.image} />

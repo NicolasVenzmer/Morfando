@@ -40,7 +40,7 @@ const MisRestaurantes = ({navigation}) => {
             source={require('../assets/Icons/back_icon.png')}
           />
         </Pressable>
-        <Text style={styles.buttonHeaderScreen}>Mis restaurantes</Text>
+        <Text style={styles.buttonHeaderScreen}>Mis Restaurantes</Text>
       </View>
       <ScrollView style={styles.scrollView}>
         {data.map(restaurante => (
@@ -49,7 +49,7 @@ const MisRestaurantes = ({navigation}) => {
       </ScrollView>
       <Pressable
         style={styles.buttonStyle}
-        onPress={() => navigation.navigate('CompletarSignUp')}>
+        onPress={() => navigation.navigate('CrearRestaurante')}>
         <Text style={styles.buttonTextStyle}>Nuevo</Text>
       </Pressable>
     </SafeAreaView>
