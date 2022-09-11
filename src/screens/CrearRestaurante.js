@@ -9,20 +9,17 @@ import {
   BackHandler,
   ScrollView,
   TextInput,
-  Switch,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DropDownPicker from 'react-native-dropdown-picker';
-import Dia from '../components/Dia';
-import {dataHorarios} from '../data/dataDiasHorario';
+import Feather from 'react-native-vector-icons/Feather';
 
 DropDownPicker.setLanguage('ES');
 
 const CrearRestaurante = ({navigation}) => {
   const [nombreRestaurante, onChangenombreRestaurante] = useState(false);
   const [direccion, onChangeDireccion] = useState(false);
-
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);
   const [items, setItems] = useState([
@@ -48,6 +45,42 @@ const CrearRestaurante = ({navigation}) => {
       );
     };
   }, []);
+
+  const [inputs, setInputs] = useState([
+    {key: '', dia: '', abiertoDesde: '', abiertoHasta: ''},
+  ]);
+
+  const addHandler = () => {
+    const _inputs = [...inputs];
+    _inputs.push({key: '', dia: '', abiertoDesde: '', abiertoHasta: ''});
+    setInputs(_inputs);
+  };
+
+  const deleteHandler = key => {
+    if (inputs.length > 1) {
+      const _inputs = inputs.filter((input, index) => index != key);
+      setInputs(_inputs);
+    }
+  };
+
+  const inputHandlerDia = (dia, key) => {
+    const _inputs = [...inputs];
+    _inputs[key].key = key;
+    _inputs[key].dia = dia;
+    setInputs(_inputs);
+  };
+  const inputHandlerAbiertoDesde = (abiertoDesde, key) => {
+    const _inputs = [...inputs];
+    _inputs[key].key = key;
+    _inputs[key].abiertoDesde = abiertoDesde;
+    setInputs(_inputs);
+  };
+  const inputHandlerAbiertoHasta = (abiertoHasta, key) => {
+    const _inputs = [...inputs];
+    _inputs[key].key = key;
+    _inputs[key].abiertoHasta = abiertoHasta;
+    setInputs(_inputs);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -90,11 +123,120 @@ const CrearRestaurante = ({navigation}) => {
         </View>
         <View style={styles.horarios}>
           <Text style={styles.headerHorarios}>Horario de atencion</Text>
-          <ScrollView nestedScrollEnabled={true} style={styles.scrollView}>
-            {dataHorarios.map(dia => (
-              <Dia key={dia.id} dia={dia} />
-            ))}
-          </ScrollView>
+          <View style={{flexDirection: 'row'}}>
+            <Text
+              style={{
+                left: 10,
+                top: 5,
+                color: 'black',
+                fontWeight: '400',
+                fontSize: 10,
+              }}>
+              Dia
+            </Text>
+            <Text
+              style={{
+                left: 75,
+                top: 5,
+                color: 'black',
+                fontWeight: '400',
+                fontSize: 10,
+              }}>
+              Desde
+            </Text>
+            <Text
+              style={{
+                left: 94,
+                top: 5,
+                color: 'black',
+                fontWeight: '400',
+                fontSize: 10,
+              }}>
+              Hasta
+            </Text>
+          </View>
+          {inputs.map((input, key) => (
+            <View style={styles.dias}>
+              <TextInput
+                style={{
+                  backgroundColor: 'white',
+                  width: 70,
+                  height: 35,
+                  borderTopRightRadius: 5,
+                  borderTopLeftRadius: 5,
+                  borderBottomLeftRadius: 5,
+                  borderBottomRightRadius: 5,
+                  fontSize: 10,
+                }}
+                placeholder={'Ingresar dia'}
+                value={input.dia}
+                onChangeText={dia => inputHandlerDia(dia, key)}
+              />
+              <TextInput
+                style={{
+                  backgroundColor: 'white',
+                  left: 10,
+                  width: 35,
+                  height: 35,
+                  borderTopRightRadius: 5,
+                  borderTopLeftRadius: 5,
+                  borderBottomLeftRadius: 5,
+                  borderBottomRightRadius: 5,
+                  fontSize: 10,
+                }}
+                minLength={5}
+                placeholder={'00:00'}
+                value={input.abiertoDesde}
+                onChangeText={abiertoDesde =>
+                  inputHandlerAbiertoDesde(abiertoDesde, key)
+                }
+              />
+              <Text
+                style={{
+                  left: 10,
+                }}>
+                {' '}
+                -{' '}
+              </Text>
+              <TextInput
+                style={{
+                  backgroundColor: 'white',
+                  left: 10,
+                  width: 35,
+                  height: 35,
+                  borderTopRightRadius: 5,
+                  borderTopLeftRadius: 5,
+                  borderBottomLeftRadius: 5,
+                  borderBottomRightRadius: 5,
+                  fontSize: 10,
+                }}
+                minLength={5}
+                placeholder={'00:00'}
+                value={input.abiertoHasta}
+                onChangeText={abiertoHasta =>
+                  inputHandlerAbiertoHasta(abiertoHasta, key)
+                }
+              />
+              <Ionicons
+                name="add-circle"
+                style={{
+                  color: '#E14852',
+                  left: 15,
+                  fontSize: 20,
+                }}
+                onPress={addHandler}
+              />
+              <Feather
+                name="trash-2"
+                style={{
+                  color: '#E14852',
+                  left: 15,
+                  fontSize: 20,
+                }}
+                onPress={() => deleteHandler(key)}
+              />
+            </View>
+          ))}
         </View>
         <DropDownPicker
           placeholder="Tipo de comida"
@@ -135,13 +277,30 @@ const CrearRestaurante = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: 'white',
+  },
+  inputsContainer: {
+    flex: 1,
+    marginBottom: 20,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: 'lightgray',
+  },
   textoDias: {
     color: 'black',
     fontWeight: '400',
   },
   dias: {
-    top: 10,
+    top: 15,
     left: 10,
+    marginBottom: 20,
     flexDirection: 'row',
     width: '100%',
     height: 25,
@@ -166,6 +325,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     width: '100%',
+    height: '75%',
   },
   input: {
     height: 40,
@@ -194,7 +354,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: 'rgba(226, 202, 204, 0.26)',
     width: '80%',
-    height: 210,
+    minHeight: 120,
     justifyContent: 'flex-start',
   },
   nombre: {

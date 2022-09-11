@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
 import {RadioButton} from 'react-native-paper';
 
 const SignUp = ({navigation}) => {
-  const [value, setValue] = React.useState("first");
+  const [value, setValue] = useState("first");
 
   return (
     <SafeAreaView style={styles.container}>
