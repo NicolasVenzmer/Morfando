@@ -1,6 +1,7 @@
 import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const CardRestaurante = ({restaurante}) => {
   return (
@@ -10,7 +11,19 @@ const CardRestaurante = ({restaurante}) => {
         <Pressable
           style={{
             top: 10,
-            left: 150,
+            left: 125,
+            alignSelf: 'flex-end',
+          }}
+          onPress={''}>
+          <MaterialIcons
+            name="menu-book"
+            style={{color: '#E14852', fontSize: 20}}
+          />
+        </Pressable>
+        <Pressable
+          style={{
+            top: 10,
+            left: 130,
             alignSelf: 'flex-end',
           }}
           onPress={''}>

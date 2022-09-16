@@ -9,10 +9,7 @@ import {
   TextInput,
 } from 'react-native';
 
-const Login = ({navigation}) => {
-  const [email, onChangeEmail] = React.useState(null);
-  const [password, onChangePassword] = React.useState(null);
-
+const LoginConsumidor = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -42,33 +39,6 @@ const Login = ({navigation}) => {
         />
         <Text style={styles.appleText}>Ingresar con Apple</Text>
       </View>
-      <View style={styles.boxContainer}>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeEmail}
-          value={email}
-          placeholder="Email"
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangePassword}
-          value={password}
-          secureTextEntry={true}
-          placeholder="Contraseña"
-        />
-      </View>
-      <Pressable
-        style={styles.olvidasteContraseñaPressable}
-        onPress={() => navigation.navigate('OlvideMiContraseña')}>
-        <Text style={styles.textoOlvidasteContraseña}>
-          Olvidaste tu contraseña?
-        </Text>
-      </Pressable>
-      <Pressable
-        style={styles.buttonStyle}
-        onPress={() => navigation.navigate('Home')}>
-        <Text style={styles.buttonTextStyle}>Ingresar</Text>
-      </Pressable>
     </SafeAreaView>
   );
 };
@@ -120,7 +90,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '80%',
     height: 50,
-    top: 10,
+    top: 100,
     borderRadius: 10,
   },
   appleContainer: {
@@ -129,7 +99,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     width: '80%',
     height: 50,
-    top: 20,
+    top: 110,
     borderRadius: 10,
   },
   boxContainer: {
@@ -206,4 +176,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default LoginConsumidor;

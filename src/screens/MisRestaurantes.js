@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from 'react-native';
 import CardRestaurante from '../components/CardRestaurante';
-import { data } from '../data/data';
+import { data } from '../data/data'; 
 
 const MisRestaurantes = ({navigation}) => {
 

@@ -9,10 +9,7 @@ import {
   TextInput,
 } from 'react-native';
 
-const Login = ({navigation}) => {
-  const [email, onChangeEmail] = React.useState(null);
-  const [password, onChangePassword] = React.useState(null);
-
+const RestaurarContraseña = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -28,46 +25,15 @@ const Login = ({navigation}) => {
           <Text style={styles.buttonHeaderSignUpTextStyle}>Registrarse</Text>
         </Pressable>
       </View>
-      <View style={styles.googleContainer}>
-        <Image
-          style={styles.googleLogo}
-          source={require('../assets/Icons/google_icon.png')}
-        />
-        <Text style={styles.googleText}>Ingresar con Google</Text>
-      </View>
-      <View style={styles.appleContainer}>
-        <Image
-          style={styles.googleLogo}
-          source={require('../assets/Icons/apple_icon.png')}
-        />
-        <Text style={styles.appleText}>Ingresar con Apple</Text>
-      </View>
-      <View style={styles.boxContainer}>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeEmail}
-          value={email}
-          placeholder="Email"
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangePassword}
-          value={password}
-          secureTextEntry={true}
-          placeholder="Contraseña"
-        />
-      </View>
-      <Pressable
-        style={styles.olvidasteContraseñaPressable}
-        onPress={() => navigation.navigate('OlvideMiContraseña')}>
-        <Text style={styles.textoOlvidasteContraseña}>
-          Olvidaste tu contraseña?
+      <View style={styles.boxContainerContraseñaOlvidada}>
+        <Text style={styles.textoMailEnviadoContraseña}>
+          Te hemos enviado un mail para que restablezcas tu contraseña.
         </Text>
-      </Pressable>
+      </View>
       <Pressable
         style={styles.buttonStyle}
-        onPress={() => navigation.navigate('Home')}>
-        <Text style={styles.buttonTextStyle}>Ingresar</Text>
+        onPress={() => navigation.navigate('SignUp')}>
+        <Text style={styles.buttonTextStyle}>Volver</Text>
       </Pressable>
     </SafeAreaView>
   );
@@ -206,4 +172,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default RestaurarContraseña;

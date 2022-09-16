@@ -10,9 +10,8 @@ import {
   BackHandler,
 } from 'react-native';
 
-const CompletarSignUp = ({navigation}) => {
+const OlvideMiContraseña = ({navigation}) => {
   const [email, onChangeEmail] = React.useState(null);
-  const [password, onChangePassword] = React.useState(null);
 
   function handleBackButtonClick() {
     navigation.goBack();
@@ -36,13 +35,13 @@ const CompletarSignUp = ({navigation}) => {
           style={styles.tinyLogo}
           source={require('../assets/logo_icon.png')}
         />
+        <Text style={styles.buttonHeaderLoginTextStyle}>Ingresar</Text>
+        <View style={styles.textUnderline} />
         <Pressable
           style={styles.buttonTextPressable}
-          onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.buttonHeaderLoginTextStyle}>Ingresar</Text>
+          onPress={() => navigation.navigate('SignUp')}>
+          <Text style={styles.buttonHeaderSignUpTextStyle}>Registrarse</Text>
         </Pressable>
-        <Text style={styles.buttonHeaderSignUpTextStyle}>Registrarse</Text>
-        <View style={styles.textUnderline} />
       </View>
       <Pressable
         style={styles.backLogoPressable}
@@ -52,6 +51,11 @@ const CompletarSignUp = ({navigation}) => {
           source={require('../assets/Icons/back_icon.png')}
         />
       </Pressable>
+      <View style={styles.boxContainerEmail}>
+        <Text style={styles.textoEmail}>
+          Te hemos enviado un mail para que restablezcas tu contraseña.
+        </Text>
+      </View>
       <View style={styles.boxContainer}>
         <TextInput
           style={styles.input}
@@ -59,31 +63,22 @@ const CompletarSignUp = ({navigation}) => {
           value={email}
           placeholder="Email"
         />
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangePassword}
-          value={password}
-          secureTextEntry={true}
-          placeholder="Contraseña"
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangePassword}
-          value={password}
-          secureTextEntry={true}
-          placeholder="Repita la Contraseña"
-        />
       </View>
       <Pressable
         style={styles.buttonStyle}
-        onPress={() => navigation.navigate('AltaUsuarioConExito')}>
-        <Text style={styles.buttonTextStyle}>Registrarse</Text>
+        onPress={() => navigation.navigate('RestaurarContraseña')}>
+        <Text style={styles.buttonTextStyle}>Recuperar</Text>
       </Pressable>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  boxContainerEmail: {
+    top: 35,
+    maxWidth: '82%',
+  },
+  textoEmail: {color: 'black'},
   container: {
     flexDirection: 'column',
     alignItems: 'center',
@@ -120,7 +115,7 @@ const styles = StyleSheet.create({
   boxContainer: {
     alignItems: 'flex-start',
     justifyContent: 'center',
-    top: 40,
+    top: 20,
     width: '80%',
     height: 150,
     borderRadius: 30,
@@ -131,7 +126,7 @@ const styles = StyleSheet.create({
     height: 2,
     position: 'absolute',
     bottom: 0,
-    right: 60,
+    left: 50,
   },
   setUpViewButton: {
     bottom: 0,
@@ -156,20 +151,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonHeaderLoginTextStyle: {
+    position: 'absolute',
     color: 'black',
+    bottom: 10,
+    left: 70,
     fontWeight: '400',
   },
   buttonHeaderSignUpTextStyle: {
-    position: 'absolute',
-    bottom: 10,
-    right: 70,
     color: 'black',
     fontWeight: '400',
   },
   buttonTextPressable: {
     position: 'absolute',
     bottom: 10,
-    left: 70,
+    right: 70,
   },
   logo: {
     width: 155,
@@ -177,4 +172,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CompletarSignUp;
+export default OlvideMiContraseña;

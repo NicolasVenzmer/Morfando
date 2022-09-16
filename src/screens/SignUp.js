@@ -22,9 +22,9 @@ const SignUp = ({navigation}) => {
         <Pressable
           style={styles.buttonTextPressable}
           onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.buttonHeaderLoginTextStyle}>Login</Text>
+          <Text style={styles.buttonHeaderLoginTextStyle}>Ingresar</Text>
         </Pressable>
-        <Text style={styles.buttonHeaderSignUpTextStyle}>Sign-up</Text>
+        <Text style={styles.buttonHeaderSignUpTextStyle}>Registrarse</Text>
         <View style={styles.textUnderline} />
       </View>
       <View style={styles.boxContainer}>
@@ -54,7 +54,7 @@ const SignUp = ({navigation}) => {
       ) : (
         <Pressable
           style={styles.buttonStyle}
-          onPress={() => navigation.navigate('Home')}>
+          onPress={() => navigation.navigate('LoginConsumidor')}>
           <Text style={styles.buttonTextStyle}>Siguiente</Text>
         </Pressable>
       )}
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     height: 2,
     position: 'absolute',
     bottom: 0,
-    right: 45,
+    right: 60,
   },
   setUpViewButton: {
     bottom: 0,

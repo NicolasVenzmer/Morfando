@@ -20,42 +20,28 @@ DropDownPicker.setLanguage('ES');
 const CrearRestaurante = ({navigation}) => {
   const [nombreRestaurante, onChangenombreRestaurante] = useState(false);
   const [direccion, onChangeDireccion] = useState(false);
+
+  //DropDown Multiple
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);
   const [items, setItems] = useState([
     {label: 'Apple', value: 'apple'},
     {label: 'Banana', value: 'banana'},
-    {label: 'Banana', value: 'banana1'},
-    {label: 'Banana', value: 'banana2'},
+    {label: 'Manzana', value: 'banana1'},
+    {label: 'Batata', value: 'banana2'},
     {label: 'Banana', value: 'banana3'},
     {label: 'Banana', value: 'banana4'},
   ]);
 
-  function handleBackButtonClick() {
-    navigation.goBack();
-    return true;
-  }
-
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
-    return () => {
-      BackHandler.removeEventListener(
-        'hardwareBackPress',
-        handleBackButtonClick,
-      );
-    };
-  }, []);
-
+  //Metodos para poder cargar los dias y horarios
   const [inputs, setInputs] = useState([
     {key: '', dia: '', abiertoDesde: '', abiertoHasta: ''},
   ]);
-
   const addHandler = () => {
     const _inputs = [...inputs];
     _inputs.push({key: '', dia: '', abiertoDesde: '', abiertoHasta: ''});
     setInputs(_inputs);
   };
-
   const deleteHandler = key => {
     if (inputs.length > 1) {
       const _inputs = inputs.filter((input, index) => index != key);
@@ -65,6 +51,7 @@ const CrearRestaurante = ({navigation}) => {
 
   const inputHandlerDia = (dia, key) => {
     const _inputs = [...inputs];
+
     _inputs[key].key = key;
     _inputs[key].dia = dia;
     setInputs(_inputs);
@@ -80,6 +67,51 @@ const CrearRestaurante = ({navigation}) => {
     _inputs[key].key = key;
     _inputs[key].abiertoHasta = abiertoHasta;
     setInputs(_inputs);
+  };
+
+  //Icono para ir a la pantalla anterior
+  function handleBackButtonClick() {
+    navigation.goBack();
+    return true;
+  }
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    return () => {
+      BackHandler.removeEventListener(
+        'hardwareBackPress',
+        handleBackButtonClick,
+      );
+    };
+  }, []);
+
+  const validarInputDias = () => {
+    const listaDeDias = [
+      'Lunes',
+      'lunes',
+      'Martes',
+      'martes',
+      'Miercoles',
+      'miercoles',
+      'jueves',
+      'Jueves',
+      'Viernes',
+      'viernes',
+      'Sabado',
+      'sabado',
+      'Domingo',
+      'domingo',
+    ];
+    let dias = inputs.map(input => input.dia);
+    dias.forEach(dia => {
+      if (listaDeDias.includes(dia)) {
+        console.log('El dia es valido, estoy en CrearRestaurante!');
+        return true
+      } else {
+        alert('Por favor ingrese dias validos!');
+        return false
+      }
+    });
   };
 
   return (
@@ -269,7 +301,7 @@ const CrearRestaurante = ({navigation}) => {
       </ScrollView>
       <Pressable
         style={styles.buttonStyle}
-        onPress={() => navigation.navigate('MisRestaurantes')}>
+        onPress={() => navigation.navigate('MisRestaurantes') }>
         <Text style={styles.buttonTextStyle}>Guardar</Text>
       </Pressable>
     </SafeAreaView>

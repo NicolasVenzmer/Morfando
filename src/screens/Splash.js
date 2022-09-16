@@ -7,7 +7,7 @@ import * as React from 'react';import {
 const Splash = ({navigation}) => {
   React.useEffect(() => {
     setTimeout(() => {
-      navigation.replace('CrearRestaurante');
+      navigation.replace('MisRestaurantes');
     }, 2000);
     return () => {};
   }, []);
