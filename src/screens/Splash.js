@@ -7,7 +7,7 @@ import * as React from 'react';import {
 const Splash = ({navigation}) => {
   React.useEffect(() => {
     setTimeout(() => {
-      navigation.replace('MisRestaurantes');
+      navigation.replace('CrearRestaurante');
     }, 2000);
     return () => {};
   }, []);
@@ -24,7 +24,7 @@ const Splash = ({navigation}) => {
 
 const styles = StyleSheet.create({
   backLogo: {
-    width: 200,
+    width: 200, 
     height: 200,
   },
 });

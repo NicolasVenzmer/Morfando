@@ -13,13 +13,45 @@ import {
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DropDownPicker from 'react-native-dropdown-picker';
-import Feather from 'react-native-vector-icons/Feather';
+import DiasDeAtencion from "../components/DiasDeAtencion"
 
 DropDownPicker.setLanguage('ES');
 
 const CrearRestaurante = ({navigation}) => {
   const [nombreRestaurante, onChangenombreRestaurante] = useState(false);
   const [direccion, onChangeDireccion] = useState(false);
+
+  //Dias
+  const listaDeDias = [
+    {
+      id: 1,
+      title: 'LUNES',
+    },
+    {
+      id: 2,
+      title: 'MARTES',
+    },
+    {
+      id: 3,
+      title: 'MIERCOLES',
+    },
+    {
+      id: 4,
+      title: 'JUEVES',
+    },
+    {
+      id: 5,
+      title: 'VIERNES',
+    },
+    {
+      id: 6,
+      title: 'SABADO',
+    },
+    {
+      id: 7,
+      title: 'DOMINGO',
+    },
+  ];
 
   //DropDown Multiple
   const [open, setOpen] = useState(false);
@@ -32,42 +64,6 @@ const CrearRestaurante = ({navigation}) => {
     {label: 'Banana', value: 'banana3'},
     {label: 'Banana', value: 'banana4'},
   ]);
-
-  //Metodos para poder cargar los dias y horarios
-  const [inputs, setInputs] = useState([
-    {key: '', dia: '', abiertoDesde: '', abiertoHasta: ''},
-  ]);
-  const addHandler = () => {
-    const _inputs = [...inputs];
-    _inputs.push({key: '', dia: '', abiertoDesde: '', abiertoHasta: ''});
-    setInputs(_inputs);
-  };
-  const deleteHandler = key => {
-    if (inputs.length > 1) {
-      const _inputs = inputs.filter((input, index) => index != key);
-      setInputs(_inputs);
-    }
-  };
-
-  const inputHandlerDia = (dia, key) => {
-    const _inputs = [...inputs];
-
-    _inputs[key].key = key;
-    _inputs[key].dia = dia;
-    setInputs(_inputs);
-  };
-  const inputHandlerAbiertoDesde = (abiertoDesde, key) => {
-    const _inputs = [...inputs];
-    _inputs[key].key = key;
-    _inputs[key].abiertoDesde = abiertoDesde;
-    setInputs(_inputs);
-  };
-  const inputHandlerAbiertoHasta = (abiertoHasta, key) => {
-    const _inputs = [...inputs];
-    _inputs[key].key = key;
-    _inputs[key].abiertoHasta = abiertoHasta;
-    setInputs(_inputs);
-  };
 
   //Icono para ir a la pantalla anterior
   function handleBackButtonClick() {
@@ -84,35 +80,6 @@ const CrearRestaurante = ({navigation}) => {
       );
     };
   }, []);
-
-  const validarInputDias = () => {
-    const listaDeDias = [
-      'Lunes',
-      'lunes',
-      'Martes',
-      'martes',
-      'Miercoles',
-      'miercoles',
-      'jueves',
-      'Jueves',
-      'Viernes',
-      'viernes',
-      'Sabado',
-      'sabado',
-      'Domingo',
-      'domingo',
-    ];
-    let dias = inputs.map(input => input.dia);
-    dias.forEach(dia => {
-      if (listaDeDias.includes(dia)) {
-        console.log('El dia es valido, estoy en CrearRestaurante!');
-        return true
-      } else {
-        alert('Por favor ingrese dias validos!');
-        return false
-      }
-    });
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -155,119 +122,8 @@ const CrearRestaurante = ({navigation}) => {
         </View>
         <View style={styles.horarios}>
           <Text style={styles.headerHorarios}>Horario de atencion</Text>
-          <View style={{flexDirection: 'row'}}>
-            <Text
-              style={{
-                left: 10,
-                top: 5,
-                color: 'black',
-                fontWeight: '400',
-                fontSize: 10,
-              }}>
-              Dia
-            </Text>
-            <Text
-              style={{
-                left: 75,
-                top: 5,
-                color: 'black',
-                fontWeight: '400',
-                fontSize: 10,
-              }}>
-              Desde
-            </Text>
-            <Text
-              style={{
-                left: 94,
-                top: 5,
-                color: 'black',
-                fontWeight: '400',
-                fontSize: 10,
-              }}>
-              Hasta
-            </Text>
-          </View>
-          {inputs.map((input, key) => (
-            <View style={styles.dias}>
-              <TextInput
-                style={{
-                  backgroundColor: 'white',
-                  width: 70,
-                  height: 35,
-                  borderTopRightRadius: 5,
-                  borderTopLeftRadius: 5,
-                  borderBottomLeftRadius: 5,
-                  borderBottomRightRadius: 5,
-                  fontSize: 10,
-                }}
-                placeholder={'Ingresar dia'}
-                value={input.dia}
-                onChangeText={dia => inputHandlerDia(dia, key)}
-              />
-              <TextInput
-                style={{
-                  backgroundColor: 'white',
-                  left: 10,
-                  width: 35,
-                  height: 35,
-                  borderTopRightRadius: 5,
-                  borderTopLeftRadius: 5,
-                  borderBottomLeftRadius: 5,
-                  borderBottomRightRadius: 5,
-                  fontSize: 10,
-                }}
-                minLength={5}
-                placeholder={'00:00'}
-                value={input.abiertoDesde}
-                onChangeText={abiertoDesde =>
-                  inputHandlerAbiertoDesde(abiertoDesde, key)
-                }
-              />
-              <Text
-                style={{
-                  left: 10,
-                }}>
-                {' '}
-                -{' '}
-              </Text>
-              <TextInput
-                style={{
-                  backgroundColor: 'white',
-                  left: 10,
-                  width: 35,
-                  height: 35,
-                  borderTopRightRadius: 5,
-                  borderTopLeftRadius: 5,
-                  borderBottomLeftRadius: 5,
-                  borderBottomRightRadius: 5,
-                  fontSize: 10,
-                }}
-                minLength={5}
-                placeholder={'00:00'}
-                value={input.abiertoHasta}
-                onChangeText={abiertoHasta =>
-                  inputHandlerAbiertoHasta(abiertoHasta, key)
-                }
-              />
-              <Ionicons
-                name="add-circle"
-                style={{
-                  color: '#E14852',
-                  left: 15,
-                  fontSize: 20,
-                }}
-                onPress={addHandler}
-              />
-              <Feather
-                name="trash-2"
-                style={{
-                  color: '#E14852',
-                  left: 15,
-                  fontSize: 20,
-                }}
-                onPress={() => deleteHandler(key)}
-              />
-            </View>
+          {listaDeDias.map(dia => (
+            <DiasDeAtencion key={dia.id} dia={dia} />
           ))}
         </View>
         <DropDownPicker
@@ -301,7 +157,7 @@ const CrearRestaurante = ({navigation}) => {
       </ScrollView>
       <Pressable
         style={styles.buttonStyle}
-        onPress={() => navigation.navigate('MisRestaurantes') }>
+        onPress={() => navigation.navigate('MisRestaurantes')}>
         <Text style={styles.buttonTextStyle}>Guardar</Text>
       </Pressable>
     </SafeAreaView>
