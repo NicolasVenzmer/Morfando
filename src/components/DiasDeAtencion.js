@@ -1,13 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {
-  StyleSheet,
-  View,
-  Switch,
-  Image,
-  Text,
-  TextInput,
-  ScrollView,
-} from 'react-native';
+import React, {useState} from 'react';
+import {View, Switch, Text, TextInput, ScrollView} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 
@@ -158,22 +150,5 @@ const DiasDeAtencion = ({dia}) => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  textDay: {
-    backgroundColor: 'white',
-    textAlign: 'center',
-    fontSize: 12,
-    height: 35,
-    fontFamily: 'Roboto',
-    color: '#000',
-  },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
-});
 
 export default DiasDeAtencion;
