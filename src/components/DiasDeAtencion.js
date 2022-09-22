@@ -31,13 +31,6 @@ const DiasDeAtencion = ({dia}) => {
     }
   };
 
-//   const inputHandlerDia = (dia, key) => {
-//     const _inputs = [...inputs];
-
-//     _inputs[key].key = key;
-//     _inputs[key].dia = dia.title;
-//     setInputs(_inputs);
-//   };
   const inputHandlerAbiertoDesde = (abiertoDesde, key) => {
     const _inputs = [...inputs];
     _inputs[key].key = key;

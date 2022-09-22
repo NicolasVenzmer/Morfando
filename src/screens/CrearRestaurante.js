@@ -9,17 +9,59 @@ import {
   BackHandler,
   ScrollView,
   TextInput,
+  Button,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DropDownPicker from 'react-native-dropdown-picker';
-import DiasDeAtencion from "../components/DiasDeAtencion"
+import DiasDeAtencion from '../components/DiasDeAtencion';
+import {launchImageLibrary} from 'react-native-image-picker';
+import Feather from 'react-native-vector-icons/Feather';
 
 DropDownPicker.setLanguage('ES');
 
 const CrearRestaurante = ({navigation}) => {
   const [nombreRestaurante, onChangenombreRestaurante] = useState(false);
   const [direccion, onChangeDireccion] = useState(false);
+
+  //Images
+  const [pickerResponse, setPickerResponse] = useState([]);
+  const [showImage, setShowImage] = useState(true);
+
+  const openGallery = () => {
+    const options = {
+      selectionLimit: 1,
+      mediaType: 'photo',
+      includeBase64: false,
+    };
+    launchImageLibrary(options, setPickerResponse);
+    setShowImage(!showImage)
+  };
+
+  const uri = pickerResponse?.assets && pickerResponse.assets[0].uri;
+
+  const [images, setImages] = useState([
+    //{key: '', uri: ""},
+  ]);
+  const addHandler = () => {
+    const _images = [...images];
+    _images.push({key: '', uri: ""});
+    setImages(_images);
+  };
+  const deleteHandler = key => {
+    if (images.length >= 1) {
+      const _images = images.filter((input, index) => index != key);
+      setImages(_images);
+      setShowImage(false)
+    }
+  };
+
+  const inputHandlerNewImage = (uri, key) => {
+    const _images = [...images];
+    _images[key].key = key;
+    _images[key].uri = uri;
+    setImages(_images);
+  };
 
   //Dias
   const listaDeDias = [
@@ -57,18 +99,21 @@ const CrearRestaurante = ({navigation}) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);
   const [items, setItems] = useState([
-    {label: 'Apple', value: 'apple'},
-    {label: 'Banana', value: 'banana'},
-    {label: 'Manzana', value: 'banana1'},
-    {label: 'Batata', value: 'banana2'},
-    {label: 'Banana', value: 'banana3'},
-    {label: 'Banana', value: 'banana4'},
+    {label: 'Apple', value: 'Apple'},
+    {label: 'Banana', value: 'Banana'},
+    {label: 'Manzana', value: 'Manzana'},
+    {label: 'Batata', value: 'Batata'},
+    {label: 'Naranja', value: 'Naranja'},
+    {label: 'Melon', value: 'Melon'},
   ]);
 
   //Icono para ir a la pantalla anterior
   function handleBackButtonClick() {
-    navigation.goBack();
-    return true;
+    // navigation.goBack();
+    // return true;
+    if (navigation.canGoBack()) {
+      navigation.dispatch(StackActions.pop(1));
+    }
   }
 
   useEffect(() => {
@@ -141,19 +186,71 @@ const CrearRestaurante = ({navigation}) => {
           setOpen={setOpen}
           setValue={setValue}
           setItems={setItems}
+          listMode="SCROLLVIEW"
         />
-        <Pressable
-          style={styles.uploadImage}
-          onPress={() => navigation.navigate('MisRestaurantes')}>
-          <Ionicons
-            name="cloud-upload-outline"
-            style={{
-              color: 'black',
-              fontSize: 30,
-              right: 10,
-            }}
-          />
-        </Pressable>
+        {showImage ? (
+          <Pressable
+            style={styles.uploadImage}
+            onPress={() => navigation.navigate('MisRestaurantes')}>
+            <Ionicons
+              name="cloud-upload-outline"
+              style={{
+                color: 'black',
+                fontSize: 30,
+                right: 10,
+              }}
+              onPress={openGallery}
+            />
+          </Pressable>
+        ) : (
+          uri && (
+            <View
+              style={{
+                position: 'relative',
+                backgroundColor: 'rgba(226, 202, 204, 0.26)',
+                alignSelf: 'center',
+                justifyContent: 'center',
+                marginTop: 10,
+                height: 140,
+                alignItems: 'center',
+                width: '80%',
+              }}>
+              {/* {images.map((image, key) => (
+                <> */}
+              <Image
+                source={{uri}}
+                style={{
+                  alignSelf: 'center',
+                  height: 100,
+                  width: 100,
+                }}
+              />
+              <View style={{flexDirection: "row"}}>
+                <Feather
+                  name="trash-2"
+                  style={{
+                    color: '#E14852',
+                    top: 5,
+                    fontSize: 20,
+                  }}
+                  //onPress={() => deleteHandler(key)}
+                />
+                <Ionicons
+                  name="add-circle"
+                  style={{
+                    color: '#E14852',
+                    left: 5,
+                    top: 5,
+                    fontSize: 20,
+                  }}
+                  //onPress={addHandler}
+                />
+              </View>
+              {/* </>
+              ))} */}
+            </View>
+          )
+        )}
       </ScrollView>
       <Pressable
         style={styles.buttonStyle}
@@ -170,7 +267,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: 'white',
   },
-  inputsContainer: {
+  imagesContainer: {
     flex: 1,
     marginBottom: 20,
   },
