@@ -14,50 +14,110 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import DiasDeAtencion from '../components/DiasDeAtencion';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Feather from 'react-native-vector-icons/Feather';
+import MoneyChip from '../components/MoneyChip';
+import FoodTypeChip from '../components/FoodTypeChip';
+import ImageUpload from '../components/ImageUpload';
+import {FlatList} from 'react-native';
 
 DropDownPicker.setLanguage('ES');
 
 const CrearRestaurante = ({navigation}) => {
   const [nombreRestaurante, onChangenombreRestaurante] = useState(false);
   const [direccion, onChangeDireccion] = useState(false);
+  const [selectedMoney, setSelectedMoney] = useState(false);
+
+  const onAddMoneyChip = function () {
+    console.log('onAddMoneyChip', selectedMoney);
+    setSelectedMoney(!selectedMoney);
+  };
+
+  const FoodTypeChips = [
+    {
+      id: '1',
+      title: 'Cocina de autor',
+    },
+    {
+      id: '2',
+      title: 'Comida china',
+    },
+    {
+      id: '3',
+      title: 'Cocina general',
+    },
+    {
+      id: '4',
+      title: 'Comida Mexicana',
+    },
+    {
+      id: '5',
+      title: 'Comida Peruana',
+    },
+    {
+      id: '6',
+      title: 'Comida Cafeteria',
+    },
+  ];
+
+  //Money $ $$ $$$ $$$$
+  const MoneyChips = [
+    {
+      id: '1',
+      title: '$',
+    },
+    {
+      id: '2',
+      title: '$$',
+    },
+    {
+      id: '3',
+      title: '$$$',
+    },
+    {
+      id: '4',
+      title: '$$$$',
+    },
+  ];
 
   //Images
-  const [pickerResponse, setPickerResponse] = useState([]);
+  const [images, setImages] = useState([]);
   const [showImage, setShowImage] = useState(true);
 
-  const openGallery = () => {
-    const options = {
-      selectionLimit: 1,
-      mediaType: 'photo',
-      includeBase64: false,
-    };
-    launchImageLibrary(options, setPickerResponse);
-    setShowImage(!showImage);
+  const addImage = () => {
+    // const options = {
+    //   selectionLimit: 1,
+    //   mediaType: 'photo',
+    //   includeBase64: false,
+    // };
+    launchImageLibrary(
+      {
+        height: 100,
+        width: 100,
+      },
+      response => {
+        if (response.didCancel) {
+          return;
+        }
+        const img = {
+          uri: response.uri,
+          type: response.type,
+          name: response.fileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
+        };
+        setImages(prevImages => prevImages.concat(img));
+      },
+    );
+    console.log(images);
+    setShowImage(false);
   };
 
-  const uri = pickerResponse?.assets && pickerResponse.assets[0].uri;
-
-  const [images, setImages] = useState([
-    //{key: '', uri: ""},
-  ]);
-  const addHandler = () => {
-    const _images = [...images];
-    _images.push({key: '', uri: ''});
-    setImages(_images);
-  };
-  const deleteHandler = key => {
-    if (images.length >= 1) {
-      const _images = images.filter((input, index) => index != key);
+  const deleteImage = key => {
+    if (images.length) {
+      const _images = images.filter((image, index) => index != key);
       setImages(_images);
-      setShowImage(false);
     }
-  };
-
-  const inputHandlerNewImage = (uri, key) => {
-    const _images = [...images];
-    _images[key].key = key;
-    _images[key].uri = uri;
-    setImages(_images);
+    console.log(images.length);
+    if (images.length === 1) {
+      setShowImage(true);
+    }
   };
 
   //Dias
@@ -91,18 +151,6 @@ const CrearRestaurante = ({navigation}) => {
       title: 'DOMINGO',
     },
   ];
-
-  //DropDown Multiple
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState([]);
-  const [items, setItems] = useState([
-    {label: 'Apple', value: 'Apple'},
-    {label: 'Banana', value: 'Banana'},
-    {label: 'Manzana', value: 'Manzana'},
-    {label: 'Batata', value: 'Batata'},
-    {label: 'Naranja', value: 'Naranja'},
-    {label: 'Melon', value: 'Melon'},
-  ]);
 
   return (
     <SafeAreaView
@@ -224,23 +272,36 @@ const CrearRestaurante = ({navigation}) => {
             <DiasDeAtencion key={dia.id} dia={dia} />
           ))}
         </View>
-        <DropDownPicker
-          placeholder="Tipo de comida"
-          style={{width: '80%', marginTop: 10, alignSelf: 'center'}}
-          dropDownContainerStyle={{
-            width: '80%',
+        <View
+          style={{
             alignSelf: 'center',
-          }}
-          multiple={true}
-          min={1}
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-          listMode="SCROLLVIEW"
-        />
+            justifyContent: 'center',
+            flexDirection: 'row',
+            width: '80%',
+            marginTop: 10,
+          }}>
+          {MoneyChips.map(money => (
+            <MoneyChip
+              key={money.id}
+              money={money}
+              onAddMoneyChip={() => onAddMoneyChip(money.id)}
+              selectedMoney={selectedMoney}
+            />
+          ))}
+        </View>
+        <View
+          style={{
+            alignSelf: 'center',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            flexDirection: 'row',
+            width: '85%',
+            marginTop: 10,
+          }}>
+          {FoodTypeChips.map(food => (
+            <FoodTypeChip key={food.id} food={food} />
+          ))}
+        </View>
         {showImage ? (
           <Pressable
             style={{
@@ -260,57 +321,66 @@ const CrearRestaurante = ({navigation}) => {
                 fontSize: 30,
                 right: 10,
               }}
-              onPress={openGallery}
+              onPress={addImage}
             />
           </Pressable>
         ) : (
-          uri && (
-            <View
-              style={{
-                position: 'relative',
-                backgroundColor: 'rgba(226, 202, 204, 0.26)',
-                alignSelf: 'center',
-                justifyContent: 'center',
-                marginTop: 10,
-                height: 140,
-                alignItems: 'center',
-                width: '80%',
-              }}>
-              {/* {images.map((image, key) => (
-                <> */}
-              <Image
-                source={{uri}}
+          <View
+            style={{
+              position: 'relative',
+              backgroundColor: 'rgba(226, 202, 204, 0.26)',
+              alignSelf: 'center',
+              justifyContent: 'center',
+              marginTop: 10,
+              height: 140,
+              alignItems: 'center',
+              width: '80%',
+              flexWrap: 'wrap',
+            }}>
+            <ScrollView horizontal>
+              <View
                 style={{
-                  alignSelf: 'center',
-                  height: 100,
-                  width: 100,
-                }}
-              />
-              <View style={{flexDirection: 'row'}}>
-                <Feather
-                  name="trash-2"
-                  style={{
-                    color: '#E14852',
-                    top: 5,
-                    fontSize: 20,
-                  }}
-                  //onPress={() => deleteHandler(key)}
-                />
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                {images.map((image, key) => (
+                  <View
+                    style={{alignItems: 'center', justifyContent: 'center'}}>
+                    <Image
+                      source={{image}}
+                      style={{
+                        height: 110,
+                        width: 100,
+                        resizeMode: 'contain',
+                      }}
+                    />
+                    <Feather
+                      name="trash-2"
+                      style={{
+                        color: '#E14852',
+                        top: 3,
+                        fontSize: 20,
+                      }}
+                      onPress={() => deleteImage(key)}
+                    />
+                  </View>
+                ))}
                 <Ionicons
                   name="add-circle"
                   style={{
                     color: '#E14852',
                     left: 5,
-                    top: 5,
-                    fontSize: 20,
+                    fontSize: 50,
+                    width: 100,
+                    heigh: 100,
                   }}
-                  //onPress={addHandler}
+                  onPress={addImage}
                 />
               </View>
-              {/* </>
-              ))} */}
-            </View>
-          )
+            </ScrollView>
+          </View>
         )}
       </ScrollView>
       <Pressable
