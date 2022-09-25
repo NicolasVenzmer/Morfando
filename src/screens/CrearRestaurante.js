@@ -16,10 +16,6 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Feather from 'react-native-vector-icons/Feather';
 import MoneyChip from '../components/MoneyChip';
 import FoodTypeChip from '../components/FoodTypeChip';
-import ImageUpload from '../components/ImageUpload';
-import {FlatList} from 'react-native';
-
-DropDownPicker.setLanguage('ES');
 
 const CrearRestaurante = ({navigation}) => {
   const [nombreRestaurante, onChangenombreRestaurante] = useState(false);
@@ -97,15 +93,19 @@ const CrearRestaurante = ({navigation}) => {
         if (response.didCancel) {
           return;
         }
+        const _response = response.assets;
+        let _resultUri = _response.map(a => a.uri);
+        let _resultType = _response.map(a => a.type);
+        let _resultfileName = _response.map(a => a.fileName);
         const img = {
-          uri: response.uri,
-          type: response.type,
-          name: response.fileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
+          uri: _resultUri,
+          type: _resultType,
+          name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
         };
+
         setImages(prevImages => prevImages.concat(img));
       },
     );
-    console.log(images);
     setShowImage(false);
   };
 
@@ -349,7 +349,7 @@ const CrearRestaurante = ({navigation}) => {
                   <View
                     style={{alignItems: 'center', justifyContent: 'center'}}>
                     <Image
-                      source={{image}}
+                      source={{uri: image.uri.toString()}}
                       style={{
                         height: 110,
                         width: 100,
