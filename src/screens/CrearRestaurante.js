@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import DropDownPicker from 'react-native-dropdown-picker';
 import DiasDeAtencion from '../components/DiasDeAtencion';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Feather from 'react-native-vector-icons/Feather';
@@ -21,6 +20,10 @@ const CrearRestaurante = ({navigation}) => {
   const [nombreRestaurante, onChangenombreRestaurante] = useState(false);
   const [direccion, onChangeDireccion] = useState(false);
   const [selectedMoney, setSelectedMoney] = useState(false);
+
+  const onSubmitRestaurant = () => {
+    //Enviar los datos al back
+  };
 
   const onAddMoneyChip = function () {
     console.log('onAddMoneyChip', selectedMoney);
@@ -158,8 +161,9 @@ const CrearRestaurante = ({navigation}) => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'ff0000',
+        backgroundColor: 'white',
         marginVertical: '1%',
+        flex: 1,
       }}>
       <View
         style={{
@@ -194,7 +198,7 @@ const CrearRestaurante = ({navigation}) => {
       <ScrollView
         style={{
           width: '100%',
-          height: '75%',
+          height: '100%',
         }}>
         <View
           style={{
@@ -213,6 +217,9 @@ const CrearRestaurante = ({navigation}) => {
               margin: 12,
               padding: 10,
               fontWeight: '400',
+              borderBottomColor: 'grey',
+              borderBottomWidth: 1,
+              width: '90%',
             }}
             onChangeText={onChangenombreRestaurante}
             placeholder="Nombre Restaurante"
@@ -235,26 +242,20 @@ const CrearRestaurante = ({navigation}) => {
               margin: 12,
               padding: 10,
               fontWeight: '400',
+              borderBottomColor: 'grey',
+              borderBottomWidth: 1,
+              width: '90%',
             }}
             onChangeText={onChangeDireccion}
             placeholder="Direccion"
             value={direccion}
-          />
-          <Entypo
-            name="location-pin"
-            style={{
-              color: 'black',
-              fontSize: 30,
-              marginLeft: 'auto',
-              right: 10,
-            }}
           />
         </View>
         <View
           style={{
             marginTop: 10,
             alignSelf: 'center',
-            backgroundColor: 'rgba(226, 202, 204, 0.26)',
+            backgroundColor: '#E2CACC',
             width: '80%',
             minHeight: 120,
             justifyContent: 'flex-start',
@@ -268,8 +269,8 @@ const CrearRestaurante = ({navigation}) => {
             }}>
             Horario de atencion
           </Text>
-          {listaDeDias.map(dia => (
-            <DiasDeAtencion key={dia.id} dia={dia} />
+          {listaDeDias.map((dia, index) => (
+            <DiasDeAtencion key={index} dia={dia} />
           ))}
         </View>
         <View
@@ -280,12 +281,11 @@ const CrearRestaurante = ({navigation}) => {
             width: '80%',
             marginTop: 10,
           }}>
-          {MoneyChips.map(money => (
+          {MoneyChips.map((money, index) => (
             <MoneyChip
-              key={money.id}
+              key={index}
               money={money}
-              onAddMoneyChip={() => onAddMoneyChip(money.id)}
-              selectedMoney={selectedMoney}
+              onAddMoneyChip={() => onAddMoneyChip(index)}
             />
           ))}
         </View>
@@ -298,14 +298,14 @@ const CrearRestaurante = ({navigation}) => {
             width: '85%',
             marginTop: 10,
           }}>
-          {FoodTypeChips.map(food => (
-            <FoodTypeChip key={food.id} food={food} />
+          {FoodTypeChips.map((food, index) => (
+            <FoodTypeChip key={index} food={food} />
           ))}
         </View>
         {showImage ? (
           <Pressable
             style={{
-              backgroundColor: 'rgba(226, 202, 204, 0.26)',
+              backgroundColor: '#E2CACC',
               alignSelf: 'center',
               justifyContent: 'center',
               marginTop: 10,
@@ -328,7 +328,7 @@ const CrearRestaurante = ({navigation}) => {
           <View
             style={{
               position: 'relative',
-              backgroundColor: 'rgba(226, 202, 204, 0.26)',
+              backgroundColor: '#E2CACC',
               alignSelf: 'center',
               justifyContent: 'center',
               marginTop: 10,
@@ -382,29 +382,31 @@ const CrearRestaurante = ({navigation}) => {
             </ScrollView>
           </View>
         )}
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              //position: 'absolute',
+              marginTop: 10,
+              marginBottom: 10,
+              width: '80%',
+              height: 50,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#E14852',
+              borderRadius: 30,
+            }}
+            onPress={() => navigation.navigate('MisRestaurantes')}>
+            <Text
+              style={{
+                color: '#fdfdfd',
+                fontWeight: '400',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              Guardar
+            </Text>
+          </Pressable>
       </ScrollView>
-      <Pressable
-        style={{
-          position: 'absolute',
-          width: '80%',
-          top: 500,
-          height: 50,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#E14852',
-          borderRadius: 30,
-        }}
-        onPress={() => navigation.navigate('MisRestaurantes')}>
-        <Text
-          style={{
-            color: '#fdfdfd',
-            fontWeight: '400',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          Guardar
-        </Text>
-      </Pressable>
     </SafeAreaView>
   );
 };

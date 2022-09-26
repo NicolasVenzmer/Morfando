@@ -42,6 +42,7 @@ const DiasDeAtencion = ({dia}) => {
         <View
           style={{
             top: 10,
+            marginBottom: 10,
             left: 10,
             height: 40,
             paddingBottom: 10,

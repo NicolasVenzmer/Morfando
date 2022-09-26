@@ -56,7 +56,7 @@ const MisRestaurantes = ({navigation}) => {
           height: '75%',
         }}>
         {data.map(restaurante => (
-          <CardRestaurante key={restaurante.id} restaurante={restaurante} />
+          <CardRestaurante key={restaurante.id} restaurante={restaurante} navigation={navigation}/>
         ))}
       </ScrollView>
       <Pressable

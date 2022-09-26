@@ -3,7 +3,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const CardRestaurante = ({restaurante}) => {
+const CardRestaurante = ({restaurante, navigation}) => {
   //Restaurante
   const deleteHandler = key => {
       const restaurante = ""
@@ -39,6 +39,7 @@ const CardRestaurante = ({restaurante}) => {
             left: 125,
             alignSelf: 'flex-end',
           }}
+          onPress={() => navigation.navigate('CrearMenu')}
         />
         <Feather
           name="trash-2"
