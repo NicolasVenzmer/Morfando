@@ -6,13 +6,9 @@ import {
   Pressable,
   SafeAreaView,
   ScrollView,
-  TextInput,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import DropDownPicker from 'react-native-dropdown-picker';
 import {launchImageLibrary} from 'react-native-image-picker';
-import Feather from 'react-native-vector-icons/Feather';
-import {Checkbox} from 'react-native-paper';
 import CardPlato from '../components/CardPlato';
 
 const CrearMenu = ({navigation}) => {
@@ -143,20 +139,7 @@ const CrearMenu = ({navigation}) => {
           height: '100%',
         }}>
         {platos.map((plato, index) => (
-          <>
-            <CardPlato key={index} plato={plato} />
-            <Feather
-              name="trash-2"
-              style={{
-                alignSelf: 'flex-end',
-                right: 40,
-                color: '#E14852',
-                marginTop: 5,
-                fontSize: 20,
-              }}
-              onPress={() => deletePlato(index)}
-            />
-          </>
+            <CardPlato key={index} plato={plato} deletePlato={() => deletePlato(index)} />
         ))}
         <Pressable
           style={{
@@ -199,7 +182,7 @@ const CrearMenu = ({navigation}) => {
             backgroundColor: '#E14852',
             borderRadius: 30,
           }}
-          onPress={() => navigation.navigate('MisRestaurantes')}>
+          onPress={() => navigation.navigate('VerMenu')}>
           <Text
             style={{
               color: '#fdfdfd',

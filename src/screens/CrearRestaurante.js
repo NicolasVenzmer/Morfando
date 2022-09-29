@@ -8,28 +8,51 @@ import {
   ScrollView,
   TextInput,
 } from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DiasDeAtencion from '../components/DiasDeAtencion';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Feather from 'react-native-vector-icons/Feather';
-import MoneyChip from '../components/MoneyChip';
 import FoodTypeChip from '../components/FoodTypeChip';
+import {Chip} from 'react-native-paper';
 
 const CrearRestaurante = ({navigation}) => {
   const [nombreRestaurante, onChangenombreRestaurante] = useState(false);
   const [direccion, onChangeDireccion] = useState(false);
-  const [selectedMoney, setSelectedMoney] = useState(false);
+  const [selectedMoney1, setSelectedMoney1] = useState(false);
+  const [selectedMoney2, setSelectedMoney2] = useState(false);
+  const [selectedMoney3, setSelectedMoney3] = useState(false);
+  const [selectedMoney4, setSelectedMoney4] = useState(false);
 
   const onSubmitRestaurant = () => {
     //Enviar los datos al back
   };
 
-  const onAddMoneyChip = function () {
-    console.log('onAddMoneyChip', selectedMoney);
-    setSelectedMoney(!selectedMoney);
-  };
-
+  const changeSelectedChip = (num) => {
+    if(num === 1){
+      setSelectedMoney1(true)
+      setSelectedMoney2(false);
+      setSelectedMoney3(false);
+      setSelectedMoney4(false)
+    }
+    if (num === 2) {
+      setSelectedMoney2(true);
+      setSelectedMoney1(false);
+      setSelectedMoney3(false);
+      setSelectedMoney4(false);
+    }
+    if (num === 3) {
+      setSelectedMoney3(true);
+      setSelectedMoney1(false);
+      setSelectedMoney2(false);
+      setSelectedMoney4(false);
+    }
+    if (num === 4) {
+      setSelectedMoney4(true);
+      setSelectedMoney1(false);
+      setSelectedMoney2(false);
+      setSelectedMoney3(false);
+    }
+  }
   const FoodTypeChips = [
     {
       id: '1',
@@ -281,13 +304,34 @@ const CrearRestaurante = ({navigation}) => {
             width: '80%',
             marginTop: 10,
           }}>
-          {MoneyChips.map((money, index) => (
-            <MoneyChip
-              key={index}
-              money={money}
-              onAddMoneyChip={() => onAddMoneyChip(index)}
-            />
-          ))}
+          <Chip
+            style={{marginRight: 5, marginLeft: 5, backgroundColor: '#E2CACC'}}
+            onPress={() => changeSelectedChip(1)}
+            selected={selectedMoney1}
+            selectedColor={selectedMoney1 ? '#E14852' : '#A3A3A4'}>
+            <Text>$</Text>
+          </Chip>
+          <Chip
+            style={{marginRight: 5, marginLeft: 5, backgroundColor: '#E2CACC'}}
+            onPress={() => changeSelectedChip(2)}
+            selected={selectedMoney2}
+            selectedColor={selectedMoney2 ? '#E14852' : '#A3A3A4'}>
+            <Text>$$</Text>
+          </Chip>
+          <Chip
+            style={{marginRight: 5, marginLeft: 5, backgroundColor: '#E2CACC'}}
+            onPress={() => changeSelectedChip(3)}
+            selected={selectedMoney3}
+            selectedColor={selectedMoney3 ? '#E14852' : '#A3A3A4'}>
+            <Text>$$$</Text>
+          </Chip>
+          <Chip
+            style={{marginRight: 5, marginLeft: 5, backgroundColor: '#E2CACC'}}
+            onPress={() => changeSelectedChip(4)}
+            selected={selectedMoney4}
+            selectedColor={selectedMoney4 ? '#E14852' : '#A3A3A4'}>
+            <Text>$$$$</Text>
+          </Chip>
         </View>
         <View
           style={{
@@ -382,30 +426,30 @@ const CrearRestaurante = ({navigation}) => {
             </ScrollView>
           </View>
         )}
-          <Pressable
+        <Pressable
+          style={{
+            alignSelf: 'center',
+            //position: 'absolute',
+            marginTop: 10,
+            marginBottom: 10,
+            width: '80%',
+            height: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#E14852',
+            borderRadius: 30,
+          }}
+          onPress={() => navigation.navigate('MisRestaurantes')}>
+          <Text
             style={{
-              alignSelf: 'center',
-              //position: 'absolute',
-              marginTop: 10,
-              marginBottom: 10,
-              width: '80%',
-              height: 50,
+              color: '#fdfdfd',
+              fontWeight: '400',
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: '#E14852',
-              borderRadius: 30,
-            }}
-            onPress={() => navigation.navigate('MisRestaurantes')}>
-            <Text
-              style={{
-                color: '#fdfdfd',
-                fontWeight: '400',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              Guardar
-            </Text>
-          </Pressable>
+            }}>
+            Guardar
+          </Text>
+        </Pressable>
       </ScrollView>
     </SafeAreaView>
   );

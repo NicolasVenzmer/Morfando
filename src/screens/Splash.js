@@ -7,7 +7,7 @@ import {
 const Splash = ({navigation}) => {
   React.useEffect(() => {
     setTimeout(() => {
-      navigation.replace('CrearMenu');
+      navigation.replace('VerMenu');
     }, 2000);
     return () => {};
   }, []);

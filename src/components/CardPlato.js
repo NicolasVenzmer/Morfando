@@ -14,7 +14,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Feather from 'react-native-vector-icons/Feather';
 import {Checkbox} from 'react-native-paper';
 
-const CardPlato = ({navigation}) => {
+const CardPlato = ({deletePlato, navigation}) => {
   const [nombrePlato, onChangeNombrePlato] = useState(false);
   const [precio, onChangePrecio] = useState(false);
   const [ingrediente, onChangeIngrediente] = useState(false);
@@ -98,208 +98,219 @@ const CardPlato = ({navigation}) => {
           width: '100%',
           height: '100%',
         }}>
+        <View
+          style={{
+            marginTop: 10,
+            alignSelf: 'center',
+            backgroundColor: '#FCC3C3',
+            width: '80%',
+            minHeight: 120,
+            justifyContent: 'flex-start',
+          }}>
+          <TextInput
+            style={{
+              alignSelf: 'center',
+              height: 50,
+              margin: 10,
+              padding: 10,
+              fontWeight: '300',
+              backgroundColor: 'white',
+              width: '90%',
+            }}
+            onChangeText={onChangeNombrePlato}
+            placeholder="Nombre del plato"
+            placeholderTextColor="black"
+            value={nombrePlato}
+          />
+          <DropDownPicker
+            placeholder="Categoria"
+            style={{
+              width: '90%',
+              alignSelf: 'center',
+              borderRadius: 0,
+              borderColor: 0,
+            }}
+            dropDownContainerStyle={{
+              width: '90%',
+              alignSelf: 'center',
+            }}
+            min={1}
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+          />
+          <TextInput
+            style={{
+              alignSelf: 'center',
+              height: 50,
+              margin: 10,
+              padding: 10,
+              fontWeight: '300',
+              backgroundColor: 'white',
+              width: '90%',
+            }}
+            onChangeText={onChangePrecio}
+            placeholder="Precio $$"
+            placeholderTextColor="black"
+            value={precio}
+          />
+          <TextInput
+            style={{
+              alignSelf: 'center',
+              height: 50,
+              marginBottom: 10,
+              padding: 10,
+              fontWeight: '300',
+              backgroundColor: 'white',
+              width: '90%',
+            }}
+            onChangeText={onChangeIngrediente}
+            placeholder="Ingredientes / Descripcion del plato"
+            placeholderTextColor="black"
+            value={ingrediente}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              alignSelf: 'flex-start',
+            }}>
             <View
               style={{
-                marginTop: 10,
-                alignSelf: 'center',
-                backgroundColor: '#FCC3C3',
-                width: '80%',
-                minHeight: 120,
-                justifyContent: 'flex-start',
+                flexDirection: 'row',
+                alignItems: 'center',
+                alignSelf: 'flex-start',
+                left: 10,
               }}>
-              <TextInput
-                style={{
-                  alignSelf: 'center',
-                  height: 50,
-                  margin: 10,
-                  padding: 10,
-                  fontWeight: '300',
-                  backgroundColor: 'white',
-                  width: '90%',
+              <Checkbox
+                status={checkedCeliacos ? 'checked' : 'unchecked'}
+                color="blue"
+                onPress={() => {
+                  setCheckedCeliacos(!checkedCeliacos);
                 }}
-                onChangeText={onChangeNombrePlato}
-                placeholder="Nombre del plato"
-                placeholderTextColor="black"
-                value={nombrePlato}
               />
-              <DropDownPicker
-                placeholder="Categoria"
-                style={{
-                  width: '90%',
-                  alignSelf: 'center',
-                  borderRadius: 0,
-                  borderColor: 0,
+              <Text style={{fontWeight: '300', color: 'black'}}>
+                Apto Celiacos
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                alignSelf: 'flex-start',
+                left: 10,
+              }}>
+              <Checkbox
+                status={checkedVeganos ? 'checked' : 'unchecked'}
+                color="blue"
+                onPress={() => {
+                  setCheckedVeganos(!checkedVeganos);
                 }}
-                dropDownContainerStyle={{
-                  width: '90%',
-                  alignSelf: 'center',
-                }}
-                min={1}
-                open={open}
-                value={value}
-                items={items}
-                setOpen={setOpen}
-                setValue={setValue}
-                setItems={setItems}
               />
-              <TextInput
+              <Text style={{fontWeight: '300', color: 'black'}}>
+                Apto Veganos
+              </Text>
+            </View>
+          </View>
+          {showImage ? (
+            <Pressable
+              style={{
+                backgroundColor: '#EFECEC',
+                alignSelf: 'center',
+                justifyContent: 'center',
+                marginTop: 10,
+                marginBottom: 10,
+                height: 150,
+                alignItems: 'center',
+                width: '90%',
+              }}
+              onPress={() => navigation.navigate('MisRestaurantes')}>
+              <Ionicons
+                name="cloud-upload-outline"
                 style={{
-                  alignSelf: 'center',
-                  height: 50,
-                  margin: 10,
-                  padding: 10,
-                  fontWeight: '300',
-                  backgroundColor: 'white',
-                  width: '90%',
+                  color: 'black',
+                  fontSize: 30,
+                  right: 10,
                 }}
-                onChangeText={onChangePrecio}
-                placeholder="Precio $$"
-                placeholderTextColor="black"
-                value={precio}
+                onPress={addImage}
               />
-              <TextInput
-                style={{
-                  alignSelf: 'center',
-                  height: 50,
-                  marginBottom: 10,
-                  padding: 10,
-                  fontWeight: '300',
-                  backgroundColor: 'white',
-                  width: '90%',
-                }}
-                onChangeText={onChangeIngrediente}
-                placeholder="Ingredientes / Descripcion del plato"
-                placeholderTextColor="black"
-                value={ingrediente}
-              />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  alignSelf: 'flex-start',
-                }}>
+            </Pressable>
+          ) : (
+            <View
+              style={{
+                position: 'relative',
+                alignSelf: 'center',
+                justifyContent: 'center',
+                marginTop: 10,
+                marginBottom: 10,
+                height: 140,
+                alignItems: 'center',
+                width: '90%',
+                flexWrap: 'wrap',
+              }}>
+              <ScrollView horizontal>
                 <View
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    alignSelf: 'flex-start',
-                    left: 10,
-                  }}>
-                  <Checkbox
-                    status={checkedCeliacos ? 'checked' : 'unchecked'}
-                    color="blue"
-                    onPress={() => {
-                      setCheckedCeliacos(!checkedCeliacos);
-                    }}
-                  />
-                  <Text style={{fontWeight: '300', color: 'black'}}>
-                    Apto Celiacos
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    alignSelf: 'flex-start',
-                    left: 10,
-                  }}>
-                  <Checkbox
-                    status={checkedVeganos ? 'checked' : 'unchecked'}
-                    color="blue"
-                    onPress={() => {
-                      setCheckedVeganos(!checkedVeganos);
-                    }}
-                  />
-                  <Text style={{fontWeight: '300', color: 'black'}}>
-                    Apto Veganos
-                  </Text>
-                </View>
-              </View>
-              {showImage ? (
-                <Pressable
-                  style={{
-                    backgroundColor: '#EFECEC',
-                    alignSelf: 'center',
                     justifyContent: 'center',
-                    marginTop: 10,
-                    marginBottom: 10,
-                    height: 150,
                     alignItems: 'center',
-                    width: '90%',
-                  }}
-                  onPress={() => navigation.navigate('MisRestaurantes')}>
+                  }}>
+                  {images.map((image, key) => (
+                    <View
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                      <Image
+                        source={{uri: image.uri.toString()}}
+                        style={{
+                          height: 110,
+                          width: 100,
+                          resizeMode: 'contain',
+                        }}
+                      />
+                      <Feather
+                        name="trash-2"
+                        style={{
+                          color: '#E14852',
+                          top: 3,
+                          fontSize: 20,
+                        }}
+                        onPress={() => deleteImage(key)}
+                      />
+                    </View>
+                  ))}
                   <Ionicons
-                    name="cloud-upload-outline"
+                    name="add-circle"
                     style={{
-                      color: 'black',
-                      fontSize: 30,
-                      right: 10,
+                      color: '#E14852',
+                      left: 5,
+                      fontSize: 50,
+                      width: 100,
+                      heigh: 100,
                     }}
                     onPress={addImage}
                   />
-                </Pressable>
-              ) : (
-                <View
-                  style={{
-                    position: 'relative',
-                    alignSelf: 'center',
-                    justifyContent: 'center',
-                    marginTop: 10,
-                    marginBottom: 10,
-                    height: 140,
-                    alignItems: 'center',
-                    width: '90%',
-                    flexWrap: 'wrap',
-                  }}>
-                  <ScrollView horizontal>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      {images.map((image, key) => (
-                        <View
-                          style={{
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}>
-                          <Image
-                            source={{uri: image.uri.toString()}}
-                            style={{
-                              height: 110,
-                              width: 100,
-                              resizeMode: 'contain',
-                            }}
-                          />
-                          <Feather
-                            name="trash-2"
-                            style={{
-                              color: '#E14852',
-                              top: 3,
-                              fontSize: 20,
-                            }}
-                            onPress={() => deleteImage(key)}
-                          />
-                        </View>
-                      ))}
-                      <Ionicons
-                        name="add-circle"
-                        style={{
-                          color: '#E14852',
-                          left: 5,
-                          fontSize: 50,
-                          width: 100,
-                          heigh: 100,
-                        }}
-                        onPress={addImage}
-                      />
-                    </View>
-                  </ScrollView>
                 </View>
-              )}
+              </ScrollView>
             </View>
+          )}
+        </View>
+        <Feather
+          name="trash-2"
+          style={{
+            alignSelf: 'flex-end',
+            right: 40,
+            color: '#E14852',
+            marginTop: 5,
+            fontSize: 20,
+          }}
+          onPress={deletePlato}
+        />
       </ScrollView>
     </SafeAreaView>
   );

@@ -17,6 +17,8 @@ import ErrorDeServidor from '../screens/errorScreens/ErrorDeServidor';
 import ErrorDeUsuarioYaRegistrado from '../screens/errorScreens/ErrorDeUsuarioYaRegistrado';
 import ErrorDeUsuarioOContraseñaIncorrectas from '../screens/errorScreens/ErrorDeUsuarioOContraseñaIncorrectas';
 import CrearMenu from '../screens/CrearMenu';
+import VerMenu from '../screens/VerMenu';
+import DrawerNavigation from './DrawerNavigation';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +31,7 @@ const RootNavigator = () => {
           component={Splash}
           options={{headerShown: false}}
         />
+        <Stack.Screen name="DrawerNavigation" component={DrawerNavigation} />
         <Stack.Screen name="CrearRestaurante" component={CrearRestaurante} />
         <Stack.Screen name="MisRestaurantes" component={MisRestaurantes} />
         <Stack.Screen name="SignUp" component={SignUp} />
@@ -59,6 +62,7 @@ const RootNavigator = () => {
           component={ErrorDeUsuarioOContraseñaIncorrectas}
         />
         <Stack.Screen name="CrearMenu" component={CrearMenu} />
+        <Stack.Screen name="VerMenu" component={VerMenu} />
       </Stack.Navigator>
     </NavigationContainer>
   );
