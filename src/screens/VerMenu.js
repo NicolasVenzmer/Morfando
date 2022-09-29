@@ -12,6 +12,7 @@ const VerMenu = ({navigation}) => {
       descripcion: 'Patitas de pollo , arroz, huevo',
       precio: '$2500',
       image: require('../assets/Images/plato-prueba.jpg'),
+      celiaco: true,
     },
     {
       id: 2,
@@ -20,6 +21,7 @@ const VerMenu = ({navigation}) => {
       descripcion: 'Patitas de pollo , arroz, huevo',
       precio: '$2500',
       image: require('../assets/Images/plato-prueba.jpg'),
+      vegano: true,
     },
     {
       id: 3,
@@ -28,6 +30,38 @@ const VerMenu = ({navigation}) => {
       descripcion: 'Patitas de pollo , arroz, huevo',
       precio: '$2500',
       image: require('../assets/Images/plato-prueba.jpg'),
+      celiaco: true,
+      vegano: true,
+    },
+    {
+      id: 4,
+      title: 'Plato Principal',
+      nombre: 'Patitas de pollo Rosa Negras',
+      descripcion: 'Patitas de pollo , arroz, huevo',
+      precio: '$2500',
+      image: require('../assets/Images/plato-prueba.jpg'),
+      celiaco: true,
+      vegano: true,
+    },
+    {
+      id: 5,
+      title: 'Plato Principal',
+      nombre: 'Patitas de pollo Rosa Negras',
+      descripcion: 'Patitas de pollo , arroz, huevo',
+      precio: '$2500',
+      image: require('../assets/Images/plato-prueba.jpg'),
+      celiaco: true,
+      vegano: true,
+    },
+    {
+      id: 6,
+      title: 'Plato Principal',
+      nombre: 'Patitas de pollo Rosa Negras',
+      descripcion: 'Patitas de pollo , arroz, huevo',
+      precio: '$2500',
+      image: require('../assets/Images/plato-prueba.jpg'),
+      celiaco: true,
+      vegano: true,
     },
   ];
 
@@ -58,7 +92,7 @@ const VerMenu = ({navigation}) => {
             marginRight: 30,
             fontSize: 20,
           }}
-          //onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
         />
         <Text
           style={{

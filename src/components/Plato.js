@@ -1,12 +1,57 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  Image,
-} from 'react-native';
+import {View, Text, Image} from 'react-native';
+
+const PlatoType = plato => {
+  if (!plato.vegano && !plato.celiaco) return;
+
+  if (plato.vegano && plato.celiaco)
+    return (
+      <View style={{flexDirection: 'row', alignSelf: 'flex-end'}}>
+        <Image
+          style={{
+            width: 30,
+            height: 30,
+            marginTop: 2,
+          }}
+          source={require('../assets/Icons/icono-vegano.png')}
+        />
+        <Image
+          style={{
+            width: 30,
+            height: 30,
+          }}
+          source={require('../assets/Icons/icono-celiaco.png')}
+        />
+      </View>
+    );
+
+  if (plato.vegano)
+    return (
+      <Image
+        style={{
+          width: 30,
+          height: 30,
+          marginTop: 5,
+          alignSelf: 'flex-end',
+        }}
+        source={require('../assets/Icons/icono-vegano.png')}
+      />
+    );
+
+  return (
+    <Image
+      style={{
+        width: 30,
+        height: 30,
+        marginTop: 5,
+        alignSelf: 'flex-end',
+      }}
+      source={require('../assets/Icons/icono-celiaco.png')}
+    />
+  );
+};
 
 const Plato = ({plato}) => {
-
   return (
     <View
       style={{
@@ -76,7 +121,9 @@ const Plato = ({plato}) => {
               }}>
               {plato.precio}
             </Text>
+            <PlatoType {...plato}/>
           </View>
+
         </View>
       </View>
     </View>
