@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {launchImageLibrary} from 'react-native-image-picker';
-import CardPlato from '../components/CardPlato';
+import CardCrearPlato from '../components/CardCrearPlato';
 
 const CrearMenu = ({navigation}) => {
   const [nombrePlato, onChangeNombrePlato] = useState(false);
@@ -139,7 +139,11 @@ const CrearMenu = ({navigation}) => {
           height: '100%',
         }}>
         {platos.map((plato, index) => (
-            <CardPlato key={index} plato={plato} deletePlato={() => deletePlato(index)} />
+          <CardCrearPlato
+            key={index}
+            plato={plato}
+            deletePlato={() => deletePlato(index)}
+          />
         ))}
         <Pressable
           style={{

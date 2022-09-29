@@ -14,7 +14,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Feather from 'react-native-vector-icons/Feather';
 import {Checkbox} from 'react-native-paper';
 
-const CardPlato = ({deletePlato, navigation}) => {
+const CardCrearPlato = ({deletePlato, navigation}) => {
   const [nombrePlato, onChangeNombrePlato] = useState(false);
   const [precio, onChangePrecio] = useState(false);
   const [ingrediente, onChangeIngrediente] = useState(false);
@@ -316,4 +316,4 @@ const CardPlato = ({deletePlato, navigation}) => {
   );
 };
 
-export default CardPlato;
+export default CardCrearPlato;

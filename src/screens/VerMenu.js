@@ -1,26 +1,35 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  Image,
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  TextInput,
-  Button,
-} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import DropDownPicker from 'react-native-dropdown-picker';
-import {launchImageLibrary} from 'react-native-image-picker';
+import React from 'react';
+import {View, Text, SafeAreaView, ScrollView} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import {Checkbox} from 'react-native-paper';
-import CardPlato from '../components/CardPlato';
-import {DrawerActions} from '@react-navigation/native';
+import Plato from '../components/Plato';
 
 const VerMenu = ({navigation}) => {
-  const onSubmitRestaurant = () => {
-    //Enviar los datos al back
-  };
+  const platos = [
+    {
+      id: 1,
+      title: 'Entradas',
+      nombre: 'Patitas de pollo Rosa Negras',
+      descripcion: 'Patitas de pollo , arroz, huevo',
+      precio: '$2500',
+      image: require('../assets/Images/plato-prueba.jpg'),
+    },
+    {
+      id: 2,
+      title: 'Postre',
+      nombre: 'Patitas de pollo Rosa Negras',
+      descripcion: 'Patitas de pollo , arroz, huevo',
+      precio: '$2500',
+      image: require('../assets/Images/plato-prueba.jpg'),
+    },
+    {
+      id: 3,
+      title: 'Plato Principal',
+      nombre: 'Patitas de pollo Rosa Negras',
+      descripcion: 'Patitas de pollo , arroz, huevo',
+      precio: '$2500',
+      image: require('../assets/Images/plato-prueba.jpg'),
+    },
+  ];
 
   return (
     <SafeAreaView
@@ -39,6 +48,7 @@ const VerMenu = ({navigation}) => {
           height: 50,
           alignItems: 'center',
           justifyContent: 'flex-start',
+          marginBottom: 5,
         }}>
         <Feather
           name="menu"
@@ -48,7 +58,7 @@ const VerMenu = ({navigation}) => {
             marginRight: 30,
             fontSize: 20,
           }}
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+          //onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
         />
         <Text
           style={{
@@ -58,7 +68,15 @@ const VerMenu = ({navigation}) => {
           Menu
         </Text>
       </View>
-      <ScrollView></ScrollView>
+      <ScrollView
+        style={{
+          width: '100%',
+          height: '100%',
+        }}>
+          {platos.map((plato, index) => (
+            <Plato key={index} plato={plato} />
+          ))}
+      </ScrollView>
     </SafeAreaView>
   );
 };
