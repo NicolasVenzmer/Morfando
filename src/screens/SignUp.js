@@ -25,21 +25,39 @@ const SignUp = ({navigation}) => {
           justifyContent: 'center',
         }}>
         <Image source={require('../assets/logo_icon.png')} />
-        <Pressable
-          style={{
-            position: 'absolute',
-            bottom: 10,
-            left: 70,
-          }}
-          onPress={() => navigation.navigate('Login')}>
-          <Text
+        {value === 'first' ? (
+          <Pressable
             style={{
-              color: 'black',
-              fontWeight: '400',
-            }}>
-            Ingresar
-          </Text>
-        </Pressable>
+              position: 'absolute',
+              bottom: 10,
+              left: 70,
+            }}
+            onPress={() => navigation.navigate('Login')}>
+            <Text
+              style={{
+                color: 'black',
+                fontWeight: '400',
+              }}>
+              Ingresar
+            </Text>
+          </Pressable>
+        ) : (
+          <Pressable
+            style={{
+              position: 'absolute',
+              bottom: 10,
+              left: 70,
+            }}
+            onPress={() => navigation.navigate('LoginConsumidor')}>
+            <Text
+              style={{
+                color: 'black',
+                fontWeight: '400',
+              }}>
+              Ingresar
+            </Text>
+          </Pressable>
+        )}
         <Text
           style={{
             position: 'absolute',

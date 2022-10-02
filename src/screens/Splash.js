@@ -7,7 +7,7 @@ import {
 const Splash = ({navigation}) => {
   React.useEffect(() => {
     setTimeout(() => {
-      navigation.replace('Login');
+      navigation.replace('CompletarSignUp');
     }, 2000);
     return () => {};
   }, []);

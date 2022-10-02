@@ -6,10 +6,59 @@ import {
   Pressable,
   SafeAreaView,
   TextInput,
+  StyleSheet,
+  Modal,
 } from 'react-native';
 
+const isEmpty = stringToValidate => {
+  if (stringToValidate !== undefined && stringToValidate !== null) {
+    return stringToValidate.length === 0;
+  }
+
+  return true;
+};
+
+const validateEmail = email => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    );
+};
+
+const ModalPoup = ({visible, children}) => {
+  const [showModal, setShowModal] = React.useState(visible);
+  React.useEffect(() => {
+    toggleModal();
+  }, [visible]);
+  const toggleModal = () => {
+    if (visible) {
+      setShowModal(true);
+    } else {
+      setShowModal(false);
+    }
+  };
+
+  return (
+    <Modal transparent visible={showModal}>
+      <View style={styles.modalBackGround}>
+        <View style={[styles.modalContainer]}>{children}</View>
+      </View>
+    </Modal>
+  );
+};
+
 const OlvideMiContraseña = ({navigation}) => {
-  const [email, onChangeEmail] = useState(null);
+  const [mail, setUsuario] = useState('');
+  const [visible, setVisible] = React.useState(false);
+
+  const handleisEmpty = () => {
+    if (!validateEmail(mail)) {
+      setVisible(true);
+    } else {
+      navigation.navigate('RestaurarContraseña');
+    }
+  };
 
   return (
     <SafeAreaView
@@ -88,7 +137,7 @@ const OlvideMiContraseña = ({navigation}) => {
           maxWidth: '82%',
         }}>
         <Text style={{color: 'black'}}>
-          Te hemos enviado un mail para que restablezcas tu contraseña.
+          Ingresa tu mail para recuperar tu contraseña.
         </Text>
       </View>
       <View
@@ -109,11 +158,54 @@ const OlvideMiContraseña = ({navigation}) => {
             borderBottomWidth: 1,
             padding: 10,
           }}
-          onChangeText={onChangeEmail}
-          value={email}
+          onChangeText={setUsuario}
+          value={mail}
           placeholder="Email"
         />
       </View>
+
+      <ModalPoup visible={visible}>
+        <View style={{alignItems: 'flex-start'}}>
+          <Text style={{fontSize: 20, color: 'black'}}>
+            Por favor ingrese un mail valido.
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '2%',
+              marginBottom: '2%',
+              marginHorizontal: '5%',
+            }}></View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: '1%',
+            marginBottom: '1%',
+            marginHorizontal: '1%',
+          }}>
+          <Pressable
+            style={{
+              width: '40%',
+              alignSelf: 'center',
+              borderRadius: 5,
+              width: '100%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: '#E14852',
+              borderRadius: 30,
+            }}
+            onPress={() => {
+              navigation.navigate('OlvideMiContraseña');
+              setVisible(false);
+            }}>
+            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
+          </Pressable>
+        </View>
+      </ModalPoup>
+
       <Pressable
         style={{
           position: 'absolute',
@@ -125,7 +217,7 @@ const OlvideMiContraseña = ({navigation}) => {
           backgroundColor: '#E14852',
           borderRadius: 30,
         }}
-        onPress={() => navigation.navigate('RestaurarContraseña')}>
+        onPress={() => handleisEmpty()}>
         <Text
           style={{
             color: '#fdfdfd',
@@ -139,5 +231,48 @@ const OlvideMiContraseña = ({navigation}) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#D6B1B1',
+  },
+
+  centerContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  scrollView: {
+    marginHorizontal: 1,
+    marginVertical: 1,
+  },
+  text: {
+    fontSize: 42,
+  },
+
+  modalBackGround: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: '80%',
+    backgroundColor: '#F7F4F4',
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    borderRadius: 20,
+    elevation: 20,
+  },
+  modalContainer2: {
+    width: '80%',
+    backgroundColor: 'transparent',
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    borderRadius: 20,
+    elevation: 20,
+  },
+});
 
 export default OlvideMiContraseña;
