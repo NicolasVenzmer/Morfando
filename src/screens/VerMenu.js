@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, SafeAreaView, ScrollView} from 'react-native';
-import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Plato from '../components/Plato';
 
 const VerMenu = ({navigation}) => {
@@ -84,7 +84,7 @@ const VerMenu = ({navigation}) => {
           justifyContent: 'flex-start',
           marginBottom: 5,
         }}>
-        <Feather
+        <Ionicons
           name="menu"
           style={{
             color: 'black',
@@ -92,7 +92,7 @@ const VerMenu = ({navigation}) => {
             marginRight: 30,
             fontSize: 20,
           }}
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+          onPress={() => navigation.openDrawer()}
         />
         <Text
           style={{
@@ -107,9 +107,9 @@ const VerMenu = ({navigation}) => {
           width: '100%',
           height: '100%',
         }}>
-          {platos.map((plato, index) => (
-            <Plato key={index} plato={plato} />
-          ))}
+        {platos.map((plato, index) => (
+          <Plato key={index} plato={plato} />
+        ))}
       </ScrollView>
     </SafeAreaView>
   );

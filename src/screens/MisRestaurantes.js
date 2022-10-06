@@ -8,6 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import CardRestaurante from '../components/CardRestaurante';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {data} from '../data/data';
 
 const MisRestaurantes = ({navigation}) => {
@@ -27,21 +28,18 @@ const MisRestaurantes = ({navigation}) => {
           height: 50,
           alignItems: 'center',
           justifyContent: 'flex-start',
+          marginBottom: 5,
         }}>
-        <Pressable
+        <Ionicons
+          name="menu"
           style={{
+            color: 'black',
             marginLeft: 35,
             marginRight: 30,
+            fontSize: 20,
           }}
-          onPress={() => navigation.navigate('Login')}>
-          <Image
-            style={{
-              width: 15,
-              height: 15,
-            }}
-            source={require('../assets/Icons/back_icon.png')}
-          />
-        </Pressable>
+          onPress={() => navigation.openDrawer()}
+        />
         <Text
           style={{
             color: 'black',
@@ -56,7 +54,11 @@ const MisRestaurantes = ({navigation}) => {
           height: '75%',
         }}>
         {data.map(restaurante => (
-          <CardRestaurante key={restaurante.id} restaurante={restaurante} navigation={navigation}/>
+          <CardRestaurante
+            key={restaurante.id}
+            restaurante={restaurante}
+            navigation={navigation}
+          />
         ))}
       </ScrollView>
       <Pressable

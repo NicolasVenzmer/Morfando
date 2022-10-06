@@ -10,6 +10,7 @@ import {
   Modal,
 } from 'react-native';
 import {useNetInfo} from '@react-native-community/netinfo';
+import { AuthContext } from '../context/AuthContext';
 // import variables from '../config/variables';
 // import axios from 'axios';
 // import config from "../config/default.json"
@@ -53,6 +54,9 @@ const isEmpty = stringToValidate => {
 };
 
 const Login = ({navigation}) => {
+
+  const {login} = useContext(AuthContext);
+
   const netInfo = useNetInfo();
   const [mail, setUsuario] = useState('');
   const [password, setPassword] = useState('');
@@ -61,9 +65,9 @@ const Login = ({navigation}) => {
   //   const [loading, setLoading] = useState(false);
 
   const handleisEmpty = () => {
-    if (!validateEmail(mail) || isEmpty(password)) {
-      setVisible(true);
-    } else {
+    // if (!validateEmail(mail) || isEmpty(password)) {
+    //   setVisible(true);
+    // } else {
       if (netInfo.type !== 'wifi') {
         {
           Login();
@@ -71,7 +75,7 @@ const Login = ({navigation}) => {
       } else {
         setNoWifi(true);
       }
-    }
+    //}
   };
 
   // aca verifico si esta conectado a wifi o no
@@ -231,7 +235,7 @@ const Login = ({navigation}) => {
             borderBottomWidth: 1,
             padding: 10,
           }}
-          onChangeText={setUsuario}
+          onChangeText={text => setUsuario(text)}
           value={mail}
           placeholder="Email"
         />
@@ -244,7 +248,7 @@ const Login = ({navigation}) => {
             borderBottomWidth: 1,
             padding: 10,
           }}
-          onChangeText={setPassword}
+          onChangeText={text => setPassword(text)}
           value={password}
           secureTextEntry={true}
           placeholder="Contraseña"
@@ -344,7 +348,7 @@ const Login = ({navigation}) => {
               backgroundColor: '#E14852',
               borderRadius: 30,
             }}
-            onPress={() => navigation.navigate('MisRestaurantes')}
+            onPress={() => {login(mail, password)}}
             // onPress={() => {
             //   {
             //     Login();

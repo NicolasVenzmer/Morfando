@@ -3,12 +3,15 @@ import {
   View,
   Image,
 } from 'react-native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
 
 const Splash = ({navigation}) => {
   React.useEffect(() => {
     setTimeout(() => {
-      navigation.replace('CompletarSignUp');
-    }, 2000);
+      navigation.replace('SignUp');
+    }, 1500);
     return () => {};
   }, []);
 
