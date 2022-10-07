@@ -12,32 +12,8 @@ import ErrorDeConexion from '../screens/errorScreens/ErrorDeConexion';
 import ErrorDeServidor from '../screens/errorScreens/ErrorDeServidor';
 import ErrorDeUsuarioYaRegistrado from '../screens/errorScreens/ErrorDeUsuarioYaRegistrado';
 import ErrorDeUsuarioOContraseñaIncorrectas from '../screens/errorScreens/ErrorDeUsuarioOContraseñaIncorrectas';
-import MisRestaurantes from '../screens/MisRestaurantes';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Stack = createNativeStackNavigator();
-const Drawer = createDrawerNavigator();
-
-// function RootAuth() {
-//   return (
-//     <Drawer.Navigator
-//       screenOptions={{
-//         headerShown: false,
-//       }}>
-//       <Drawer.Screen
-//         name="Inicio"
-//         component={MisRestaurantes}
-//         options={{
-//           drawerIcon: ({color}) => (
-//             <Ionicons name="home-outline" size={22} color={color} />
-//           ),
-//         }}
-//       />
-//     </Drawer.Navigator>
-//   );
-// }
 
 const AuthStack = () => {
   return (
@@ -46,7 +22,6 @@ const AuthStack = () => {
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="CompletarSignUp" component={CompletarSignUp} />
       <Stack.Screen name="Login" component={Login} />
-      {/* <Stack.Screen name="RootAuth" component={RootAuth} /> */}
       <Stack.Screen name="OlvideMiContraseña" component={OlvideMiContraseña} />
       <Stack.Screen
         name="RestaurarContraseña"

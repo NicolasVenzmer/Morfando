@@ -3,10 +3,10 @@ import Feather from 'react-native-vector-icons/Feather';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const CardRestaurante = ({restaurante, navigation}) => {
+const CardRestaurante = ({restaurant, navigation}) => {
   //Restaurante
   const deleteHandler = key => {
-      const restaurante = ""
+      const restaurant = ""
   };
   return (
     <View
@@ -28,7 +28,7 @@ const CardRestaurante = ({restaurante, navigation}) => {
             color: 'black',
             fontWeight: '400',
           }}>
-          {restaurante.title}
+          {restaurant.nombre}
         </Text>
         <MaterialIcons
           name="menu-book"
@@ -64,7 +64,7 @@ const CardRestaurante = ({restaurante, navigation}) => {
           width: '90%',
           height: 150,
         }}
-        source={restaurante.image}
+        source={restaurant.restaurantImage}
       />
     </View>
   );

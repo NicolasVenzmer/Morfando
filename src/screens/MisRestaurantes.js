@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -10,8 +10,33 @@ import {
 import CardRestaurante from '../components/CardRestaurante';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {data} from '../data/data';
+import {BASE_URL} from '../config/config';
+import axios from 'axios';
 
 const MisRestaurantes = ({navigation}) => {
+  const [loading, setLoading] = useState(true);
+  const [emptyRestaurants, setEmptyRestaurants] = useState(true);
+  const [restaurants, setRestaurants] = useState([]);
+  //const userRole = localStorage.getItem('role');
+
+  const getRestaurants = async () => {
+    axios
+      .get(`${BASE_URL}/restaurants`)
+      .then(res => {
+        console.log('DATA_: ', res.data);
+        setRestaurants(res.data);
+        setEmptyRestaurants(false);
+      })
+      .catch(e => {
+        console.log(`Restaurants error ${e}`);
+      });
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    //getRestaurants();
+  }, []);
+
   return (
     <SafeAreaView
       style={{
@@ -53,13 +78,27 @@ const MisRestaurantes = ({navigation}) => {
           width: '100%',
           height: '75%',
         }}>
-        {data.map(restaurante => (
-          <CardRestaurante
-            key={restaurante.id}
-            restaurante={restaurante}
-            navigation={navigation}
-          />
-        ))}
+        {emptyRestaurants ? (
+          <View
+            style={{
+              width: '80%',
+              resizeMode:'contain',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Image source={require('../assets/Images/empty-restaurants.png')} />
+          </View>
+        ) : (
+          <>
+            {restaurants.map(restaurant => (
+              <CardRestaurante
+                key={restaurant.id}
+                restaurant={restaurant}
+                navigation={navigation}
+              />
+            ))}
+          </>
+        )}
       </ScrollView>
       <Pressable
         style={{
