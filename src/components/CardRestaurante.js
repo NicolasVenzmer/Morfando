@@ -11,7 +11,7 @@ const CardRestaurante = ({restaurant, navigation}) => {
   return (
     <View
       style={{
-        backgroundColor: 'white',
+        backgroundColor: '#F2F1F0',
         alignSelf: 'center',
         top: 10,
         width: '80%',
@@ -19,7 +19,7 @@ const CardRestaurante = ({restaurant, navigation}) => {
         borderRadius: 30,
         marginBottom: 10,
       }}>
-      <View style={{flexDirection: 'row', height: 20}}>
+      <View style={{flexDirection: 'row', height: 20, position: 'relative'}}>
         <Text
           style={{
             alignSelf: 'flex-start',
@@ -27,6 +27,7 @@ const CardRestaurante = ({restaurant, navigation}) => {
             left: 20,
             color: 'black',
             fontWeight: '400',
+            marginRight: 'auto',
           }}>
           {restaurant.nombre}
         </Text>
@@ -36,8 +37,7 @@ const CardRestaurante = ({restaurant, navigation}) => {
             color: '#E14852',
             fontSize: 20,
             top: 10,
-            left: 125,
-            alignSelf: 'flex-end',
+            right: 20,
           }}
           onPress={() => navigation.navigate('CrearMenu')}
         />
@@ -47,8 +47,7 @@ const CardRestaurante = ({restaurant, navigation}) => {
             color: '#E14852',
             fontSize: 20,
             top: 10,
-            left: 130,
-            alignSelf: 'flex-end',
+            right: 15,
           }}
           onPress={() => deleteHandler()}
         />

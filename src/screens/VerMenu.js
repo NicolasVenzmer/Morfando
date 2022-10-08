@@ -69,11 +69,9 @@ const VerMenu = ({navigation}) => {
     <SafeAreaView
       style={{
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'white',
-        marginVertical: '1%',
         flex: 1,
+        alignItems: 'center',
+        backgroundColor: 'white',
       }}>
       <View
         style={{

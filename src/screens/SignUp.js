@@ -9,8 +9,8 @@ const SignUp = ({navigation}) => {
     <SafeAreaView
       style={{
         flexDirection: 'column',
+        flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
         backgroundColor: 'ff0000',
       }}>
       <View
@@ -81,37 +81,48 @@ const SignUp = ({navigation}) => {
       </View>
       <View
         style={{
-          backgroundColor: 'white',
-          alignItems: 'flex-start',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
-          top: 50,
-          width: '80%',
-          height: 150,
+          width: '100%',
+          height: '50%',
           borderRadius: 30,
         }}>
-        <RadioButton.Group
-          onValueChange={value => setValue(value)}
-          value={value}>
-          <RadioButton.Item
-            style={{flexDirection: 'row-reverse'}}
-            color="#E14852"
-            label="Tengo Restaurante(s)"
-            value="first"
-          />
-          <RadioButton.Item
-            style={{flexDirection: 'row-reverse'}}
-            color="#E14852"
-            label="Tengo hambre"
-            value="second"
-          />
-        </RadioButton.Group>
+        <View
+          style={{
+            backgroundColor: 'white',
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            width: '80%',
+            height: 150,
+            borderRadius: 30,
+          }}>
+          <RadioButton.Group
+            onValueChange={value => setValue(value)}
+            value={value}>
+            <RadioButton.Item
+              style={{flexDirection: 'row-reverse'}}
+              color="#E14852"
+              label="Tengo Restaurante(s)"
+              value="first"
+            />
+            <RadioButton.Item
+              style={{flexDirection: 'row-reverse'}}
+              color="#E14852"
+              label="Tengo hambre"
+              value="second"
+            />
+          </RadioButton.Group>
+        </View>
       </View>
       {value === 'first' ? (
         <Pressable
           style={{
+            marginTop: 10,
+            marginBottom: 10,
             position: 'absolute',
             width: '80%',
-            top: 500,
+            bottom: 0,
             height: 50,
             justifyContent: 'center',
             alignItems: 'center',
@@ -132,9 +143,11 @@ const SignUp = ({navigation}) => {
       ) : (
         <Pressable
           style={{
+            marginTop: 10,
+            marginBottom: 10,
             position: 'absolute',
             width: '80%',
-            top: 500,
+            bottom: 0,
             height: 50,
             justifyContent: 'center',
             alignItems: 'center',

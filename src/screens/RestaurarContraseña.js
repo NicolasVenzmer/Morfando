@@ -6,8 +6,8 @@ const RestaurarContraseña = ({navigation}) => {
     <SafeAreaView
       style={{
         flexDirection: 'column',
+        flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
         backgroundColor: 'ff0000',
       }}>
       <View
@@ -60,24 +60,36 @@ const RestaurarContraseña = ({navigation}) => {
       </View>
       <View
         style={{
+          display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          width: '80%',
-          height: 150,
-          top: 50,
+          width: '100%',
+          height: '50%',
+          borderRadius: 30,
         }}>
-        <Text
+        <View
           style={{
-            color: 'black',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '80%',
+            height: 150,
+            top: 50,
           }}>
-          Te hemos enviado un mail para que restablezcas tu contraseña.
-        </Text>
+          <Text
+            style={{
+              color: 'black',
+            }}>
+            Te hemos enviado un mail para que restablezcas tu contraseña.
+          </Text>
+        </View>
       </View>
       <Pressable
         style={{
+          marginTop: 10,
+          marginBottom: 10,
           position: 'absolute',
           width: '80%',
-          top: 500,
+          bottom: 0,
           height: 50,
           justifyContent: 'center',
           alignItems: 'center',

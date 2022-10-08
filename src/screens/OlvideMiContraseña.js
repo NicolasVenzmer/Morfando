@@ -64,8 +64,8 @@ const OlvideMiContraseña = ({navigation}) => {
     <SafeAreaView
       style={{
         flexDirection: 'column',
+        flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
         backgroundColor: 'ff0000',
       }}>
       <View
@@ -133,35 +133,45 @@ const OlvideMiContraseña = ({navigation}) => {
       </Pressable>
       <View
         style={{
-          top: 35,
-          maxWidth: '82%',
-        }}>
-        <Text style={{color: 'black'}}>
-          Ingresa tu mail para recuperar tu contraseña.
-        </Text>
-      </View>
-      <View
-        style={{
-          alignItems: 'flex-start',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
-          top: 20,
-          width: '80%',
-          height: 150,
+          width: '100%',
+          height: '50%',
           borderRadius: 30,
         }}>
-        <TextInput
+        <View
           style={{
-            width: '90%',
-            height: 40,
-            margin: 12,
-            borderBottomColor: 'grey', // Add this to specify bottom border color
-            borderBottomWidth: 1,
-            padding: 10,
-          }}
-          onChangeText={setUsuario}
-          value={mail}
-          placeholder="Email"
-        />
+            top: 35,
+            maxWidth: '82%',
+          }}>
+          <Text style={{color: 'black'}}>
+            Ingresa tu mail para recuperar tu contraseña.
+          </Text>
+        </View>
+        <View
+          style={{
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            top: 20,
+            width: '80%',
+            height: 150,
+            borderRadius: 30,
+          }}>
+          <TextInput
+            style={{
+              width: '90%',
+              height: 40,
+              margin: 12,
+              borderBottomColor: 'grey', // Add this to specify bottom border color
+              borderBottomWidth: 1,
+              padding: 10,
+            }}
+            onChangeText={setUsuario}
+            value={mail}
+            placeholder="Email"
+          />
+        </View>
       </View>
 
       <ModalPoup visible={visible}>
@@ -188,9 +198,7 @@ const OlvideMiContraseña = ({navigation}) => {
           }}>
           <Pressable
             style={{
-              width: '40%',
               alignSelf: 'center',
-              borderRadius: 5,
               width: '100%',
               marginVertical: 10,
               paddingVertical: 10,
@@ -208,9 +216,11 @@ const OlvideMiContraseña = ({navigation}) => {
 
       <Pressable
         style={{
+          marginTop: 10,
+          marginBottom: 10,
           position: 'absolute',
           width: '80%',
-          top: 500,
+          bottom: 0,
           height: 50,
           justifyContent: 'center',
           alignItems: 'center',

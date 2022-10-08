@@ -182,11 +182,11 @@ const CrearRestaurante = ({navigation}) => {
     <SafeAreaView
       style={{
         flexDirection: 'column',
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
         marginVertical: '1%',
-        flex: 1,
       }}>
       <View
         style={{
@@ -426,31 +426,31 @@ const CrearRestaurante = ({navigation}) => {
             </ScrollView>
           </View>
         )}
-        <Pressable
+      </ScrollView>
+      <Pressable
+        style={{
+          marginTop: 10,
+          marginBottom: 10,
+          position: 'relative',
+          width: '80%',
+          bottom: 0,
+          height: 50,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#E14852',
+          borderRadius: 30,
+        }}
+        onPress={() => navigation.navigate('MisRestaurantes')}>
+        <Text
           style={{
-            alignSelf: 'center',
-            //position: 'absolute',
-            marginTop: 10,
-            marginBottom: 10,
-            width: '80%',
-            height: 50,
+            color: '#fdfdfd',
+            fontWeight: '400',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#E14852',
-            borderRadius: 30,
-          }}
-          onPress={() => navigation.navigate('MisRestaurantes')}>
-          <Text
-            style={{
-              color: '#fdfdfd',
-              fontWeight: '400',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            Guardar
-          </Text>
-        </Pressable>
-      </ScrollView>
+          }}>
+          Guardar
+        </Text>
+      </Pressable>
     </SafeAreaView>
   );
 };

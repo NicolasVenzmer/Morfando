@@ -34,17 +34,17 @@ const MisRestaurantes = ({navigation}) => {
   };
 
   useEffect(() => {
-    //getRestaurants();
+    getRestaurants();
   }, []);
 
   return (
     <SafeAreaView
       style={{
         flexDirection: 'column',
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'ff0000',
-        marginVertical: '1%',
+        backgroundColor: 'white',
       }}>
       <View
         style={{
@@ -76,13 +76,13 @@ const MisRestaurantes = ({navigation}) => {
       <ScrollView
         style={{
           width: '100%',
-          height: '75%',
+          height: '80%',
         }}>
         {emptyRestaurants ? (
           <View
             style={{
               width: '80%',
-              resizeMode:'contain',
+              resizeMode: 'contain',
               alignItems: 'center',
               justifyContent: 'center',
             }}>
@@ -102,9 +102,11 @@ const MisRestaurantes = ({navigation}) => {
       </ScrollView>
       <Pressable
         style={{
-          position: 'absolute',
+          marginTop: 10,
+          marginBottom: 10,
+          position: 'relative',
           width: '80%',
-          top: 500,
+          bottom: 0,
           height: 50,
           justifyContent: 'center',
           alignItems: 'center',

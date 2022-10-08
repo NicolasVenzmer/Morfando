@@ -138,8 +138,8 @@ const Login = ({navigation}) => {
     <SafeAreaView
       style={{
         flexDirection: 'column',
+        flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
         backgroundColor: 'ff0000',
       }}>
       <View
@@ -192,192 +192,203 @@ const Login = ({navigation}) => {
       </View>
       <View
         style={{
-          flexDirection: 'row',
+          display: 'flex',
           alignItems: 'center',
-          backgroundColor: 'white',
-          width: '80%',
-          height: 50,
-          top: 20,
-          borderRadius: 10,
-        }}>
-        <Image
-          style={{
-            alignSelf: 'flex-start',
-            alignSelf: 'center',
-            left: 10,
-            width: 25,
-            height: 25,
-          }}
-          source={require('../assets/Icons/google_icon.png')}
-        />
-        <Text
-          style={{
-            color: 'black',
-            fontWeight: '400',
-            left: 20,
-          }}>
-          Ingresar con Google
-        </Text>
-      </View>
-      <View
-        style={{
-          alignItems: 'flex-start',
           justifyContent: 'center',
-          width: '80%',
-          height: 150,
+          width: '100%',
+          height: '50%',
+          borderRadius: 30,
         }}>
-        <TextInput
+        <View
           style={{
-            width: '90%',
-            height: 40,
-            margin: 5,
-            borderBottomColor: 'grey',
-            borderBottomWidth: 1,
-            padding: 10,
-          }}
-          onChangeText={text => setUsuario(text)}
-          value={mail}
-          placeholder="Email"
-        />
-        <TextInput
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: 'white',
+            width: '80%',
+            height: 50,
+            top: 20,
+            borderRadius: 10,
+          }}>
+          <Image
+            style={{
+              alignSelf: 'center',
+              left: 10,
+              width: 25,
+              height: 25,
+            }}
+            source={require('../assets/Icons/google_icon.png')}
+          />
+          <Text
+            style={{
+              color: 'black',
+              fontWeight: '400',
+              left: 20,
+            }}>
+            Ingresar con Google
+          </Text>
+        </View>
+        <View
           style={{
-            width: '90%',
-            height: 40,
-            margin: 5,
-            borderBottomColor: 'grey',
-            borderBottomWidth: 1,
-            padding: 10,
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            width: '80%',
+            height: 150,
+          }}>
+          <TextInput
+            style={{
+              width: '90%',
+              height: 40,
+              margin: 5,
+              borderBottomColor: 'grey',
+              borderBottomWidth: 1,
+              padding: 10,
+            }}
+            onChangeText={text => setUsuario(text)}
+            value={mail}
+            placeholder="Email"
+          />
+          <TextInput
+            style={{
+              width: '90%',
+              height: 40,
+              margin: 5,
+              borderBottomColor: 'grey',
+              borderBottomWidth: 1,
+              padding: 10,
+            }}
+            onChangeText={text => setPassword(text)}
+            value={password}
+            secureTextEntry={true}
+            placeholder="Contraseña"
+          />
+        </View>
+
+        <ModalPoup visible={visible}>
+          <View style={{alignItems: 'flex-start'}}>
+            <Text style={{fontSize: 20, color: 'black'}}>
+              El mail o contraseña son invalidos.
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: '2%',
+                marginBottom: '2%',
+                marginHorizontal: '5%',
+              }}
+            />
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '1%',
+              marginBottom: '1%',
+              marginHorizontal: '1%',
+            }}>
+            <Pressable
+              style={{
+                width: '40%',
+                alignSelf: 'center',
+                borderRadius: 5,
+                width: '100%',
+                marginVertical: 10,
+                paddingVertical: 10,
+                backgroundColor: '#E14852',
+                borderRadius: 30,
+              }}
+              onPress={() => {
+                navigation.navigate('Login');
+                setVisible(false);
+              }}>
+              <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
+            </Pressable>
+          </View>
+        </ModalPoup>
+
+        <ModalPoup visible={noWifi}>
+          <View style={{alignItems: 'flex-start'}}>
+            <Text style={{fontSize: 20, color: 'black'}}>
+              No se encuentra conectado a una red Wifi. ¿Desea continuar usando
+              sus datos?
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: '2%',
+                marginBottom: '2%',
+                marginHorizontal: '5%',
+              }}></View>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '1%',
+              marginBottom: '1%',
+              marginHorizontal: '1%',
+            }}>
+            <Pressable
+              style={{
+                alignSelf: 'center',
+                width: '50%',
+                marginVertical: 10,
+                paddingVertical: 10,
+                backgroundColor: '#E14852',
+                borderRadius: 30,
+              }}
+              onPress={() => {
+                navigation.navigate('Login');
+                setNoWifi(false);
+              }}>
+              <Text style={{color: 'white', textAlign: 'center'}}>
+                Cancelar
+              </Text>
+            </Pressable>
+            <Pressable
+              style={{
+                alignSelf: 'center',
+                width: '50%',
+                marginVertical: 10,
+                paddingVertical: 10,
+                backgroundColor: '#E14852',
+                borderRadius: 30,
+              }}
+              onPress={() => {
+                login(mail, password);
+              }}
+              // onPress={() => {
+              //   {
+              //     Login();
+              //   }
+              //   setNoWifi(false);
+              // }}
+            >
+              <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
+            </Pressable>
+          </View>
+        </ModalPoup>
+
+        <Pressable
+          style={{
+            width: '78%',
+            height: 20,
           }}
-          onChangeText={text => setPassword(text)}
-          value={password}
-          secureTextEntry={true}
-          placeholder="Contraseña"
-        />
+          onPress={() => navigation.navigate('OlvideMiContraseña')}>
+          <Text style={{color: '#E14852', fontStyle: 'italic'}}>
+            Olvidaste tu contraseña?
+          </Text>
+        </Pressable>
       </View>
-
-      <ModalPoup visible={visible}>
-        <View style={{alignItems: 'flex-start'}}>
-          <Text style={{fontSize: 20, color: 'black'}}>
-            El mail o contraseña son invalidos.
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: '2%',
-              marginBottom: '2%',
-              marginHorizontal: '5%',
-            }}></View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: '1%',
-            marginBottom: '1%',
-            marginHorizontal: '1%',
-          }}>
-          <Pressable
-            style={{
-              width: '40%',
-              alignSelf: 'center',
-              borderRadius: 5,
-              width: '100%',
-              marginVertical: 10,
-              paddingVertical: 10,
-              backgroundColor: '#E14852',
-              borderRadius: 30,
-            }}
-            onPress={() => {
-              navigation.navigate('Login');
-              setVisible(false);
-            }}>
-            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
-          </Pressable>
-        </View>
-      </ModalPoup>
-
-      <ModalPoup visible={noWifi}>
-        <View style={{alignItems: 'flex-start'}}>
-          <Text style={{fontSize: 20, color: 'black'}}>
-            No se encuentra conectado a una red Wifi. ¿Desea continuar usando
-            sus datos?
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: '2%',
-              marginBottom: '2%',
-              marginHorizontal: '5%',
-            }}></View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: '1%',
-            marginBottom: '1%',
-            marginHorizontal: '1%',
-          }}>
-          <Pressable
-            style={{
-              width: '40%',
-              alignSelf: 'center',
-              borderRadius: 5,
-              width: '50%',
-              marginVertical: 10,
-              paddingVertical: 10,
-              backgroundColor: '#E14852',
-              borderRadius: 30,
-            }}
-            onPress={() => {
-              navigation.navigate('Login');
-              setNoWifi(false);
-            }}>
-            <Text style={{color: 'white', textAlign: 'center'}}>Cancelar</Text>
-          </Pressable>
-          <Pressable
-            style={{
-              width: '40%',
-              alignSelf: 'center',
-              borderRadius: 5,
-              width: '50%',
-              marginVertical: 10,
-              paddingVertical: 10,
-              backgroundColor: '#E14852',
-              borderRadius: 30,
-            }}
-            onPress={() => {login(mail, password)}}
-            // onPress={() => {
-            //   {
-            //     Login();
-            //   }
-            //   setNoWifi(false);
-            // }}
-          >
-            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
-          </Pressable>
-        </View>
-      </ModalPoup>
-
       <Pressable
         style={{
-          width: '78%',
-          height: 20,
-          position: 'absolute',
-          top: 440,
-        }}
-        onPress={() => navigation.navigate('OlvideMiContraseña')}>
-        <Text style={{color: '#E14852', fontStyle: 'italic'}}>
-          Olvidaste tu contraseña?
-        </Text>
-      </Pressable>
-      <Pressable
-        style={{
+          marginTop: 10,
+          marginBottom: 10,
           position: 'absolute',
           width: '80%',
-          top: 500,
+          bottom: 0,
           height: 50,
           justifyContent: 'center',
           alignItems: 'center',
