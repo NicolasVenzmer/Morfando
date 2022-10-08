@@ -289,9 +289,7 @@ const Login = ({navigation}) => {
             }}>
             <Pressable
               style={{
-                width: '40%',
                 alignSelf: 'center',
-                borderRadius: 5,
                 width: '100%',
                 marginVertical: 10,
                 paddingVertical: 10,

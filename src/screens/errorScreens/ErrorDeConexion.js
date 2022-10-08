@@ -31,15 +31,14 @@ const ErrorDeConexion = ({navigation}) => {
     <SafeAreaView
       style={{
         flexDirection: 'column',
+        flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'ff0000',
-        marginVertical: '1%',
+        backgroundColor: 'white',
       }}>
       <View
         style={{
           width: '100%',
-          height: 300,
+          height: 250,
           alignItems: 'center',
           justifyContent: 'center',
         }}>
@@ -51,23 +50,34 @@ const ErrorDeConexion = ({navigation}) => {
           source={require('../../assets/Icons/error-icon.png')}
         />
       </View>
-      <Text
+      <View
         style={{
-          fontSize: 15,
-          color: 'black',
-          width: '60%',
-          height: 140,
-          textAlign: 'center',
-          textAlignVertical: 'center',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          height: '50%',
+          borderRadius: 30,
         }}>
-        No es posible acceder a la conexion. Por favor, intentelo de nuevo mas
-        tarde.
-      </Text>
+        <Text
+          style={{
+            fontSize: 15,
+            color: 'black',
+            width: '60%',
+            textAlign: 'center',
+            textAlignVertical: 'center',
+          }}>
+          No es posible acceder a la conexion. Por favor, intentelo de nuevo mas
+          tarde.
+        </Text>
+      </View>
       <Pressable
         style={{
-          position: 'absolute',
+          marginTop: 10,
+          marginBottom: 10,
+          position: 'relative',
           width: '80%',
-          top: 500,
+          bottom: 0,
           height: 50,
           justifyContent: 'center',
           alignItems: 'center',

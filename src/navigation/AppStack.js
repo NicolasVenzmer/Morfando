@@ -3,7 +3,6 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import PerfilUsuario from '../screens/PerfilUsuario';
 import Favoritos from '../screens/Favoritos';
 import CustomDrawer from '../components/CustomDrawer';
-import HomeScreen from '../screens/HomeScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CrearMenu from '../screens/CrearMenu';
 import VerMenu from '../screens/VerMenu';
@@ -13,7 +12,6 @@ import CrearRestaurante from '../screens/CrearRestaurante';
 const Drawer = createDrawerNavigator();
 
 const AppStack = () => {
-  
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawer {...props} />}
