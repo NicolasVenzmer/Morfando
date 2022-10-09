@@ -3,7 +3,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SignUp from '../screens/SignUp';
 import Login from '../screens/Login';
 import CompletarSignUp from '../screens/CompletarSignUp';
-import Splash from '../screens/Splash';
 import OlvideMiContraseña from '../screens/OlvideMiContraseña';
 import RestaurarContraseña from '../screens/RestaurarContraseña';
 import AltaUsuarioConExito from '../screens/AltaUsuarioConExito';
@@ -18,7 +17,6 @@ const Stack = createNativeStackNavigator();
 const AuthStack = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      {/* <Stack.Screen name="Splash" component={Splash} /> */}
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="CompletarSignUp" component={CompletarSignUp} />
       <Stack.Screen name="Login" component={Login} />

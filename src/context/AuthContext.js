@@ -7,6 +7,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [esDueño, setEsDueño] = useState(true)
   const [userToken, setUserToken] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
 
@@ -22,6 +23,11 @@ export const AuthProvider = ({children}) => {
         let userInfo = res.data;
         setUserInfo(userInfo);
         setUserToken(userInfo.token);
+
+        // ACA ME FIJO SI EL DUEÑO O NO
+        // if(userInfo.duenio){
+        //   setEsDueño(true);
+        // }
 
         AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
         AsyncStorage.setItem('userToken', userInfo.token);
@@ -68,7 +74,7 @@ export const AuthProvider = ({children}) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{login, logout, isLoading, userToken, userInfo}}>
+    <AuthContext.Provider value={{login, logout, isLoading, userToken, userInfo, esDueño}}>
       {children}
     </AuthContext.Provider>
   );
