@@ -196,24 +196,22 @@ const CrearRestaurante = ({navigation}) => {
           alignItems: 'center',
           justifyContent: 'flex-start',
         }}>
-        <Pressable
+        <Ionicons
+          name="chevron-back"
           style={{
-            marginLeft: 35,
-            marginRight: 30,
+            color: 'black',
+            marginLeft: 15,
+            marginRight: 25,
+            fontSize: 30,
           }}
-          onPress={() => navigation.navigate('MisRestaurantes')}>
-          <Image
-            style={{
-              width: 15,
-              height: 15,
-            }}
-            source={require('../assets/Icons/back_icon.png')}
-          />
-        </Pressable>
+          onPress={() => navigation.goBack()}
+        />
         <Text
           style={{
             color: 'black',
-            fontWeight: '400',
+            fontWeight: '500',
+            fontSize: 20,
+            fontFamily: 'Roboto',
           }}>
           Crear Restaurante
         </Text>

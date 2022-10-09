@@ -4,6 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Plato from '../components/Plato';
 
 const VerMenu = ({navigation}) => {
+
   const platos = [
     {
       id: 1,
@@ -86,16 +87,19 @@ const VerMenu = ({navigation}) => {
           name="menu"
           style={{
             color: 'black',
-            marginLeft: 35,
-            marginRight: 30,
-            fontSize: 20,
+            marginLeft: 15,
+            marginRight: 25,
+            fontSize: 30,
           }}
-          onPress={() => navigation.openDrawer()}
+          onPress={() => navigation.popToTop()}
+          //onPress={handleResetNavigationPressed()}
         />
         <Text
           style={{
             color: 'black',
-            fontWeight: '400',
+            fontWeight: '500',
+            fontSize: 20,
+            fontFamily: 'Roboto',
           }}>
           Menu
         </Text>

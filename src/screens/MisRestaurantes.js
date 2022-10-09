@@ -23,7 +23,7 @@ const MisRestaurantes = ({navigation}) => {
     axios
       .get(`${BASE_URL}/restaurants`)
       .then(res => {
-        console.log('DATA_: ', res.data);
+        //console.log('DATA_: ', res.data);
         setRestaurants(res.data);
         setEmptyRestaurants(false);
       })
@@ -34,7 +34,7 @@ const MisRestaurantes = ({navigation}) => {
   };
 
   useEffect(() => {
-    getRestaurants();
+    //getRestaurants();
   }, []);
 
   return (
@@ -59,16 +59,18 @@ const MisRestaurantes = ({navigation}) => {
           name="menu"
           style={{
             color: 'black',
-            marginLeft: 35,
-            marginRight: 30,
-            fontSize: 20,
+            marginLeft: 15,
+            marginRight: 25,
+            fontSize: 30,
           }}
           onPress={() => navigation.openDrawer()}
         />
         <Text
           style={{
             color: 'black',
-            fontWeight: '400',
+            fontWeight: '500',
+            fontSize: 20,
+            fontFamily: 'Roboto',
           }}>
           Mis Restaurantes
         </Text>
@@ -81,11 +83,20 @@ const MisRestaurantes = ({navigation}) => {
         {emptyRestaurants ? (
           <View
             style={{
-              width: '80%',
-              resizeMode: 'contain',
+              width: '100%',
               alignItems: 'center',
               justifyContent: 'center',
             }}>
+            <Text
+              style={{
+                position: 'absolute',
+                fontSize: 20,
+                fontWeight: '450',
+                textAlign: 'center',
+              }}>
+              Aun no tienes restaurantes{'\n'}
+              Crea uno nuevo!
+            </Text>
             <Image source={require('../assets/Images/empty-restaurants.png')} />
           </View>
         ) : (

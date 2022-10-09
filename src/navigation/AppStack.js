@@ -41,7 +41,7 @@ const NavigationDrawerStructure = props => {
   );
 };
 
-const firstScreenStack = ({navigation}) => {
+const FlowDeRestaurante = ({navigation}) => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -55,92 +55,12 @@ const firstScreenStack = ({navigation}) => {
         headerTitleStyle: {
           fontWeight: 'bold', //Set Header text style
         },
+        headerShown: false,
       }}>
-      <Stack.Screen
-        name="FirstPage"
-        component={MisRestaurantes}
-        options={{
-          title: 'First Page', //Set Header Title
-        }}
-      />
-    </Stack.Navigator>
-  );
-};
-
-const secondScreenStack = ({navigation}) => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerLeft: () => (
-          <NavigationDrawerStructure navigationProps={navigation} />
-        ),
-        headerStyle: {
-          backgroundColor: '#f4511e', //Set Header color
-        },
-        headerTintColor: '#fff', //Set Header text color
-        headerTitleStyle: {
-          fontWeight: 'bold', //Set Header text style
-        },
-      }}>
-      <Stack.Screen
-        name="SecondPage"
-        component={VerMenu}
-        options={{
-          title: 'Second Page', //Set Header Title
-        }}
-      />
-    </Stack.Navigator>
-  );
-};
-
-const thirdScreenStack = ({navigation}) => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerLeft: () => (
-          <NavigationDrawerStructure navigationProps={navigation} />
-        ),
-        headerStyle: {
-          backgroundColor: '#f4511e', //Set Header color
-        },
-        headerTintColor: '#fff', //Set Header text color
-        headerTitleStyle: {
-          fontWeight: 'bold', //Set Header text style
-        },
-      }}>
-      <Stack.Screen
-        name="HiddenPage1"
-        component={PerfilUsuario}
-        options={{
-          title: 'Hidder Page One', //Set Header Title
-        }}
-      />
-    </Stack.Navigator>
-  );
-};
-
-const fourthScreenStack = ({navigation}) => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerLeft: () => (
-          <NavigationDrawerStructure navigationProps={navigation} />
-        ),
-        headerStyle: {
-          backgroundColor: '#f4511e', //Set Header color
-        },
-        headerTintColor: '#fff', //Set Header text color
-        headerTitleStyle: {
-          fontWeight: 'bold', //Set Header text style
-        },
-      }}>
-      <Stack.Screen
-        name="HiddenPage2"
-        component={CrearMenu}
-        options={{
-          title: 'Hidden Page Two', //Set Header Title
-        }}
-      />
+      <Stack.Screen name="MisRestaurantes" component={MisRestaurantes} />
+      <Stack.Screen name="CrearRestaurante" component={CrearRestaurante} />
+      <Stack.Screen name="CrearMenu" component={CrearMenu} />
+      <Stack.Screen name="VerMenu" component={VerMenu} />
     </Stack.Navigator>
   );
 };
@@ -148,12 +68,10 @@ const fourthScreenStack = ({navigation}) => {
 const AppStack = ({navigation}) => {
   const {esDueño} = useContext(AuthContext);
   return (
-    // <Drawer.Navigator
-    //   drawerContent={props => <CustomDrawer {...props} />}>
     <Drawer.Navigator
       initialRouteName="Mis Restaurantes"
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         drawerActiveBackgroundColor: '#E14852',
         drawerActiveTintColor: '#fff',
         drawerInactiveTintColor: '#333',
@@ -173,12 +91,16 @@ const AppStack = ({navigation}) => {
               // (routeName) => routeName !== 'HiddenPage1',
               // To hide multiple options you can add & condition
               routeName => {
-                routeName !== 'HiddenPage1' && routeName !== 'HiddenPage2';
+                routeName !== 'HiddenPage1' &&
+                  routeName !== 'HiddenPage2' &&
+                  routeName !== 'HiddenPage3';
               },
             ),
             routes: props.state.routes.filter(
               route =>
-                route.name !== 'HiddenPage1' && route.name !== 'HiddenPage2',
+                route.name !== 'HiddenPage1' &&
+                route.name !== 'HiddenPage2' &&
+                route.name !== 'HiddenPage3',
             ),
           },
         };
@@ -188,13 +110,29 @@ const AppStack = ({navigation}) => {
         <>
           <Drawer.Screen
             name="Mis Restaurantes"
-            component={MisRestaurantes}
+            component={FlowDeRestaurante}
             options={{
               drawerIcon: ({color}) => (
                 <Ionicons name="home-outline" size={22} color={color} />
               ),
             }}
           />
+          <Drawer.Screen
+            name="Mi Cuenta"
+            component={PerfilUsuario}
+            options={{
+              drawerIcon: ({color}) => (
+                <Ionicons name="person-outline" size={22} color={color} />
+              ),
+            }}
+          />
+          <Drawer.Screen name="HiddenPage3" component={CrearRestaurante} />
+          <Drawer.Screen name="HiddenPage1" component={CrearMenu} />
+          <Drawer.Screen name="HiddenPage2" component={VerMenu} />
+        </>
+      )}
+      {!esDueño && (
+        <>
           <Drawer.Screen
             name="Favoritos"
             component={Favoritos}
@@ -213,94 +151,10 @@ const AppStack = ({navigation}) => {
               ),
             }}
           />
-          <Drawer.Screen
-            name="CrearRestaurante"
-            component={CrearRestaurante}
-            options={{
-              drawerLabel: () => null,
-              title: null,
-            }}
-          />
-          <Drawer.Screen name="HiddenPage1" component={CrearMenu} />
-          <Drawer.Screen name="HiddenPage2" component={VerMenu} />
-        </>
-      )}
-      {!esDueño && (
-        <>
-          <Drawer.Screen
-            name="Mi Cuenta"
-            component={PerfilUsuario}
-            options={{
-              drawerIcon: ({color}) => (
-                <Ionicons name="person-outline" size={22} color={color} />
-              ),
-            }}
-          />
           <Drawer.Screen name="HiddenPage1" component={VerMenu} />
         </>
       )}
     </Drawer.Navigator>
-    // <Drawer.Navigator
-    //   drawerContent={props => <CustomDrawer {...props} />}
-    //   initialRouteName="Mis Restaurantes"
-    //   screenOptions={{
-    //     headerShown: true,
-    //     drawerActiveBackgroundColor: '#E14852',
-    //     drawerActiveTintColor: '#fff',
-    //     drawerInactiveTintColor: '#333',
-    //     drawerLabelStyle: {
-    //       marginLeft: -25,
-    //       fontFamily: 'Roboto-Medium',
-    //       fontSize: 15,
-    //     },
-    //   }}>
-    //   {esDueño && (
-    //     <>
-    //       <Drawer.Screen
-    //         name="Mis Restaurantes"
-    //         component={MisRestaurantes}
-    //         options={{
-    //           drawerIcon: ({color}) => (
-    //             <Ionicons name="home-outline" size={22} color={color} />
-    //           ),
-    //         }}
-    //       />
-    //       <Drawer.Screen
-    //         name="Favoritos"
-    //         component={Favoritos}
-    //         options={{
-    //           drawerIcon: ({color}) => (
-    //             <Ionicons name="heart-outline" size={22} color={color} />
-    //           ),
-    //         }}
-    //       />
-    //       <Drawer.Screen
-    //         name="Mi Cuenta"
-    //         component={PerfilUsuario}
-    //         options={{
-    //           drawerIcon: ({color}) => (
-    //             <Ionicons name="person-outline" size={22} color={color} />
-    //           ),
-    //         }}
-    //       />
-    //       <Drawer.Screen
-    //         name="CrearRestaurante"
-    //         component={CrearRestaurante}
-    //         options={{
-    //           drawerLabel: () => null,
-    //           title: null,
-    //         }}
-    //       />
-    //       <Drawer.Screen name="CrearMenu" component={CrearMenu} />
-    //       <Drawer.Screen name="VerMenu" component={VerMenu} />
-    //     </>
-    //   )}
-    //   {!esDueño && (
-    //     <>
-    //       <Drawer.Screen name="VerMenu" component={VerMenu} />
-    //     </>
-    //   )}
-    // </Drawer.Navigator>
   );
 };
 

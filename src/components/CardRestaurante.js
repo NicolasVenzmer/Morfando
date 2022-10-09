@@ -39,7 +39,8 @@ const CardRestaurante = ({restaurant, navigation}) => {
             top: 10,
             right: 20,
           }}
-          onPress={() => navigation.navigate('CrearMenu')}
+          //onPress={() => navigation.navigate('CrearMenu')}
+          onPress={() => navigation.navigate('CrearMenu') && navigation.setOptions({title: "Crear Menu"})}
         />
         <Feather
           name="trash-2"
