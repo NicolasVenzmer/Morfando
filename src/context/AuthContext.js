@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 import React, {createContext, useState, useEffect} from 'react';
-import {BASE_URL} from '../config/config';
+import axios from "../api/axios"
+const LOGIN_URL = '/user/';
 
 export const AuthContext = createContext();
 
@@ -11,29 +11,30 @@ export const AuthProvider = ({children}) => {
   const [userToken, setUserToken] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
 
-  const login = (username, password) => {
+  const login = async (username, password) => {
     setIsLoading(true);
-    const mail = username
+
+    const mail = username;
     axios
-      .post(`${BASE_URL}/user/:mail/:password`, {
+      .get(LOGIN_URL, {
         mail,
         password,
       })
       .then(res => {
         let userInfo = res.data;
         setUserInfo(userInfo);
-        setUserToken(userInfo.token);
+        //setUserToken(userInfo.token);
 
         // ACA ME FIJO SI EL DUEÑO O NO
         // if(userInfo.duenio){
         //   setEsDueño(true);
         // }
 
-        AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
-        AsyncStorage.setItem('userToken', userInfo.token);
+        //AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
+        //AsyncStorage.setItem('userToken', userInfo.token);
 
-        console.log(res.data);
-        console.log('User Token: ' + userInfo.token);
+        console.log("User Data: ", res.data);
+        //console.log('User Token: ' + userInfo.token);
       })
       .catch(e => {
         console.log(`Login error ${e}`);

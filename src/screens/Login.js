@@ -10,7 +10,7 @@ import {
   Modal,
 } from 'react-native';
 import {useNetInfo} from '@react-native-community/netinfo';
-import { AuthContext } from '../context/AuthContext';
+import {AuthContext} from '../context/AuthContext';
 // import variables from '../config/variables';
 // import axios from 'axios';
 // import config from "../config/default.json"
@@ -54,7 +54,6 @@ const isEmpty = stringToValidate => {
 };
 
 const Login = ({navigation}) => {
-
   const {login} = useContext(AuthContext);
 
   const netInfo = useNetInfo();
@@ -65,74 +64,30 @@ const Login = ({navigation}) => {
   //   const [loading, setLoading] = useState(false);
 
   const handleisEmpty = () => {
-    // if (!validateEmail(mail) || isEmpty(password)) {
-    //   setVisible(true);
-    // } else {
-      if (netInfo.type !== 'wifi') {
+    if (!validateEmail(mail) || isEmpty(password)) {
+      setVisible(true);
+    } else {
+      if (netInfo.type === 'wifi') {
         {
-          Login();
+          login(mail, password);
         }
       } else {
         setNoWifi(true);
       }
-    //}
+    }
   };
 
   // aca verifico si esta conectado a wifi o no
   //HAY QUE CAMBIAR EL IF A ===
   const wifi = () => {
-    if (netInfo.type !== 'wifi') {
+    if (netInfo.type === 'wifi') {
       {
-        Login();
+        login(mail, password);
       }
     } else {
       setNoWifi(true);
     }
   };
-
-  // const {login} = useContext(UserContext);
-
-  // const baseUrl = config.baseUrl;
-
-  // const Login = async () => {
-  //   const setup = {
-  //     headers: {
-  //       'content-type': 'application/json',
-  //     },
-  //   };
-  //   const body = JSON.stringify({mail, password});
-
-  //   try {
-  //     setLoading(true);
-  //     axios
-  //       .post(`${baseUrl}/login`, body, setup)
-  //       .then(function (res) {
-  //         if (res.status === 201) {
-  //           setLoading(false);
-  //           variables.setUsuario(res.data.data[0].idUsuario);
-  //           variables.setNick(res.data.data[0].nickname);
-  //           variables.setMail(res.data.data[0].mail);
-  //           variables.setNombre(res.data.data[0].nombre);
-  //           variables.setAvatar(res.data.data[0].avatar);
-  //           //navigation.navigate('Principal');
-  //           //navigation.navigate('Home');
-  //           login(mail);
-  //           storeLoginData(res.data.data[0]);
-  //         }
-  //         if (res.status === 202 || res.status === 203) {
-  //           setLoading(false);
-  //           setVisible(true);
-  //           //alert("Invalid username or password")
-  //         }
-  //       })
-  //       .catch(function (error) {
-  //         console.log(error);
-  //       });
-  //   } catch (error) {
-  //     console.log(error.msg);
-  //     alert(error.msg);
-  //   }
-  // };
 
   return (
     <SafeAreaView
@@ -355,15 +310,11 @@ const Login = ({navigation}) => {
                 borderRadius: 30,
               }}
               onPress={() => {
-                login(mail, password);
-              }}
-              // onPress={() => {
-              //   {
-              //     Login();
-              //   }
-              //   setNoWifi(false);
-              // }}
-            >
+                {
+                  login(mail, password);
+                }
+                setNoWifi(false);
+              }}>
               <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
             </Pressable>
           </View>
@@ -393,7 +344,6 @@ const Login = ({navigation}) => {
           backgroundColor: '#E14852',
           borderRadius: 30,
         }}
-        // onPress={() => navigation.navigate('MisRestaurantes')}
         onPress={() => setNoWifi(handleisEmpty)}>
         <Text
           style={{

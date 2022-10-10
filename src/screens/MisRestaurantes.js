@@ -10,18 +10,17 @@ import {
 import CardRestaurante from '../components/CardRestaurante';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {data} from '../data/data';
-import {BASE_URL} from '../config/config';
-import axios from 'axios';
+import axios from "../api/axios"
+const RESTAURANTS_URL = '/restaurants';
 
 const MisRestaurantes = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const [emptyRestaurants, setEmptyRestaurants] = useState(true);
   const [restaurants, setRestaurants] = useState([]);
-  //const userRole = localStorage.getItem('role');
 
   const getRestaurants = async () => {
     axios
-      .get(`${BASE_URL}/restaurants`)
+      .get(RESTAURANTS_URL)
       .then(res => {
         //console.log('DATA_: ', res.data);
         setRestaurants(res.data);
@@ -34,7 +33,7 @@ const MisRestaurantes = ({navigation}) => {
   };
 
   useEffect(() => {
-    //getRestaurants();
+    getRestaurants();
   }, []);
 
   return (

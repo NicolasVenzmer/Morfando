@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -10,11 +10,81 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {launchImageLibrary} from 'react-native-image-picker';
 import CardCrearPlato from '../components/CardCrearPlato';
+import axios from '../api/axios';
+const MENUS_URL = '/restaurant/';
+import {useRoute} from "@react-navigation/native"
 
 const CrearMenu = ({navigation}) => {
+  const route = useRoute()
   const [nombrePlato, onChangeNombrePlato] = useState(false);
   const [precio, onChangePrecio] = useState(false);
   const [ingrediente, onChangeIngrediente] = useState(false);
+
+  const [platosTemp, setPlatosTemp] = useState([]);
+  const [emptyMenus, setEmptyMenus] = useState(true);
+  
+  console.log(
+    'Estoy en el crear menu con el restaurante: ',
+    route.params.restaurant.id, // ID
+    route.params.restaurant.plates.map(
+      (
+        plato, // NOMBRE DEL PLATO
+      ) => console.log(plato.nombre),
+    ),
+    route.params.restaurant.plates.map(
+      (
+        plato, // NOMBRE DE LA CATEGORIA
+      ) => console.log(plato.category.nombre),
+    ),
+    //precio
+    route.params.restaurant.plates.map(
+      (
+        plato, // NOMBRE DEL INGREDIENTE
+      ) => console.log(plato.ingredientes),
+    ),
+    route.params.restaurant.plates.map(
+      (
+        plato, // APTO PARA VEGANOS
+      ) => console.log(plato.aptoVegano),
+    ),
+    route.params.restaurant.plates.map(
+      (
+        plato, // APTO PARA CELIACOS
+      ) => console.log(plato.aptoCeliaco),
+    ),
+    route.params.restaurant.plates.map(
+      (
+        plato, // APTO PARA CELIACOS
+      ) => console.log(plato.plato_imagen),
+    ),
+  );
+
+    // const [loading, setLoading] = useState(true);
+    // const [emptyMenus, setEmptyMenus] = useState(true);
+    // const [menus, setMenus] = useState([]);
+
+    // const getMenus = async () => {
+    //   axios
+    //     .get(MENUS_URL)
+    //     .then(res => {
+    //       //console.log('DATA_: ', res.data);
+    //       setMenus(res.data);
+    //       setEmptyMenus(false);
+    //     })
+    //     .catch(e => {
+    //       console.log(`Menus error ${e}`);
+    //     });
+    //   setLoading(false);
+    // };
+
+    useEffect(() => {
+      setPlatosTemp(route.params.restaurant.plates);
+      if(!!platosTemp){
+        setEmptyMenus(false)
+      }
+    }, []);
+
+    console.log("Ya cargue los platos: ", platosTemp)
 
   const [platos, setPlatos] = useState([{key: '', plato: ''}]);
   const addPlato = () => {
@@ -134,41 +204,98 @@ const CrearMenu = ({navigation}) => {
           width: '100%',
           height: '100%',
         }}>
-        {platos.map((plato, index) => (
-          <CardCrearPlato
-            key={index}
-            plato={plato}
-            deletePlato={() => deletePlato(index)}
-          />
-        ))}
-        <Pressable
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            left: 30,
-            marginBottom: 10,
-          }}
-          onPress={addPlato}>
-          <Ionicons
-            name="add-circle"
+        {emptyMenus ? (
+          <View
             style={{
-              color: '#E14852',
-              left: 5,
-              top: 5,
-              fontSize: 20,
-            }}
-          />
-          <Text
-            style={{
-              color: 'black',
-              fontWeight: '300',
-              aligSelf: 'center',
-              left: 10,
-              top: 3,
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}>
-            Agregar plato al menu
-          </Text>
-        </Pressable>
+            <Text
+              style={{
+                position: 'absolute',
+                fontSize: 20,
+                fontWeight: '450',
+                textAlign: 'center',
+              }}>
+              Aun no tienes restaurantes{'\n'}
+              Crea uno nuevo!
+            </Text>
+          </View>
+        ) : (
+          <>
+            {platosTemp.map((plato, index) => (
+              <CardCrearPlato
+                key={index}
+                plato={plato}
+                deletePlato={() => deletePlato(index)}
+              />
+            ))}
+            <Pressable
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                left: 30,
+                marginBottom: 10,
+              }}
+              onPress={addPlato}>
+              <Ionicons
+                name="add-circle"
+                style={{
+                  color: '#E14852',
+                  left: 5,
+                  top: 5,
+                  fontSize: 20,
+                }}
+              />
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: '300',
+                  aligSelf: 'center',
+                  left: 10,
+                  top: 3,
+                }}>
+                Agregar plato al menu
+              </Text>
+            </Pressable>
+            {/* {platos.map((plato, index) => (
+              <CardCrearPlato
+                key={index}
+                plato={plato}
+                deletePlato={() => deletePlato(index)}
+              />
+            ))}
+            <Pressable
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                left: 30,
+                marginBottom: 10,
+              }}
+              onPress={addPlato}>
+              <Ionicons
+                name="add-circle"
+                style={{
+                  color: '#E14852',
+                  left: 5,
+                  top: 5,
+                  fontSize: 20,
+                }}
+              />
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: '300',
+                  aligSelf: 'center',
+                  left: 10,
+                  top: 3,
+                }}>
+                Agregar plato al menu
+              </Text>
+            </Pressable> */}
+          </>
+        )}
       </ScrollView>
       <Pressable
         style={{

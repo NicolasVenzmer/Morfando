@@ -14,7 +14,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Feather from 'react-native-vector-icons/Feather';
 import {Checkbox} from 'react-native-paper';
 
-const CardCrearPlato = ({deletePlato, navigation}) => {
+const CardCrearPlato = ({deletePlato, navigation, plato}) => {
   const [nombrePlato, onChangeNombrePlato] = useState(false);
   const [precio, onChangePrecio] = useState(false);
   const [ingrediente, onChangeIngrediente] = useState(false);
@@ -120,7 +120,7 @@ const CardCrearPlato = ({deletePlato, navigation}) => {
             onChangeText={onChangeNombrePlato}
             placeholder="Nombre del plato"
             placeholderTextColor="black"
-            value={nombrePlato}
+            value={plato?.nombre || nombrePlato}
           />
           <DropDownPicker
             placeholder="Categoria"
@@ -155,7 +155,7 @@ const CardCrearPlato = ({deletePlato, navigation}) => {
             onChangeText={onChangePrecio}
             placeholder="Precio $$"
             placeholderTextColor="black"
-            value={precio}
+            value={plato?.precio || precio}
           />
           <TextInput
             style={{
@@ -170,7 +170,7 @@ const CardCrearPlato = ({deletePlato, navigation}) => {
             onChangeText={onChangeIngrediente}
             placeholder="Ingredientes / Descripcion del plato"
             placeholderTextColor="black"
-            value={ingrediente}
+            value={plato?.ingredientes || ingrediente}
           />
           <View
             style={{
@@ -186,7 +186,11 @@ const CardCrearPlato = ({deletePlato, navigation}) => {
                 left: 10,
               }}>
               <Checkbox
-                status={checkedCeliacos ? 'checked' : 'unchecked'}
+                status={
+                  plato?.aptoCeliaco || checkedCeliacos
+                    ? 'checked'
+                    : 'unchecked'
+                }
                 color="blue"
                 onPress={() => {
                   setCheckedCeliacos(!checkedCeliacos);
@@ -204,7 +208,9 @@ const CardCrearPlato = ({deletePlato, navigation}) => {
                 left: 10,
               }}>
               <Checkbox
-                status={checkedVeganos ? 'checked' : 'unchecked'}
+                status={
+                  plato?.aptoVegano || checkedVeganos ? 'checked' : 'unchecked'
+                }
                 color="blue"
                 onPress={() => {
                   setCheckedVeganos(!checkedVeganos);
@@ -226,8 +232,7 @@ const CardCrearPlato = ({deletePlato, navigation}) => {
                 height: 150,
                 alignItems: 'center',
                 width: '90%',
-              }}
-              onPress={() => navigation.navigate('MisRestaurantes')}>
+              }}>
               <Ionicons
                 name="cloud-upload-outline"
                 style={{
