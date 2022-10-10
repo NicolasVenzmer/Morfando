@@ -80,14 +80,15 @@ const VerMenu = ({navigation}) => {
           width: '100%',
           height: 50,
           alignItems: 'center',
-          justifyContent: 'flex-start',
+          justifyContent: 'center',
           marginBottom: 5,
         }}>
         <Ionicons
           name="menu"
           style={{
             color: 'black',
-            marginLeft: 15,
+            position: 'absolute',
+            left: 15,
             marginRight: 25,
             fontSize: 30,
           }}

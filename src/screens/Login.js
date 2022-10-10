@@ -11,9 +11,6 @@ import {
 } from 'react-native';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {AuthContext} from '../context/AuthContext';
-// import variables from '../config/variables';
-// import axios from 'axios';
-// import config from "../config/default.json"
 
 const validateEmail = email => {
   return String(email)
