@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import {View, Text, Image} from 'react-native';
 
 const PlatoType = plato => {
-  if (!plato.vegano && !plato.celiaco) return;
+  if (!plato.aptoVegano && !plato.aptoCeliaco) return;
 
-  if (plato.vegano && plato.celiaco)
+  if (plato.aptoVegano && plato.aptoCeliaco)
     return (
       <View style={{flexDirection: 'row', alignSelf: 'flex-end'}}>
         <Image
@@ -25,7 +25,7 @@ const PlatoType = plato => {
       </View>
     );
 
-  if (plato.vegano)
+  if (plato.aptoVegano)
     return (
       <Image
         style={{
@@ -66,7 +66,7 @@ const Plato = ({plato}) => {
           left: 5,
           marginBottom: 5,
         }}>
-        {plato.title}
+        {plato?.category?.nombre}
       </Text>
       <View
         style={{
@@ -90,7 +90,7 @@ const Plato = ({plato}) => {
           }}>
           <Image
             style={{width: 90, height: 90, margin: 5, borderRadius: 30}}
-            source={plato.image}
+            source={plato.plato_imagen}
           />
           <View
             style={{
@@ -111,7 +111,7 @@ const Plato = ({plato}) => {
                 marginTop: 5,
                 fontSize: 12,
               }}>
-              {plato.descripcion}
+              {plato.ingredientes}
             </Text>
             <Text
               style={{
@@ -119,11 +119,10 @@ const Plato = ({plato}) => {
                 fontWeight: '250',
                 bottom: -20,
               }}>
-              {plato.precio}
+              {plato.precio || '$2599'}
             </Text>
-            <PlatoType {...plato}/>
+            <PlatoType {...plato} />
           </View>
-
         </View>
       </View>
     </View>

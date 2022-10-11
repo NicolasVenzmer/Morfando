@@ -15,13 +15,19 @@ import Feather from 'react-native-vector-icons/Feather';
 import {Checkbox} from 'react-native-paper';
 
 const CardCrearPlato = ({deletePlato, navigation, plato}) => {
-  const [nombrePlato, onChangeNombrePlato] = useState(false);
-  const [precio, onChangePrecio] = useState(false);
-  const [ingrediente, onChangeIngrediente] = useState(false);
+  const [nombrePlato, onChangeNombrePlato] = useState(plato?.nombre || '');
+  const [precio, onChangePrecio] = useState(plato?.precio || '');
+  const [ingrediente, onChangeIngrediente] = useState(
+    plato?.ingredientes || '',
+  );
 
   //Checkbox celiaco o vegetariano
-  const [checkedCeliacos, setCheckedCeliacos] = useState(false);
-  const [checkedVeganos, setCheckedVeganos] = useState(false);
+  const [checkedCeliacos, setCheckedCeliacos] = useState(
+    plato?.aptoCeliaco || false,
+  );
+  const [checkedVeganos, setCheckedVeganos] = useState(
+    plato?.aptoVegano || false,
+  );
 
   const onSubmitRestaurant = () => {
     //Enviar los datos al back
@@ -120,7 +126,7 @@ const CardCrearPlato = ({deletePlato, navigation, plato}) => {
             onChangeText={onChangeNombrePlato}
             placeholder="Nombre del plato"
             placeholderTextColor="black"
-            value={plato?.nombre || nombrePlato}
+            value={nombrePlato}
           />
           <DropDownPicker
             placeholder="Categoria"
@@ -153,9 +159,10 @@ const CardCrearPlato = ({deletePlato, navigation, plato}) => {
               width: '90%',
             }}
             onChangeText={onChangePrecio}
+            keyboardType="numeric"
             placeholder="Precio $$"
             placeholderTextColor="black"
-            value={plato?.precio || precio}
+            value={precio}
           />
           <TextInput
             style={{
@@ -170,7 +177,7 @@ const CardCrearPlato = ({deletePlato, navigation, plato}) => {
             onChangeText={onChangeIngrediente}
             placeholder="Ingredientes / Descripcion del plato"
             placeholderTextColor="black"
-            value={plato?.ingredientes || ingrediente}
+            value={ingrediente}
           />
           <View
             style={{
@@ -186,11 +193,7 @@ const CardCrearPlato = ({deletePlato, navigation, plato}) => {
                 left: 10,
               }}>
               <Checkbox
-                status={
-                  plato?.aptoCeliaco || checkedCeliacos
-                    ? 'checked'
-                    : 'unchecked'
-                }
+                status={checkedCeliacos ? 'checked' : 'unchecked'}
                 color="blue"
                 onPress={() => {
                   setCheckedCeliacos(!checkedCeliacos);
@@ -208,9 +211,7 @@ const CardCrearPlato = ({deletePlato, navigation, plato}) => {
                 left: 10,
               }}>
               <Checkbox
-                status={
-                  plato?.aptoVegano || checkedVeganos ? 'checked' : 'unchecked'
-                }
+                status={checkedVeganos ? 'checked' : 'unchecked'}
                 color="blue"
                 onPress={() => {
                   setCheckedVeganos(!checkedVeganos);
@@ -260,7 +261,6 @@ const CardCrearPlato = ({deletePlato, navigation, plato}) => {
                 <View
                   style={{
                     flexDirection: 'row',
-                    alignItems: 'center',
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>

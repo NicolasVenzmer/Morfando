@@ -1,9 +1,22 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, SafeAreaView, ScrollView} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Plato from '../components/Plato';
+import {useRoute} from '@react-navigation/native';
 
 const VerMenu = ({navigation}) => {
+ const route = useRoute();
+  const [menus, setMenus] = useState([]);
+  const [emptyMenus, setEmptyMenus] = useState(true);
+
+  useEffect(() => {
+    setMenus(route.params.platosTemp);
+    if (!!menus) {
+      setEmptyMenus(false);
+    }
+  }, []);
+
+  console.log('Ya cargue los menus: ', menus);
 
   const platos = [
     {
@@ -110,7 +123,7 @@ const VerMenu = ({navigation}) => {
           width: '100%',
           height: '100%',
         }}>
-        {platos.map((plato, index) => (
+        {menus.map((plato, index) => (
           <Plato key={index} plato={plato} />
         ))}
       </ScrollView>

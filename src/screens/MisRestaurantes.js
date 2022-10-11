@@ -101,9 +101,9 @@ const MisRestaurantes = ({navigation}) => {
           </View>
         ) : (
           <>
-            {restaurants.map(restaurant => (
+            {restaurants?.map(restaurant => (
               <CardRestaurante
-                key={restaurant.id}
+                key={restaurant?.id}
                 restaurant={restaurant}
                 navigation={navigation}
               />

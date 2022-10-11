@@ -1,15 +1,18 @@
 import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import DefaultImage from "../assets/Images/upload-restaurant-image.jpg"
 
 const CardRestaurante = ({restaurant, navigation}) => {
   //Restaurante
   const deleteHandler = key => {
       const restaurant = ""
   };
+
   return (
-    <View
+    <Pressable
+      onPress={() => navigation.navigate('VerMenu')}
       style={{
         backgroundColor: '#F2F1F0',
         alignSelf: 'center',
@@ -29,7 +32,7 @@ const CardRestaurante = ({restaurant, navigation}) => {
             fontWeight: '400',
             marginRight: 'auto',
           }}>
-          {restaurant.nombre}
+          {restaurant?.nombre}
         </Text>
         <MaterialIcons
           name="menu-book"
@@ -65,7 +68,7 @@ const CardRestaurante = ({restaurant, navigation}) => {
         }}
         source={restaurant.restaurantImage}
       />
-    </View>
+    </Pressable>
   );
 };
 

@@ -88,14 +88,14 @@ const CrearMenu = ({navigation}) => {
 
   const [platos, setPlatos] = useState([{key: '', plato: ''}]);
   const addPlato = () => {
-    const _platos = [...platos];
-    _platos.push({key: '', plato: ''});
-    setPlatos(_platos);
+    const _platosTemp = [...platosTemp];
+    _platosTemp.push({key: '', plato: ''});
+    setPlatosTemp(_platosTemp);
   };
   const deletePlato = key => {
-    if (platos.length > 1) {
-      const _platos = platos.filter((plato, index) => index != key);
-      setPlatos(_platos);
+    if (platosTemp.length > 1) {
+      const _platosTemp = platosTemp.filter((plato, index) => index != key);
+      setPlatosTemp(_platosTemp);
     }
   };
 
@@ -311,7 +311,7 @@ const CrearMenu = ({navigation}) => {
           backgroundColor: '#E14852',
           borderRadius: 30,
         }}
-        onPress={() => navigation.navigate('VerMenu')}>
+        onPress={() => navigation.navigate('VerMenu', {platosTemp})}>
         <Text
           style={{
             color: '#fdfdfd',
