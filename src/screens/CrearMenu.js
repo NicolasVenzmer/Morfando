@@ -206,23 +206,43 @@ const CrearMenu = ({navigation}) => {
           height: '100%',
         }}>
         {emptyMenus ? (
-          <View
-            style={{
-              width: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Text
+          <>
+            {platosTemp?.map((plato, index) => (
+              <CardCrearPlato
+                key={index}
+                plato={plato}
+                deletePlato={() => deletePlato(index)}
+              />
+            ))}
+            <Pressable
               style={{
-                position: 'absolute',
-                fontSize: 20,
-                fontWeight: '450',
-                textAlign: 'center',
-              }}>
-              Aun no tienes restaurantes{'\n'}
-              Crea uno nuevo!
-            </Text>
-          </View>
+                flexDirection: 'row',
+                alignItems: 'center',
+                left: 30,
+                marginBottom: 10,
+              }}
+              onPress={addPlato}>
+              <Ionicons
+                name="add-circle"
+                style={{
+                  color: '#E14852',
+                  left: 5,
+                  top: 5,
+                  fontSize: 20,
+                }}
+              />
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: '300',
+                  aligSelf: 'center',
+                  left: 10,
+                  top: 3,
+                }}>
+                Agregar plato al menu
+              </Text>
+            </Pressable>
+          </>
         ) : (
           <>
             {platosTemp.map((plato, index) => (
@@ -260,41 +280,6 @@ const CrearMenu = ({navigation}) => {
                 Agregar plato al menu
               </Text>
             </Pressable>
-            {/* {platos.map((plato, index) => (
-              <CardCrearPlato
-                key={index}
-                plato={plato}
-                deletePlato={() => deletePlato(index)}
-              />
-            ))}
-            <Pressable
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                left: 30,
-                marginBottom: 10,
-              }}
-              onPress={addPlato}>
-              <Ionicons
-                name="add-circle"
-                style={{
-                  color: '#E14852',
-                  left: 5,
-                  top: 5,
-                  fontSize: 20,
-                }}
-              />
-              <Text
-                style={{
-                  color: 'black',
-                  fontWeight: '300',
-                  aligSelf: 'center',
-                  left: 10,
-                  top: 3,
-                }}>
-                Agregar plato al menu
-              </Text>
-            </Pressable> */}
           </>
         )}
       </ScrollView>

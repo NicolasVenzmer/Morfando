@@ -112,6 +112,7 @@ const CardCrearPlato = ({deletePlato, navigation, plato}) => {
             width: '80%',
             minHeight: 120,
             justifyContent: 'flex-start',
+            borderRadius: 20,
           }}>
           <TextInput
             style={{
