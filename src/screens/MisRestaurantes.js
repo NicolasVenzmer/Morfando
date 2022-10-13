@@ -40,20 +40,23 @@ const MisRestaurantes = ({navigation}) => {
   const deleteRestaurant = async restaurant => {
     const sendData = {
       id :restaurant.id,
-      activo:false,
+      activo:false
     };
     console.log("El ID del restaurante a eliminar es: ", sendData.id)
     axios
       .delete(DELETE_RESTAURANTS_URL, sendData)
       .then(res => {
-        console.log(res);
+        console.log(res.status);
+        if (res.status === 200){
+          Alert.alert(
+            'Se elimino con exito el restaurante ' + restaurants[id - 1].nombre,
+          );
+        }
         // const dataDelete = [...restaurants];
         // const index = restaurants[id];
         // dataDelete.splice(index, 1);
         // setRestaurants([...dataDelete]);
-        // Alert.alert(
-        //   'Se elimino con exito el restaurante ' + restaurants[id - 1].nombre,
-        // );
+        
       })
       .catch(e => {
         console.log(`Restaurants DELETE error ${e}`);

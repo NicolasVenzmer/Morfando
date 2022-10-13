@@ -15,6 +15,7 @@ import VerMenu from '../screens/VerMenu';
 import MisRestaurantes from '../screens/MisRestaurantes';
 import CrearRestaurante from '../screens/CrearRestaurante';
 import {AuthContext} from '../context/AuthContext';
+import EditarRestaurante from '../screens/EditarRestaurante';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -61,6 +62,7 @@ const FlowDeRestaurante = ({navigation}) => {
       <Stack.Screen name="CrearRestaurante" component={CrearRestaurante} />
       <Stack.Screen name="CrearMenu" component={CrearMenu} />
       <Stack.Screen name="VerMenu" component={VerMenu} />
+      <Stack.Screen name="EditarRestaurante" component={EditarRestaurante} />
     </Stack.Navigator>
   );
 };

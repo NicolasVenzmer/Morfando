@@ -2,6 +2,7 @@ import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DefaultImage from "../assets/Images/upload-restaurant-image.jpg"
 
 const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
@@ -39,15 +40,25 @@ const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
                 color: '#E14852',
                 fontSize: 20,
                 top: 10,
-                right: 20,
+                right: 25,
               }}
               onPress={() => navigation.navigate('CrearMenu', {restaurant})}
+            />
+            <MaterialCommunityIcons
+              name="circle-edit-outline"
+              style={{
+                color: '#E14852',
+                fontSize: 20,
+                top: 10,
+                right: 20,
+              }}
+              onPress={() => navigation.navigate('EditarRestaurante', {restaurant})}
             />
             <Feather
               name="trash-2"
               style={{
                 color: '#E14852',
-                fontSize: 20,
+                fontSize: 19,
                 top: 10,
                 right: 15,
               }}
