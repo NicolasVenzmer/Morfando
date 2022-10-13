@@ -6,12 +6,13 @@ import {
   Pressable,
   SafeAreaView,
   ScrollView,
+  Alert,
 } from 'react-native';
 import CardRestaurante from '../components/CardRestaurante';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {data} from '../data/data';
-import axios from "../api/axios"
-const RESTAURANTS_URL = '/restaurants';
+import axios from '../api/axios';
+const DELETE_RESTAURANTS_URL = '/restaurant';
 
 const MisRestaurantes = ({navigation}) => {
   const [loading, setLoading] = useState(true);
@@ -19,17 +20,44 @@ const MisRestaurantes = ({navigation}) => {
   const [restaurants, setRestaurants] = useState([]);
 
   const getRestaurants = async () => {
+    const id = 1; // ACA TENGO QUE TRAER EL CONTEXT Y PASRA EL ID DEL USUARIO OWNER LOGEADO
+    const GET_USER_RESTAURANTS_URL = `/users/${id}/restaurants`;
     axios
-      .get(RESTAURANTS_URL)
+      .get(GET_USER_RESTAURANTS_URL)
       .then(res => {
-        //console.log('DATA_: ', res.data);
-        setRestaurants(res.data);
-        setEmptyRestaurants(false);
+        //console.log(res.data.misRestaurantes);
+        setRestaurants(res.data.misRestaurantes);
+        if (restaurants.length === 0) {
+          setEmptyRestaurants(false);
+        }
       })
       .catch(e => {
-        console.log(`Restaurants error ${e}`);
+        console.log(`Restaurants GET error ${e}`);
       });
     setLoading(false);
+  };
+
+  const deleteRestaurant = async restaurant => {
+    const sendData = {
+      id :restaurant.id,
+      activo:false,
+    };
+    console.log("El ID del restaurante a eliminar es: ", sendData.id)
+    axios
+      .delete(DELETE_RESTAURANTS_URL, sendData)
+      .then(res => {
+        console.log(res);
+        // const dataDelete = [...restaurants];
+        // const index = restaurants[id];
+        // dataDelete.splice(index, 1);
+        // setRestaurants([...dataDelete]);
+        // Alert.alert(
+        //   'Se elimino con exito el restaurante ' + restaurants[id - 1].nombre,
+        // );
+      })
+      .catch(e => {
+        console.log(`Restaurants DELETE error ${e}`);
+      });
   };
 
   useEffect(() => {
@@ -106,6 +134,7 @@ const MisRestaurantes = ({navigation}) => {
                 key={restaurant?.id}
                 restaurant={restaurant}
                 navigation={navigation}
+                deleteRestaurant={() => deleteRestaurant(restaurant)}
               />
             ))}
           </>

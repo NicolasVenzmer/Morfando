@@ -9,11 +9,11 @@ const DiasDeAtencion = ({dia}) => {
 
   //Metodos para poder cargar los dias y horarios
   const [inputs, setInputs] = useState([
-    {key: '', dia: dia.title, abiertoDesde: '', abiertoHasta: ''},
+    {dia: dia.title, abiertoDesde: '', abiertoHasta: ''},
   ]);
   const addHandler = () => {
     const _inputs = [...inputs];
-    _inputs.push({key: '', dia: dia.title, abiertoDesde: '', abiertoHasta: ''});
+    _inputs.push({dia: dia.title, abiertoDesde: '', abiertoHasta: ''});
     setInputs(_inputs);
   };
   const deleteHandler = key => {
@@ -35,6 +35,8 @@ const DiasDeAtencion = ({dia}) => {
     _inputs[key].abiertoHasta = abiertoHasta;
     setInputs(_inputs);
   };
+
+  //console.log('Lista: ', inputs);
 
   return (
     <ScrollView vertical>

@@ -15,6 +15,9 @@ import Feather from 'react-native-vector-icons/Feather';
 import FoodTypeChip from '../components/FoodTypeChip';
 import {Chip} from 'react-native-paper';
 
+import axios from '../api/axios';
+const RESTAURANT_URL = '/restaurant';
+
 const CrearRestaurante = ({navigation}) => {
   const [nombreRestaurante, onChangenombreRestaurante] = useState(false);
   const [direccion, onChangeDireccion] = useState(false);
@@ -22,9 +25,29 @@ const CrearRestaurante = ({navigation}) => {
   const [selectedMoney2, setSelectedMoney2] = useState(false);
   const [selectedMoney3, setSelectedMoney3] = useState(false);
   const [selectedMoney4, setSelectedMoney4] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  var rangoPrecios = 1;
 
+    
   const onSubmitRestaurant = () => {
     //Enviar los datos al back
+    setIsLoading(true);
+    axios
+      .post(RESTAURANT_URL, {
+        nombreRestaurante,
+        direccion,
+        //aca horarios
+        rangoPrecios,
+        tipoDeComida,
+        images
+      })
+      .then(res => {
+        console.log('User Data: ', res.data);
+      })
+      .catch(e => {
+        console.log(`Create restaurant error ${e}`);
+      });
+    setIsLoading(false);
   };
 
   const changeSelectedChip = (num) => {
@@ -33,26 +56,31 @@ const CrearRestaurante = ({navigation}) => {
       setSelectedMoney2(false);
       setSelectedMoney3(false);
       setSelectedMoney4(false)
+      rangoPrecios++
     }
     if (num === 2) {
       setSelectedMoney2(true);
       setSelectedMoney1(false);
       setSelectedMoney3(false);
       setSelectedMoney4(false);
+      rangoPrecios = 2;
     }
     if (num === 3) {
       setSelectedMoney3(true);
       setSelectedMoney1(false);
       setSelectedMoney2(false);
       setSelectedMoney4(false);
+      rangoPrecios = 3;
     }
     if (num === 4) {
       setSelectedMoney4(true);
       setSelectedMoney1(false);
       setSelectedMoney2(false);
       setSelectedMoney3(false);
+      rangoPrecios = 4;
     }
   }
+  console.log(rangoPrecios);
   const FoodTypeChips = [
     {
       id: '1',
@@ -134,6 +162,8 @@ const CrearRestaurante = ({navigation}) => {
     );
     setShowImage(false);
   };
+
+  //console.log("imagenes", images)
 
   const deleteImage = key => {
     if (images.length) {
