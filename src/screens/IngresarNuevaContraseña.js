@@ -48,29 +48,17 @@ const isEmpty = stringToValidate => {
   return true;
 };
 
-const CompletarSignUp = ({navigation}) => {
-  const [mail, setUsuario] = useState('');
+const IngresarNuevaContraseña = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
-  const [visible, setVisible] = React.useState(false);
-  const [visiblePasswordModal, setVisiblePasswordModal] = React.useState(false);
-
-  const validateData = () => {
-    let isValid = true;
-    if (password != password2) {
-      //isValid = false;
-      setVisiblePasswordModal(true)
-    }
-    return isValid;
-  };
+  const [visible, setVisible] = useState(false);
+  const [visiblePasswordModal, setVisiblePasswordModal] = useState(false);
 
   const handleisEmpty = () => {
-    if (!validateEmail(mail) || isEmpty(password) || isEmpty(password2)) {
-      setVisible(true);
-    } else if (password != password2) {
+    if (isEmpty(password) || isEmpty(password2) || password != password2) {
       setVisiblePasswordModal(true);
-    } else {
-      navigation.navigate('AltaUsuarioConExito');
+    }else {
+      navigation.navigate('SignUp');
     }
   };
 
@@ -94,57 +82,7 @@ const CompletarSignUp = ({navigation}) => {
           justifyContent: 'center',
         }}>
         <Image source={require('../assets/logo_icon.png')} />
-        <Pressable
-          style={{
-            position: 'absolute',
-            bottom: 10,
-            left: 70,
-          }}
-          onPress={() => navigation.navigate('Login')}>
-          <Text
-            style={{
-              color: 'black',
-              fontWeight: '400',
-            }}>
-            Ingresar
-          </Text>
-        </Pressable>
-        <Text
-          style={{
-            position: 'absolute',
-            bottom: 10,
-            right: 70,
-            color: 'black',
-            fontWeight: '400',
-          }}>
-          Registrarse
-        </Text>
-        <View
-          style={{
-            backgroundColor: '#E14852',
-            width: 90,
-            height: 2,
-            position: 'absolute',
-            bottom: 0,
-            right: 60,
-          }}
-        />
       </View>
-      <Pressable
-        style={{
-          alignSelf: 'flex-start',
-          top: 20,
-          left: 40,
-        }}
-        onPress={() => navigation.navigate('SignUp')}>
-        <Image
-          style={{
-            width: 15,
-            height: 15,
-          }}
-          source={require('../assets/Icons/back_icon.png')}
-        />
-      </Pressable>
       <View
         style={{
           display: 'flex',
@@ -172,23 +110,10 @@ const CompletarSignUp = ({navigation}) => {
               borderBottomWidth: 1,
               padding: 10,
             }}
-            onChangeText={setUsuario}
-            value={mail}
-            placeholder="Email"
-          />
-          <TextInput
-            style={{
-              width: '90%',
-              height: 40,
-              margin: 12,
-              borderBottomColor: 'grey',
-              borderBottomWidth: 1,
-              padding: 10,
-            }}
             onChangeText={setPassword}
             value={password}
             secureTextEntry={true}
-            placeholder="Contraseña"
+            placeholder="Ingresar Nueva Contraseña"
           />
           <TextInput
             style={{
@@ -202,50 +127,10 @@ const CompletarSignUp = ({navigation}) => {
             onChangeText={setPassword2}
             value={password2}
             secureTextEntry={true}
-            placeholder="Repita la Contraseña"
+            placeholder="Repetir Nueva Contraseña"
           />
         </View>
       </View>
-
-      <ModalPoup visible={visible}>
-        <View style={{alignItems: 'flex-start'}}>
-          <Text style={{fontSize: 20, color: 'black'}}>
-            El mail o contraseña son invalidos.
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: '2%',
-              marginBottom: '2%',
-              marginHorizontal: '5%',
-            }}></View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: '1%',
-            marginBottom: '1%',
-            marginHorizontal: '1%',
-          }}>
-          <Pressable
-            style={{
-              alignSelf: 'center',
-              width: '100%',
-              marginVertical: 10,
-              paddingVertical: 10,
-              backgroundColor: '#E14852',
-              borderRadius: 30,
-            }}
-            onPress={() => {
-              navigation.navigate('CompletarSignUp');
-              setVisible(false);
-            }}>
-            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
-          </Pressable>
-        </View>
-      </ModalPoup>
 
       <ModalPoup visible={visiblePasswordModal}>
         <View style={{alignItems: 'flex-start'}}>
@@ -279,7 +164,7 @@ const CompletarSignUp = ({navigation}) => {
               borderRadius: 30,
             }}
             onPress={() => {
-              navigation.navigate('CompletarSignUp');
+              navigation.navigate('IngresarNuevaContraseña');
               setVisiblePasswordModal(false);
             }}>
             <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
@@ -308,7 +193,7 @@ const CompletarSignUp = ({navigation}) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          Registrarse
+          Guardar
         </Text>
       </Pressable>
     </SafeAreaView>
@@ -358,4 +243,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CompletarSignUp;
+export default IngresarNuevaContraseña;

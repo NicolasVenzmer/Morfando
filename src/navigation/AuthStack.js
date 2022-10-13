@@ -11,6 +11,7 @@ import ErrorDeConexion from '../screens/errorScreens/ErrorDeConexion';
 import ErrorDeServidor from '../screens/errorScreens/ErrorDeServidor';
 import ErrorDeUsuarioYaRegistrado from '../screens/errorScreens/ErrorDeUsuarioYaRegistrado';
 import ErrorDeUsuarioOContraseñaIncorrectas from '../screens/errorScreens/ErrorDeUsuarioOContraseñaIncorrectas';
+import IngresarNuevaContraseña from '../screens/IngresarNuevaContraseña';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +40,10 @@ const AuthStack = () => {
       <Stack.Screen
         name="ErrorDeUsuarioOContraseñaIncorrectas"
         component={ErrorDeUsuarioOContraseñaIncorrectas}
+      />
+      <Stack.Screen
+        name="IngresarNuevaContraseña"
+        component={IngresarNuevaContraseña}
       />
     </Stack.Navigator>
   );
