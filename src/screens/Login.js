@@ -10,7 +10,8 @@ import {
   Modal,
 } from 'react-native';
 import {useNetInfo} from '@react-native-community/netinfo';
-import {AuthContext} from '../context/AuthContext';
+import {AuthContext, ErrorReference} from '../context/AuthContext';
+import { useEffect } from 'react';
 
 const validateEmail = email => {
   return String(email)
@@ -51,7 +52,7 @@ const isEmpty = stringToValidate => {
 };
 
 const Login = ({navigation}) => {
-  const {login} = useContext(AuthContext);
+  const {login, error} = useContext(AuthContext);
 
   const netInfo = useNetInfo();
   const [mail, setUsuario] = useState('');
@@ -85,6 +86,12 @@ const Login = ({navigation}) => {
       setNoWifi(true);
     }
   };
+
+  useEffect(() => {
+    if(error === ErrorReference[404]){
+      setVisible(true)
+    }
+  } ,[error])
 
   return (
     <SafeAreaView

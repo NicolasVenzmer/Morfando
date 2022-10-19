@@ -28,7 +28,6 @@ const CrearRestaurante = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
   var rangoPrecios = 1;
 
-    
   const onSubmitRestaurant = () => {
     //Enviar los datos al back
     setIsLoading(true);
@@ -36,10 +35,10 @@ const CrearRestaurante = ({navigation}) => {
       .post(RESTAURANT_URL, {
         nombreRestaurante,
         direccion,
-        //aca horarios
+        horarios,
         rangoPrecios,
         tipoDeComida,
-        images
+        images,
       })
       .then(res => {
         console.log('User Data: ', res.data);
@@ -50,13 +49,13 @@ const CrearRestaurante = ({navigation}) => {
     setIsLoading(false);
   };
 
-  const changeSelectedChip = (num) => {
-    if(num === 1){
-      setSelectedMoney1(true)
+  const changeSelectedChip = num => {
+    if (num === 1) {
+      setSelectedMoney1(true);
       setSelectedMoney2(false);
       setSelectedMoney3(false);
-      setSelectedMoney4(false)
-      rangoPrecios++
+      setSelectedMoney4(false);
+      rangoPrecios++;
     }
     if (num === 2) {
       setSelectedMoney2(true);
@@ -79,7 +78,7 @@ const CrearRestaurante = ({navigation}) => {
       setSelectedMoney3(false);
       rangoPrecios = 4;
     }
-  }
+  };
   console.log(rangoPrecios);
   const FoodTypeChips = [
     {
@@ -170,7 +169,7 @@ const CrearRestaurante = ({navigation}) => {
       const _images = images.filter((image, index) => index != key);
       setImages(_images);
     }
-    console.log(images.length);
+    //console.log(images.length);
     if (images.length === 1) {
       setShowImage(true);
     }
@@ -207,6 +206,45 @@ const CrearRestaurante = ({navigation}) => {
       title: 'DOMINGO',
     },
   ];
+
+  //Metodos para poder cargar los dias y horarios
+  const [horarios, sethorarios] = useState(
+    listaDeDias.map(dia => ({
+      dia: dia.title,
+      abiertoDesde: '',
+      abiertoHasta: '',
+    })),
+  );
+  const addHandler = (dia,position) => {
+    const _horarios = [...horarios];
+    _horarios.splice(position,0,{
+      dia,
+      abiertoDesde: '',
+      abiertoHasta: '',
+    });
+    sethorarios(_horarios);
+  };
+  const deleteHandler = key => {
+    if (horarios.length > 1) {
+      const _horarios = horarios.filter((input, index) => index != key);
+      sethorarios(_horarios);
+    }
+  };
+
+  const inputHandlerAbiertoDesde = (abiertoDesde, key) => {
+    console.log(arguments);
+    const _horarios = [...horarios];
+    _horarios[key].abiertoDesde = abiertoDesde;
+    sethorarios(_horarios);
+  };
+  const inputHandlerAbiertoHasta = (abiertoHasta, key) => {
+        console.log(arguments);
+    const _horarios = [...horarios];
+    _horarios[key].abiertoHasta = abiertoHasta;
+    sethorarios(_horarios);
+  };
+
+  console.log('Lista: ', horarios);
 
   return (
     <SafeAreaView
@@ -322,9 +360,19 @@ const CrearRestaurante = ({navigation}) => {
             }}>
             Horario de atencion
           </Text>
-          {listaDeDias.map((dia, index) => (
-            <DiasDeAtencion key={index} dia={dia} />
-          ))}
+          <ScrollView vertical>
+            {horarios.map((input, index) => (
+              <DiasDeAtencion
+                key={index}
+                id={index}
+                input={input}
+                addHandler={addHandler}
+                deleteHandler={deleteHandler}
+                inputHandlerAbiertoDesde={inputHandlerAbiertoDesde}
+                inputHandlerAbiertoHasta={inputHandlerAbiertoHasta}
+              />
+            ))}
+          </ScrollView>
         </View>
         <View
           style={{

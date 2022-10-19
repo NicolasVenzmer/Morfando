@@ -130,7 +130,7 @@ const MisRestaurantes = ({navigation}) => {
             </Text>
             <Image source={require('../assets/Images/empty-restaurants.png')} />
           </View>
-        ) : (
+        ) : ( // sacar los fragments
           <>
             {restaurants?.map(restaurant => (
               <CardRestaurante
