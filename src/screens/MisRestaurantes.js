@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -12,22 +12,25 @@ import CardRestaurante from '../components/CardRestaurante';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {data} from '../data/data';
 import axios from '../api/axios';
+import {AuthContext, ErrorReference} from '../context/AuthContext';
 const DELETE_RESTAURANTS_URL = '/restaurant';
 
 const MisRestaurantes = ({navigation}) => {
+  const {userInfo} = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [emptyRestaurants, setEmptyRestaurants] = useState(true);
   const [restaurants, setRestaurants] = useState([]);
 
+  // Obtengo los restaurantes de un owner en especifico
   const getRestaurants = async () => {
-    const id = 1; // ACA TENGO QUE TRAER EL CONTEXT Y PASRA EL ID DEL USUARIO OWNER LOGEADO
+    const id = userInfo.id;
     const GET_USER_RESTAURANTS_URL = `/users/${id}/restaurants`;
     axios
       .get(GET_USER_RESTAURANTS_URL)
       .then(res => {
         //console.log(res.data.misRestaurantes);
         setRestaurants(res.data.misRestaurantes);
-        if (restaurants.length === 0) {
+        if (restaurants.length !== 0) {
           setEmptyRestaurants(false);
         }
       })
@@ -37,6 +40,7 @@ const MisRestaurantes = ({navigation}) => {
     setLoading(false);
   };
 
+  // Elimino un restaurante en especifico
   const deleteRestaurant = async restaurant => {
     const sendData = {
       id :restaurant.id,
@@ -65,7 +69,7 @@ const MisRestaurantes = ({navigation}) => {
 
   useEffect(() => {
     getRestaurants();
-  }, []);
+  }, [restaurants]);
 
   return (
     <SafeAreaView

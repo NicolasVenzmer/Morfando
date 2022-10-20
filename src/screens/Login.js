@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {AuthContext, ErrorReference} from '../context/AuthContext';
-import { useEffect } from 'react';
 
 const validateEmail = email => {
   return String(email)
@@ -89,6 +88,7 @@ const Login = ({navigation}) => {
 
   useEffect(() => {
     if(error === ErrorReference[404]){
+      console.log(ErrorReference[404])
       setVisible(true)
     }
   } ,[error])

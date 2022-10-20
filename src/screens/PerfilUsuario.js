@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -9,12 +9,14 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Avatar} from 'react-native-paper';
+import {AuthContext} from '../context/AuthContext';
 
 const PerfilUsuario = ({navigation}) => {
-const [nombreUsuario, setNombreUsuario] = useState('');
-  useEffect(() => {
-    
-  }, []);
+  
+  const {userInfo} = useContext(AuthContext);
+  const [nombreUsuario, setNombreUsuario] = useState(userInfo.nombre);
+
+  useEffect(() => {}, []);
 
   return (
     <SafeAreaView
@@ -106,7 +108,7 @@ const [nombreUsuario, setNombreUsuario] = useState('');
           />
         </View>
       </ScrollView>
-      <Pressable
+      {/* <Pressable
         style={{
           width: '80%',
           height: 20,
@@ -117,7 +119,7 @@ const [nombreUsuario, setNombreUsuario] = useState('');
         <Text style={{color: '#E14852', fontSize: 15, fontWeight: 'bold'}}>
           Cerrar Sesion
         </Text>
-      </Pressable>
+      </Pressable> */}
       <Pressable
         style={{
           width: '80%',
