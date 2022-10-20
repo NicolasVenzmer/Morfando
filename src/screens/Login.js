@@ -21,8 +21,8 @@ const validateEmail = email => {
 };
 
 const ModalPoup = ({visible, children}) => {
-  const [showModal, setShowModal] = React.useState(visible);
-  React.useEffect(() => {
+  const [showModal, setShowModal] = useState(visible);
+  useEffect(() => {
     toggleModal();
   }, [visible]);
   const toggleModal = () => {
@@ -56,9 +56,8 @@ const Login = ({navigation}) => {
   const netInfo = useNetInfo();
   const [mail, setUsuario] = useState('');
   const [password, setPassword] = useState('');
-  const [visible, setVisible] = React.useState(false);
-  const [noWifi, setNoWifi] = React.useState(false);
-  //   const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [noWifi, setNoWifi] = useState(false);
 
   const handleisEmpty = () => {
     if (!validateEmail(mail) || isEmpty(password)) {
@@ -75,7 +74,6 @@ const Login = ({navigation}) => {
   };
 
   // aca verifico si esta conectado a wifi o no
-  //HAY QUE CAMBIAR EL IF A ===
   const wifi = () => {
     if (netInfo.type === 'wifi') {
       {
@@ -88,7 +86,7 @@ const Login = ({navigation}) => {
 
   useEffect(() => {
     if(error === ErrorReference[404]){
-      console.log(ErrorReference[404])
+      console.log(ErrorReference[404]);
       setVisible(true)
     }
   } ,[error])
@@ -225,7 +223,7 @@ const Login = ({navigation}) => {
         <ModalPoup visible={visible}>
           <View style={{alignItems: 'flex-start'}}>
             <Text style={{fontSize: 20, color: 'black'}}>
-              El mail o contraseña son invalidos.
+              {ErrorReference[404]}
             </Text>
             <View
               style={{

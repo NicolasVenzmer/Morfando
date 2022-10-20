@@ -6,9 +6,9 @@ const LOGIN_URL = '/user/:mail/:password';
 export const AuthContext = createContext();
 
 export const ErrorReference = {
-  500: 'Internal Server Error',
+  500: 'Error de servidor',
   400: 'Bad Request',
-  404: 'Sarasa',
+  404: 'Usuario no encontrado con ese correo o contraseña.',
 };
 
 export const AuthProvider = ({children}) => {
@@ -39,15 +39,15 @@ export const AuthProvider = ({children}) => {
 
         // ACA ME FIJO SI EL DUEÑO O NO
         if (userData.usuario.duenio) {
-          console.log("entre dueño", userData.usuario.duenio)
           setEsDueño(true);
         }
-        console.log('DATA: ', JSON.stringify(userData.usuario));
+        console.log('DATA: ', JSON.stringify(userData.usuario.activo));
         AsyncStorage.setItem('userInfo', JSON.stringify(userData.usuario));
         AsyncStorage.setItem('userToken', userData.token);
       })
       .catch(e => {
-        setError(ErrorReference[500]);
+        setError(ErrorReference[404]);
+        console.log("error: ", error[404])
         console.log(`Login error ${e}`);
       });
     setIsLoading(false);
@@ -56,7 +56,7 @@ export const AuthProvider = ({children}) => {
   const logout = () => {
     setIsLoading(true);
     setUserToken(null);
-    setEsDueño(null)
+    setEsDueño(null);
     AsyncStorage.removeItem('userInfo');
     AsyncStorage.removeItem('userToken');
     AsyncStorage.clear();
@@ -84,7 +84,7 @@ export const AuthProvider = ({children}) => {
   };
 
   useEffect(() => {
-    isLoggedIn();
+    //isLoggedIn();
   }, []);
 
   return (

@@ -9,6 +9,8 @@ import {
   StyleSheet,
   Modal,
 } from 'react-native';
+import axios from '../api/axios';
+const PASSWORD_RESET_URL = '/user-forgot-password';
 
 const isEmpty = stringToValidate => {
   if (stringToValidate !== undefined && stringToValidate !== null) {
@@ -51,13 +53,34 @@ const ModalPoup = ({visible, children}) => {
 const OlvideMiContraseña = ({navigation}) => {
   const [mail, setUsuario] = useState('');
   const [visible, setVisible] = React.useState(false);
+  const [loading, setIsLoading] = useState(false);
 
-  const handleisEmpty = () => {
+  const handleisEmpty = mail => {
     if (!validateEmail(mail)) {
       setVisible(true);
     } else {
-      navigation.navigate('RestaurarContraseña');
+      resetPassword(mail);
     }
+  };
+
+  const resetPassword = async mail => {
+    setIsLoading(true);
+    const correo = mail
+    axios
+      .post(PASSWORD_RESET_URL, {
+        correo
+      })
+      .then(res => {
+        if (res.status === 200) {
+          navigation.navigate('RestaurarContraseña');
+        }
+
+        console.log('data', res.status);
+      })
+      .catch(e => {
+        console.log(`Login error ${e}`);
+      });
+    setIsLoading(false);
   };
 
   return (
@@ -227,7 +250,7 @@ const OlvideMiContraseña = ({navigation}) => {
           backgroundColor: '#E14852',
           borderRadius: 30,
         }}
-        onPress={() => handleisEmpty()}>
+        onPress={() => handleisEmpty(mail)}>
         <Text
           style={{
             color: '#fdfdfd',
