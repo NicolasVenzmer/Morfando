@@ -14,7 +14,7 @@ import {Avatar} from 'react-native-paper';
 import {AuthContext} from '../context/AuthContext';
 
 import axios from '../api/axios';
-import { ListAccordionGroupContext } from 'react-native-paper/lib/typescript/components/List/ListAccordionGroup';
+import {ListAccordionGroupContext} from 'react-native-paper/lib/typescript/components/List/ListAccordionGroup';
 const USER_URL = '/user';
 
 const ModalPoup = ({visible, children}) => {
@@ -84,20 +84,21 @@ const PerfilUsuario = ({navigation}) => {
   // Elimino el usuario
   const onDeleteUser = () => {
     //Enviar los datos al back
-    setVisibleDeleteUser(true)
+    setVisibleDeleteUser(true);
     setIsLoading(true);
-    axios
-      .delete(USER_URL, {
-        id: id,
-        activo: false,
-      })
-      .then(res => {
-        console.log('Deleted User: ', res.data);
-      })
-      .catch(e => {
-        console.log(`Delete User error ${e}`);
-      });
-
+    if (visibleDeleteUser) {
+      axios
+        .delete(USER_URL, {
+          id: id,
+          activo: false
+        })
+        .then(res => {
+          console.log('Deleted User: ', res.data);
+        })
+        .catch(e => {
+          console.log(`Delete User error ${e}`);
+        });
+    }
     setIsLoading(false);
   };
 
@@ -211,8 +212,7 @@ const PerfilUsuario = ({navigation}) => {
           height: 20,
           marginBottom: 30,
         }}
-        onPress={() => onDeleteUser()}
-      >
+        onPress={() => onDeleteUser()}>
         <Text style={{color: '#E14852', fontSize: 15, fontWeight: 'bold'}}>
           Dar de baja la cuenta
         </Text>
@@ -307,7 +307,7 @@ const PerfilUsuario = ({navigation}) => {
                 onDeleteUser();
               }
               setVisibleDeleteUser(false);
-              logout()
+              logout();
             }}>
             <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
           </Pressable>
