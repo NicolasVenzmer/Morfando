@@ -9,6 +9,8 @@ import {
   StyleSheet,
   Modal,
 } from 'react-native';
+import axios from '../api/axios';
+const REGISTER_URL = '/user';
 
 const validateEmail = email => {
   return String(email)
@@ -52,26 +54,49 @@ const CompletarSignUp = ({navigation}) => {
   const [mail, setUsuario] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
-  const [visible, setVisible] = React.useState(false);
-  const [visiblePasswordModal, setVisiblePasswordModal] = React.useState(false);
+  const [visible, setVisible] = useState(false);
+  const [visiblePasswordModal, setVisiblePasswordModal] = useState(false);
+  const [loading, setIsLoading] = useState(false);
 
   const validateData = () => {
     let isValid = true;
     if (password != password2) {
-      //isValid = false;
       setVisiblePasswordModal(true)
     }
     return isValid;
   };
 
-  const handleisEmpty = () => {
+  const handleisEmpty = (mail, password) => {
     if (!validateEmail(mail) || isEmpty(password) || isEmpty(password2)) {
       setVisible(true);
     } else if (password != password2) {
       setVisiblePasswordModal(true);
     } else {
-      navigation.navigate('AltaUsuarioConExito');
+      registerUser(mail, password)
     }
+  };
+
+  const registerUser = async (mail, password) => {
+    setIsLoading(true);
+
+    /*
+    FALTA AGREGAR LOS VALORES PEDIDOS EN EL POSTMAN
+    */
+
+    axios
+      .post(REGISTER_URL, {
+        mail,
+        password,
+      })
+      .then(res => {
+        if(res.status === 200){
+          navigation.navigate('AltaUsuarioConExito');
+        }
+      })
+      .catch(e => {
+        console.log(`Login error ${e}`);
+      });
+    setIsLoading(false);
   };
 
   return (
@@ -300,7 +325,7 @@ const CompletarSignUp = ({navigation}) => {
           backgroundColor: '#E14852',
           borderRadius: 30,
         }}
-        onPress={() => handleisEmpty()}>
+        onPress={() => handleisEmpty(mail, password)}>
         <Text
           style={{
             color: '#fdfdfd',

@@ -6,17 +6,102 @@ import {
   SafeAreaView,
   ScrollView,
   TextInput,
+  Modal,
+  StyleSheet,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Avatar} from 'react-native-paper';
 import {AuthContext} from '../context/AuthContext';
 
-const PerfilUsuario = ({navigation}) => {
-  
-  const {userInfo} = useContext(AuthContext);
-  const [nombreUsuario, setNombreUsuario] = useState(userInfo.nombre);
+import axios from '../api/axios';
+import { ListAccordionGroupContext } from 'react-native-paper/lib/typescript/components/List/ListAccordionGroup';
+const USER_URL = '/user';
 
-  useEffect(() => {}, []);
+const ModalPoup = ({visible, children}) => {
+  const [showModal, setShowModal] = useState(visible);
+  useEffect(() => {
+    toggleModal();
+  }, [visible]);
+  const toggleModal = () => {
+    if (visible) {
+      setShowModal(true);
+    } else {
+      setShowModal(false);
+    }
+  };
+
+  return (
+    <Modal transparent visible={showModal}>
+      <View style={styles.modalBackGround}>
+        <View style={[styles.modalContainer]}>{children}</View>
+      </View>
+    </Modal>
+  );
+};
+
+const PerfilUsuario = ({navigation}) => {
+  const {userInfo, logout} = useContext(AuthContext);
+  const [nombreUsuario, setNombreUsuario] = useState(userInfo.nombre);
+  const [isLoading, setIsLoading] = useState(false);
+  const [visibleUserEdited, setVisibleUserEdited] = useState(false);
+  const [visibleDeleteUser, setVisibleDeleteUser] = useState(false);
+
+  const {
+    id,
+    correo,
+    contrasenia,
+    preguntaSeguridad,
+    respuestaSeguridad,
+    duenio,
+    activo,
+  } = userInfo;
+
+  // Cambio los datos del usuario
+  const onChangeUserData = () => {
+    //Enviar los datos al back
+    setIsLoading(true);
+    axios
+      .put(USER_URL, {
+        id: id,
+        nombre: nombreUsuario,
+        correo: correo,
+        contrasenia: contrasenia,
+        preguntaSeguridad: preguntaSeguridad,
+        respuestaSeguridad: respuestaSeguridad,
+        duenio: duenio,
+        activo: activo,
+      })
+      .then(res => {
+        console.log('Edited User: ', res.data);
+      })
+      .catch(e => {
+        console.log(`Create mi cuenta error ${e}`);
+      });
+    setVisibleUserEdited(true);
+    setIsLoading(false);
+  };
+
+  // Elimino el usuario
+  const onDeleteUser = () => {
+    //Enviar los datos al back
+    setVisibleDeleteUser(true)
+    setIsLoading(true);
+    axios
+      .delete(USER_URL, {
+        id: id,
+        activo: false,
+      })
+      .then(res => {
+        console.log('Deleted User: ', res.data);
+      })
+      .catch(e => {
+        console.log(`Delete User error ${e}`);
+      });
+
+    setIsLoading(false);
+  };
+
+  useEffect(() => {}, [userInfo]);
 
   return (
     <SafeAreaView
@@ -126,12 +211,109 @@ const PerfilUsuario = ({navigation}) => {
           height: 20,
           marginBottom: 30,
         }}
-        //onPress={() => navigation.navigate('OlvideMiContraseña')}
+        onPress={() => onDeleteUser()}
       >
         <Text style={{color: '#E14852', fontSize: 15, fontWeight: 'bold'}}>
           Dar de baja la cuenta
         </Text>
       </Pressable>
+
+      <ModalPoup visible={visibleUserEdited}>
+        <View style={{alignItems: 'flex-start'}}>
+          <Text style={{fontSize: 20, color: 'black'}}>Cambios guardados.</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '2%',
+              marginBottom: '2%',
+              marginHorizontal: '5%',
+            }}
+          />
+        </View>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: '1%',
+            marginBottom: '1%',
+            marginHorizontal: '1%',
+          }}>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '100%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: '#E14852',
+              borderRadius: 30,
+            }}
+            onPress={() => {
+              setVisibleUserEdited(false);
+            }}>
+            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
+          </Pressable>
+        </View>
+      </ModalPoup>
+
+      <ModalPoup visible={visibleDeleteUser}>
+        <View style={{alignItems: 'flex-start'}}>
+          <Text style={{fontSize: 20, color: 'black'}}>
+            Esta seguro que desea eliminar la cuenta?
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '2%',
+              marginBottom: '2%',
+              marginHorizontal: '5%',
+            }}></View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: '1%',
+            marginBottom: '1%',
+            marginHorizontal: '1%',
+          }}>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '50%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: '#E14852',
+              borderRadius: 30,
+            }}
+            onPress={() => {
+              setVisibleDeleteUser(false);
+            }}>
+            <Text style={{color: 'white', textAlign: 'center'}}>Cancelar</Text>
+          </Pressable>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '50%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: '#E14852',
+              borderRadius: 30,
+            }}
+            onPress={() => {
+              {
+                onDeleteUser();
+              }
+              setVisibleDeleteUser(false);
+              logout()
+            }}>
+            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
+          </Pressable>
+        </View>
+      </ModalPoup>
+
       <Pressable
         style={{
           marginTop: 10,
@@ -145,7 +327,7 @@ const PerfilUsuario = ({navigation}) => {
           backgroundColor: '#E14852',
           borderRadius: 30,
         }}
-        onPress={() => navigation.navigate('CrearRestaurante')}>
+        onPress={() => onChangeUserData()}>
         <Text
           style={{
             color: '#fdfdfd',
@@ -159,5 +341,48 @@ const PerfilUsuario = ({navigation}) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#D6B1B1',
+  },
+
+  centerContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  scrollView: {
+    marginHorizontal: 1,
+    marginVertical: 1,
+  },
+  text: {
+    fontSize: 42,
+  },
+
+  modalBackGround: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: '80%',
+    backgroundColor: '#F7F4F4',
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    borderRadius: 20,
+    elevation: 20,
+  },
+  modalContainer2: {
+    width: '80%',
+    backgroundColor: 'transparent',
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    borderRadius: 20,
+    elevation: 20,
+  },
+});
 
 export default PerfilUsuario;

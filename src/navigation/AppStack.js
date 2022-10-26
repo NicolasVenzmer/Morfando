@@ -63,6 +63,7 @@ const FlowDeRestaurante = ({navigation}) => {
       <Stack.Screen name="CrearMenu" component={CrearMenu} />
       <Stack.Screen name="VerMenu" component={VerMenu} />
       <Stack.Screen name="EditarRestaurante" component={EditarRestaurante} />
+      <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
     </Stack.Navigator>
   );
 };
