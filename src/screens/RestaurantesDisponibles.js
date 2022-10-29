@@ -39,9 +39,7 @@ const ModalPoup = ({visible, children}) => {
 };
 
 const RestaurantesDisponibles = ({navigation}) => {
-  const {userInfo} = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
-  const [emptyRestaurants, setEmptyRestaurants] = useState(true);
   const [restaurants, setRestaurants] = useState([]);
   const [visible, setVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -49,27 +47,21 @@ const RestaurantesDisponibles = ({navigation}) => {
 
   // Obtengo los restaurantes de un owner en especifico
   const getRestaurants = async () => {
-    const id = userInfo.id;
-    const GET_RESTAURANTS_URL = "/restaurants";
+    const GET_RESTAURANTS_URL = '/restaurants';
     axios
       .get(GET_RESTAURANTS_URL)
       .then(res => {
-        console.log(res.data);
-        //setRestaurants(res.data.Restaurantes);
-        // Chequeo si el array contiene restaurants o si esta vacio
+        //console.log(res.data);
+        setRestaurants(res.data);
       })
       .catch(e => {
         console.log(`Restaurants GET error ${e}`);
       });
-    console.log(restaurants.length);
-    if (restaurants.length > 0) {
-      setEmptyRestaurants(false);
-    }
     setLoading(false);
   };
 
   useEffect(() => {
-    //getRestaurants();
+    getRestaurants();
   }, []);
 
   return (
@@ -111,12 +103,23 @@ const RestaurantesDisponibles = ({navigation}) => {
           Restaurantes cercanos
         </Text>
       </View>
-      <View style={{width: '85%', marginTop: 10}}>
-        <Searchbar
-          style={{borderRadius: 15}}
-          placeholder="Buscar Restaurante"
-          onChangeText={onChangeSearch}
-          value={searchQuery}
+      <View style={{width: '95%', alignItems: 'center', flexDirection: 'row'}}>
+        <View style={{width: '80%', left: 10}}>
+          <Searchbar
+            style={{borderRadius: 15}}
+            placeholder="Buscar Restaurante"
+            onChangeText={onChangeSearch}
+            value={searchQuery}
+          />
+        </View>
+        <Ionicons
+          name="filter"
+          style={{
+            color: 'black',
+            left: 20,
+            fontSize: 30,
+          }}
+          //onPress={() => navigation.openDrawer()}
         />
       </View>
       <ScrollView
@@ -124,7 +127,7 @@ const RestaurantesDisponibles = ({navigation}) => {
           width: '100%',
           height: '100%',
         }}>
-        {emptyRestaurants ? (
+        {!restaurants?.length > 0 ? (
           <View
             style={{
               width: '100%',
@@ -143,18 +146,22 @@ const RestaurantesDisponibles = ({navigation}) => {
             <Image source={require('../assets/Images/empty-restaurants.png')} />
           </View>
         ) : (
-          // sacar los fragments
-          <>
-            <CardRestauranteConsumidor />
-            {/* {restaurants?.map(restaurant => (
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            {restaurants?.map(restaurant => (
               <CardRestauranteConsumidor
-                key={restaurant?.id}
+                key={restaurant.id}
                 restaurant={restaurant}
                 navigation={navigation}
-                deleteRestaurant={() => deleteRestaurant(restaurant)}
               />
-            ))} */}
-          </>
+            ))}
+          </View>
         )}
       </ScrollView>
 

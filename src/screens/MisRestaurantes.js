@@ -15,7 +15,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {data} from '../data/data';
 import axios from '../api/axios';
 import {AuthContext, ErrorReference} from '../context/AuthContext';
-import { Dialog } from 'react-native-paper';
+import {Dialog} from 'react-native-paper';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);
@@ -44,7 +44,7 @@ const MisRestaurantes = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [restaurants, setRestaurants] = useState([]);
   const [visible, setVisible] = useState(false);
-  const [confirm,setConfirm] = useState({ok:()=>{},cancel:()=>{}});
+  const [confirm, setConfirm] = useState({ok: () => {}, cancel: () => {}});
 
   // Obtengo los restaurantes de un owner en especifico
   const getRestaurants = async () => {
@@ -62,26 +62,25 @@ const MisRestaurantes = ({navigation}) => {
       })
       .finally(() => setLoading(false));
   };
-  const withVisibleFalse =  (func)=>{
-    return async()=>{
-    await Promise.resolve(func());
-    setVisible(false)}
-  }
-  const withConfirmationDialog =  function(onConfirmed,onCancelled){
-    	const defaultCallback = ()=>{}
- 
-    return ()=>{
-      const ok = withVisibleFalse (onConfirmed || defaultCallback);
+  const withVisibleFalse = func => {
+    return async () => {
+      await Promise.resolve(func());
+      setVisible(false);
+    };
+  };
+  const withConfirmationDialog = function (onConfirmed, onCancelled) {
+    const defaultCallback = () => {};
+
+    return () => {
+      const ok = withVisibleFalse(onConfirmed || defaultCallback);
       const cancel = withVisibleFalse(onCancelled || defaultCallback);
-    setConfirm({ok,cancel}); 
-    setVisible(true);
-    }
-    
-  }
+      setConfirm({ok, cancel});
+      setVisible(true);
+    };
+  };
 
   // Elimino un restaurante en especifico
   const deleteRestaurant = async restaurant => {
-
     const sendData = {
       id: restaurant.id,
       activo: false,
@@ -89,10 +88,8 @@ const MisRestaurantes = ({navigation}) => {
     console.log('El ID del restaurante a eliminar es: ', sendData.id);
     const DELETE_RESTAURANTS_URL = '/restaurant';
     axios
-      .delete(DELETE_RESTAURANTS_URL, {data:sendData})
+      .delete(DELETE_RESTAURANTS_URL, {data: sendData})
       .then(res => {
-        //console.log(restaurant.id);
-        //console.log(res.status);
         const dataDelete = [...restaurants];
         const filteredData = dataDelete.filter(el => el.id != restaurant.id);
         setRestaurants(filteredData);
@@ -177,7 +174,9 @@ const MisRestaurantes = ({navigation}) => {
                 key={restaurant.id}
                 restaurant={restaurant}
                 navigation={navigation}
-                deleteRestaurant={withConfirmationDialog(() => deleteRestaurant(restaurant))}
+                deleteRestaurant={withConfirmationDialog(() =>
+                  deleteRestaurant(restaurant),
+                )}
               />
             ))}
           </>

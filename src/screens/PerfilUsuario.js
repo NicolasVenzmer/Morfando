@@ -87,12 +87,13 @@ const PerfilUsuario = ({navigation}) => {
     //Enviar los datos al back
     setVisibleDeleteUser(true);
     setIsLoading(true);
+    const sendData = {
+      id: id,
+      activo: false,
+    };
     if (visibleDeleteUser) {
       axios
-        .delete(USER_URL, {
-          id: id,
-          activo: false,
-        })
+        .delete(USER_URL, {data: sendData})
         .then(res => {
           logout();
           console.log('Deleted User: ', res.data);

@@ -78,7 +78,7 @@ export const AuthProvider = ({children}) => {
         if (userInfo.duenio) {
           setEsDueño(true);
         }
-        console.log('isLoggedIn: ', userInfo);
+        //console.log('isLoggedIn: ', userInfo);
         setUserToken(userToken);
         setUserInfo(userInfo);
       } else {

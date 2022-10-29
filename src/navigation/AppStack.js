@@ -89,6 +89,7 @@ const FlowDeRestauranteConsumidor = ({navigation}) => {
         name="RestaurantesDisponibles"
         component={RestaurantesDisponibles}
       />
+      <Stack.Screen name="VerMenu" component={VerMenu} />
       <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
     </Stack.Navigator>
   );

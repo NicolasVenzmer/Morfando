@@ -79,17 +79,21 @@ const CompletarSignUp = ({navigation}) => {
   const registerUser = async (mail, password) => {
     setIsLoading(true);
 
-    /*
-    FALTA AGREGAR LOS VALORES PEDIDOS EN EL POSTMAN
-    */
+    //Chequear esto porque pide token
+    const sendData = {
+      nombre: 'Prueba',
+      correo: mail,
+      contrasenia: password,
+      preguntaSeguridad: 'Como se llamo tu primer mascota?',
+      respuestaSeguridad: 'kiki',
+      duenio: false,
+      activo: false,
+    };
 
     axios
-      .post(REGISTER_URL, {
-        mail,
-        password,
-      })
+      .post(REGISTER_URL, {data: sendData})
       .then(res => {
-        if(res.status === 200){
+        if (res.status === 200) {
           navigation.navigate('AltaUsuarioConExito');
         }
       })
@@ -264,7 +268,6 @@ const CompletarSignUp = ({navigation}) => {
               borderRadius: 30,
             }}
             onPress={() => {
-              navigation.navigate('CompletarSignUp');
               setVisible(false);
             }}>
             <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
@@ -304,7 +307,6 @@ const CompletarSignUp = ({navigation}) => {
               borderRadius: 30,
             }}
             onPress={() => {
-              navigation.navigate('CompletarSignUp');
               setVisiblePasswordModal(false);
             }}>
             <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
