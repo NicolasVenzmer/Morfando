@@ -12,6 +12,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Avatar} from 'react-native-paper';
 import {AuthContext} from '../context/AuthContext';
+import DefaultImageUser from "../assets/Images/default-user-image.png"
 
 import axios from '../api/axios';
 import {ListAccordionGroupContext} from 'react-native-paper/lib/typescript/components/List/ListAccordionGroup';
@@ -159,7 +160,7 @@ const PerfilUsuario = ({navigation}) => {
             <Avatar.Image
               style={{marginBottom: 20}}
               size={150}
-              source={require('../assets/Icons/error-icon.png')}
+              source={DefaultImageUser}
             />
             <Pressable
               style={{

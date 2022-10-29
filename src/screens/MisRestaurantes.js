@@ -15,6 +15,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {data} from '../data/data';
 import axios from '../api/axios';
 import {AuthContext, ErrorReference} from '../context/AuthContext';
+import { Dialog } from 'react-native-paper';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);
@@ -40,37 +41,47 @@ const ModalPoup = ({visible, children}) => {
 
 const MisRestaurantes = ({navigation}) => {
   const {userInfo} = useContext(AuthContext);
-  const [loading, setLoading] = useState(true);
-  const [emptyRestaurants, setEmptyRestaurants] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [restaurants, setRestaurants] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [confirm,setConfirm] = useState({ok:()=>{},cancel:()=>{}});
 
   // Obtengo los restaurantes de un owner en especifico
   const getRestaurants = async () => {
+    setLoading(true);
     const id = userInfo.id;
     const GET_USER_RESTAURANTS_URL = `/users/${id}/restaurants`;
     axios
       .get(GET_USER_RESTAURANTS_URL)
       .then(res => {
-        console.log(res.data.misRestaurantes);
+        //console.log(res.data.misRestaurantes);
         setRestaurants(res.data.misRestaurantes);
-        // Chequeo si el array contiene restaurants o si esta vacio
-        
-        
       })
       .catch(e => {
         console.log(`Restaurants GET error ${e}`);
-      });
-    console.log(restaurants.length);
-    if (restaurants.length > 0) {
-      setEmptyRestaurants(false);
-    }
-    setLoading(false);
+      })
+      .finally(() => setLoading(false));
   };
+  const withVisibleFalse =  (func)=>{
+    return async()=>{
+    await Promise.resolve(func());
+    setVisible(false)}
+  }
+  const withConfirmationDialog =  function(onConfirmed,onCancelled){
+    	const defaultCallback = ()=>{}
+ 
+    return ()=>{
+      const ok = withVisibleFalse (onConfirmed || defaultCallback);
+      const cancel = withVisibleFalse(onCancelled || defaultCallback);
+    setConfirm({ok,cancel}); 
+    setVisible(true);
+    }
+    
+  }
 
   // Elimino un restaurante en especifico
   const deleteRestaurant = async restaurant => {
-    setVisible(true);
+
     const sendData = {
       id: restaurant.id,
       activo: false,
@@ -78,13 +89,13 @@ const MisRestaurantes = ({navigation}) => {
     console.log('El ID del restaurante a eliminar es: ', sendData.id);
     const DELETE_RESTAURANTS_URL = '/restaurant';
     axios
-      .delete(DELETE_RESTAURANTS_URL, sendData)
+      .delete(DELETE_RESTAURANTS_URL, {data:sendData})
       .then(res => {
-        console.log(res.status);
-        // const dataDelete = [...restaurants];
-        // const index = restaurants[id];
-        // dataDelete.splice(index, 1);
-        // setRestaurants([...dataDelete]);
+        //console.log(restaurant.id);
+        //console.log(res.status);
+        const dataDelete = [...restaurants];
+        const filteredData = dataDelete.filter(el => el.id != restaurant.id);
+        setRestaurants(filteredData);
       })
       .catch(e => {
         console.log(`Restaurants DELETE error ${e}`);
@@ -139,7 +150,7 @@ const MisRestaurantes = ({navigation}) => {
           width: '100%',
           height: '80%',
         }}>
-        {emptyRestaurants ? (
+        {!restaurants?.length > 0 ? (
           <View
             style={{
               width: '100%',
@@ -163,10 +174,10 @@ const MisRestaurantes = ({navigation}) => {
           <>
             {restaurants?.map(restaurant => (
               <CardRestaurante
-                key={restaurant?.id}
+                key={restaurant.id}
                 restaurant={restaurant}
                 navigation={navigation}
-                deleteRestaurant={() => deleteRestaurant(restaurant)}
+                deleteRestaurant={withConfirmationDialog(() => deleteRestaurant(restaurant))}
               />
             ))}
           </>
@@ -204,10 +215,7 @@ const MisRestaurantes = ({navigation}) => {
               backgroundColor: '#E14852',
               borderRadius: 30,
             }}
-            onPress={() => {
-              navigation.navigate('MisRestaurantes');
-              setVisible(false);
-            }}>
+            onPress={confirm?.cancel}>
             <Text style={{color: 'white', textAlign: 'center'}}>Cancelar</Text>
           </Pressable>
           <Pressable
@@ -219,12 +227,7 @@ const MisRestaurantes = ({navigation}) => {
               backgroundColor: '#E14852',
               borderRadius: 30,
             }}
-            onPress={() => {
-              {
-                deleteRestaurant();
-              }
-              setVisible(false);
-            }}>
+            onPress={confirm?.ok}>
             <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
           </Pressable>
         </View>

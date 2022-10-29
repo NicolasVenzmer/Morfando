@@ -28,6 +28,9 @@ export const AuthProvider = ({children}) => {
         password,
       })
       .then(res => {
+
+        //console.log(res.data)
+
         //Resultado de aceptacion
         if (res.status > 299) {
           setError(ErrorReference[res.status]);
@@ -41,7 +44,7 @@ export const AuthProvider = ({children}) => {
         if (userData.usuario.duenio) {
           setEsDueño(true);
         }
-        console.log('DATA: ', JSON.stringify(userData.usuario.activo));
+        //console.log('DATA: ', JSON.stringify(userData.usuario.activo));
         AsyncStorage.setItem('userInfo', JSON.stringify(userData.usuario));
         AsyncStorage.setItem('userToken', userData.token);
       })
@@ -66,10 +69,15 @@ export const AuthProvider = ({children}) => {
   const isLoggedIn = async () => {
     try {
       setIsLoading(true);
-      let userInfo = AsyncStorage.getItem('userInfo');
-      let userToken = AsyncStorage.getItem('userToken');
+      let userInfo = await AsyncStorage.getItem('userInfo').then(JSON.parse);
+      let userToken = await AsyncStorage.getItem('userToken');
 
       if (userInfo) {
+        // ACA ME FIJO SI EL DUEÑO O NO
+        console.log(userInfo.duenio)
+        if (userInfo.duenio) {
+          setEsDueño(true);
+        }
         console.log('isLoggedIn: ', userInfo);
         setUserToken(userToken);
         setUserInfo(userInfo);
@@ -84,7 +92,7 @@ export const AuthProvider = ({children}) => {
   };
 
   useEffect(() => {
-    //isLoggedIn();
+    isLoggedIn();
   }, []);
 
   return (
