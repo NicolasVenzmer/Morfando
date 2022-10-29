@@ -3,7 +3,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import DefaultImage from "../assets/Images/upload-restaurant-image.jpg"
+import DefaultRestaurantImage from "../assets/Images/default-restaurant-image.png"
 
 const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
 
@@ -52,7 +52,7 @@ const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
                 top: 10,
                 right: 20,
               }}
-              onPress={() => navigation.navigate('EditarRestaurante', {restaurant})}
+              // onPress={() => navigation.navigate('EditarRestaurante', {restaurant})}
             />
             <Feather
               name="trash-2"
@@ -76,7 +76,7 @@ const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
               width: '90%',
               height: 150,
             }}
-            source={restaurant.restaurantImage}
+            source={restaurant.restaurantImage === "" || DefaultRestaurantImage}
           />
         </Pressable>
       ) : null}

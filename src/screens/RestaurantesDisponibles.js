@@ -10,11 +10,11 @@ import {
   Modal,
   StyleSheet,
 } from 'react-native';
-import CardRestaurante from '../components/CardRestaurante';
+import CardRestauranteConsumidor from '../components/CardRestauranteConsumidor';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {data} from '../data/data';
 import axios from '../api/axios';
 import {AuthContext, ErrorReference} from '../context/AuthContext';
+import {Searchbar} from 'react-native-paper';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);
@@ -38,25 +38,25 @@ const ModalPoup = ({visible, children}) => {
   );
 };
 
-const MisRestaurantes = ({navigation}) => {
+const RestaurantesDisponibles = ({navigation}) => {
   const {userInfo} = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [emptyRestaurants, setEmptyRestaurants] = useState(true);
   const [restaurants, setRestaurants] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const onChangeSearch = query => setSearchQuery(query);
 
   // Obtengo los restaurantes de un owner en especifico
   const getRestaurants = async () => {
     const id = userInfo.id;
-    const GET_USER_RESTAURANTS_URL = `/users/${id}/restaurants`;
+    const GET_RESTAURANTS_URL = "/restaurants";
     axios
-      .get(GET_USER_RESTAURANTS_URL)
+      .get(GET_RESTAURANTS_URL)
       .then(res => {
-        console.log(res.data.misRestaurantes);
-        setRestaurants(res.data.misRestaurantes);
+        console.log(res.data);
+        //setRestaurants(res.data.Restaurantes);
         // Chequeo si el array contiene restaurants o si esta vacio
-        
-        
       })
       .catch(e => {
         console.log(`Restaurants GET error ${e}`);
@@ -68,31 +68,8 @@ const MisRestaurantes = ({navigation}) => {
     setLoading(false);
   };
 
-  // Elimino un restaurante en especifico
-  const deleteRestaurant = async restaurant => {
-    setVisible(true);
-    const sendData = {
-      id: restaurant.id,
-      activo: false,
-    };
-    console.log('El ID del restaurante a eliminar es: ', sendData.id);
-    const DELETE_RESTAURANTS_URL = '/restaurant';
-    axios
-      .delete(DELETE_RESTAURANTS_URL, sendData)
-      .then(res => {
-        console.log(res.status);
-        // const dataDelete = [...restaurants];
-        // const index = restaurants[id];
-        // dataDelete.splice(index, 1);
-        // setRestaurants([...dataDelete]);
-      })
-      .catch(e => {
-        console.log(`Restaurants DELETE error ${e}`);
-      });
-  };
-
   useEffect(() => {
-    getRestaurants();
+    //getRestaurants();
   }, []);
 
   return (
@@ -131,13 +108,21 @@ const MisRestaurantes = ({navigation}) => {
             fontSize: 20,
             fontFamily: 'Roboto',
           }}>
-          Mis Restaurantes
+          Restaurantes cercanos
         </Text>
+      </View>
+      <View style={{width: '85%', marginTop: 10}}>
+        <Searchbar
+          style={{borderRadius: 15}}
+          placeholder="Buscar Restaurante"
+          onChangeText={onChangeSearch}
+          value={searchQuery}
+        />
       </View>
       <ScrollView
         style={{
           width: '100%',
-          height: '80%',
+          height: '100%',
         }}>
         {emptyRestaurants ? (
           <View
@@ -153,22 +138,22 @@ const MisRestaurantes = ({navigation}) => {
                 fontWeight: '450',
                 textAlign: 'center',
               }}>
-              Aun no tienes restaurantes{'\n'}
-              Crea uno nuevo!
+              Aun no hay restaurantes disponibles
             </Text>
             <Image source={require('../assets/Images/empty-restaurants.png')} />
           </View>
         ) : (
           // sacar los fragments
           <>
-            {restaurants?.map(restaurant => (
-              <CardRestaurante
+            <CardRestauranteConsumidor />
+            {/* {restaurants?.map(restaurant => (
+              <CardRestauranteConsumidor
                 key={restaurant?.id}
                 restaurant={restaurant}
                 navigation={navigation}
                 deleteRestaurant={() => deleteRestaurant(restaurant)}
               />
-            ))}
+            ))} */}
           </>
         )}
       </ScrollView>
@@ -229,31 +214,6 @@ const MisRestaurantes = ({navigation}) => {
           </Pressable>
         </View>
       </ModalPoup>
-
-      <Pressable
-        style={{
-          marginTop: 10,
-          marginBottom: 10,
-          position: 'relative',
-          width: '80%',
-          bottom: 0,
-          height: 50,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#E14852',
-          borderRadius: 30,
-        }}
-        onPress={() => navigation.navigate('CrearRestaurante')}>
-        <Text
-          style={{
-            color: '#fdfdfd',
-            fontWeight: '400',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          Nuevo
-        </Text>
-      </Pressable>
     </SafeAreaView>
   );
 };
@@ -301,4 +261,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MisRestaurantes;
+export default RestaurantesDisponibles;

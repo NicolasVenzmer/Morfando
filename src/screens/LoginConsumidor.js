@@ -6,8 +6,8 @@ const LoginConsumidor = ({navigation}) => {
     <SafeAreaView
       style={{
         flexDirection: 'column',
+        flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
         backgroundColor: 'ff0000',
       }}>
       <View
@@ -70,7 +70,6 @@ const LoginConsumidor = ({navigation}) => {
         }}>
         <Image
           style={{
-            alignSelf: 'flex-start',
             alignSelf: 'center',
             left: 10,
             width: 25,
@@ -87,6 +86,30 @@ const LoginConsumidor = ({navigation}) => {
           Ingresar con Google
         </Text>
       </View>
+      <Pressable
+        style={{
+          marginTop: 10,
+          marginBottom: 10,
+          position: 'absolute',
+          width: '80%',
+          bottom: 0,
+          height: 50,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#E14852',
+          borderRadius: 30,
+        }}
+        onPress={() => navigation.navigate('SignUp')}>
+        <Text
+          style={{
+            color: '#fdfdfd',
+            fontWeight: '400',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          Volver
+        </Text>
+      </Pressable>
     </SafeAreaView>
   );
 };

@@ -90,9 +90,10 @@ const PerfilUsuario = ({navigation}) => {
       axios
         .delete(USER_URL, {
           id: id,
-          activo: false
+          activo: false,
         })
         .then(res => {
+          logout();
           console.log('Deleted User: ', res.data);
         })
         .catch(e => {
@@ -123,7 +124,7 @@ const PerfilUsuario = ({navigation}) => {
           marginBottom: 5,
         }}>
         <Ionicons
-          name="chevron-back"
+          name="menu"
           style={{
             position: 'absolute',
             left: 15,
@@ -131,7 +132,7 @@ const PerfilUsuario = ({navigation}) => {
             marginRight: 25,
             fontSize: 30,
           }}
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.openDrawer()}
         />
         <Text
           style={{
@@ -307,7 +308,6 @@ const PerfilUsuario = ({navigation}) => {
                 onDeleteUser();
               }
               setVisibleDeleteUser(false);
-              logout();
             }}>
             <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
           </Pressable>

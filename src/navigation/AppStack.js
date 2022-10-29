@@ -16,6 +16,7 @@ import MisRestaurantes from '../screens/MisRestaurantes';
 import CrearRestaurante from '../screens/CrearRestaurante';
 import {AuthContext} from '../context/AuthContext';
 import EditarRestaurante from '../screens/EditarRestaurante';
+import RestaurantesDisponibles from '../screens/RestaurantesDisponibles';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -63,6 +64,31 @@ const FlowDeRestaurante = ({navigation}) => {
       <Stack.Screen name="CrearMenu" component={CrearMenu} />
       <Stack.Screen name="VerMenu" component={VerMenu} />
       <Stack.Screen name="EditarRestaurante" component={EditarRestaurante} />
+      <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
+    </Stack.Navigator>
+  );
+};
+
+const FlowDeRestauranteConsumidor = ({navigation}) => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerLeft: () => (
+          <NavigationDrawerStructure navigationProps={navigation} />
+        ),
+        headerStyle: {
+          backgroundColor: '#f4511e', //Set Header color
+        },
+        headerTintColor: '#fff', //Set Header text color
+        headerTitleStyle: {
+          fontWeight: 'bold', //Set Header text style
+        },
+        headerShown: false,
+      }}>
+      <Stack.Screen
+        name="RestaurantesDisponibles"
+        component={RestaurantesDisponibles}
+      />
       <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
     </Stack.Navigator>
   );
@@ -136,6 +162,15 @@ const AppStack = ({navigation}) => {
       )}
       {!esDueño && (
         <>
+          <Drawer.Screen
+            name="Restaurantes"
+            component={FlowDeRestauranteConsumidor}
+            options={{
+              drawerIcon: ({color}) => (
+                <Ionicons name="home-outline" size={22} color={color} />
+              ),
+            }}
+          />
           <Drawer.Screen
             name="Favoritos"
             component={Favoritos}
