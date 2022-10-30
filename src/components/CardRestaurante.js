@@ -11,7 +11,7 @@ const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
     <>
       {restaurant.activo ? (
         <Pressable
-          onPress={() => navigation.navigate('VerMenu')}
+          //onPress={() => navigation.navigate('VerMenu', {restaurant})}
           style={{
             backgroundColor: '#F2F1F0',
             alignSelf: 'center',

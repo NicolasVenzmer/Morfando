@@ -4,22 +4,20 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Plato from '../components/Plato';
 import {useRoute} from '@react-navigation/native';
 
-const VerMenu = ({restaurant, navigation}) => {
-  console.log("estoy en menus", restaurant)
+const VerMenuConsumidor = ({navigation}) => {
   const route = useRoute();
   const [menus, setMenus] = useState([]);
   const [emptyMenus, setEmptyMenus] = useState(true);
 
   useEffect(() => {
-    //restaurant.map((restaurant) => setMenus(restaurant.plates))
-    //setMenus(route.params.platosTemp);
-    setMenus(platos)
+    const plates = route.params.restaurant.plates;
+    setMenus(plates)
     if (!!menus) {
       setEmptyMenus(false);
     }
   }, []);
 
-  console.log('Ya cargue los menus: ', menus);
+  console.log('Ya cargue los menus: ', route.params.restaurant);
 
   const platos = [
     {
@@ -108,7 +106,7 @@ const VerMenu = ({restaurant, navigation}) => {
             marginRight: 25,
             fontSize: 30,
           }}
-          onPress={() => navigation.replace('MisRestaurantes')}
+          onPress={() => navigation.replace("RestaurantesDisponibles")}
         />
         <Text
           style={{
@@ -133,4 +131,4 @@ const VerMenu = ({restaurant, navigation}) => {
   );
 };
 
-export default VerMenu;
+export default VerMenuConsumidor;

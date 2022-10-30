@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, Image} from 'react-native';
+import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 
 const PlatoType = plato => {
   if (!plato.aptoVegano && !plato.aptoCeliaco) return;
@@ -25,7 +26,7 @@ const PlatoType = plato => {
       </View>
     );
 
-  if (plato.aptoVegano)
+  if (plato.aptoVegano === "")
     return (
       <Image
         style={{
@@ -90,7 +91,7 @@ const Plato = ({plato}) => {
           }}>
           <Image
             style={{width: 90, height: 90, margin: 5, borderRadius: 30}}
-            source={plato.plato_imagen}
+            source={plato.plato_imagen === '' || DefaultRestaurantImage}
           />
           <View
             style={{
@@ -102,7 +103,7 @@ const Plato = ({plato}) => {
                 color: 'black',
                 fontWeight: '400',
               }}>
-              {plato.nombre}
+              {plato?.nombre}
             </Text>
             <Text
               style={{
@@ -111,7 +112,7 @@ const Plato = ({plato}) => {
                 marginTop: 5,
                 fontSize: 12,
               }}>
-              {plato.ingredientes}
+              {plato?.ingredientes}
             </Text>
             <Text
               style={{

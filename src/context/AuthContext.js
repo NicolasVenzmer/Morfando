@@ -37,6 +37,7 @@ export const AuthProvider = ({children}) => {
           return;
         }
         let userData = res.data;
+        console.log("token", userData.token)
         setUserInfo(userData.usuario);
         setUserToken(userData.token);
 

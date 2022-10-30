@@ -4,16 +4,14 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 
-const CardRestauranteConsumidor = ({
-  restaurant,
-  navigation,
-  deleteRestaurant,
-}) => {
+const CardRestauranteConsumidor = ({restaurant, navigation}) => {
   return (
     <>
       {restaurant.activo ? (
         <Pressable
-          onPress={() => navigation.navigate('DetalleRestaurante', {restaurant})}
+          onPress={() =>
+            navigation.navigate('DetalleRestaurante', {restaurant})
+          }
           style={{
             backgroundColor: '#F2F1F0',
             alignSelf: 'center',
@@ -38,7 +36,7 @@ const CardRestauranteConsumidor = ({
                 top: 5,
                 right: 10,
               }}
-              // onPress={() => navigation.navigate('EditarRestaurante', {restaurant})}
+              //onPress={() => }
             />
             <Image
               style={{
@@ -83,7 +81,9 @@ const CardRestauranteConsumidor = ({
                 fontSize: 30,
                 top: 10,
               }}
-              //onPress={() => navigation.navigate('VerMenu', {restaurant})}
+              onPress={() =>
+                navigation.navigate('VerMenuConsumidor', {restaurant})
+              }
             />
           </View>
         </Pressable>
