@@ -3,15 +3,14 @@ import Feather from 'react-native-vector-icons/Feather';
 import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import DefaultRestaurantImage from "../assets/Images/default-restaurant-image.png"
+import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 
 const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
-
   return (
     <>
       {restaurant.activo ? (
         <Pressable
-          //onPress={() => navigation.navigate('VerMenu', {restaurant})}
+          onPress={() => navigation.navigate('VerMenu')}
           style={{
             backgroundColor: '#F2F1F0',
             alignSelf: 'center',
@@ -42,7 +41,7 @@ const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
                 top: 10,
                 right: 25,
               }}
-              onPress={() => navigation.navigate('CrearMenu', {restaurant})}
+              onPress={() => navigation.navigate('CrearMenu')}
             />
             <MaterialCommunityIcons
               name="circle-edit-outline"
@@ -52,7 +51,7 @@ const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
                 top: 10,
                 right: 20,
               }}
-              // onPress={() => navigation.navigate('EditarRestaurante', {restaurant})}
+              onPress={() => navigation.navigate('EditarRestaurante')}
             />
             <Feather
               name="trash-2"
@@ -76,7 +75,8 @@ const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
               width: '90%',
               height: 150,
             }}
-            source={restaurant.restaurantImage === "" || DefaultRestaurantImage}
+            resizeMode="contain"
+            source={restaurant.restaurantImage === '' || DefaultRestaurantImage}
           />
         </Pressable>
       ) : null}

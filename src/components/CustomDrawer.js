@@ -11,6 +11,7 @@ import {
 } from '@react-navigation/drawer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { AuthContext } from '../context/AuthContext';
+import DefaultImageUser from '../assets/Images/default-user-image.png';
 
 const CustomDrawer = props => {
   const {logout, userInfo} = useContext(AuthContext)
@@ -21,7 +22,7 @@ const CustomDrawer = props => {
         contentContainerStyle={{backgroundColor: '#E14852'}}>
         <View style={{padding: 20, backgroundColor: '#E14852'}}>
           <Image
-            source={require('../assets/Images/plato-prueba.jpg')}
+            source={DefaultImageUser}
             style={{height: 80, width: 80, borderRadius: 40, marginBottom: 10}}
           />
           <Text
@@ -39,7 +40,11 @@ const CustomDrawer = props => {
         </View>
       </DrawerContentScrollView>
       <View style={{padding: 20, borderTopWidth: 1, borderTopColor: '#ccc'}}>
-        <TouchableOpacity onPress={() => {logout()}} style={{paddingVertical: 15}}>
+        <TouchableOpacity
+          onPress={() => {
+            logout();
+          }}
+          style={{paddingVertical: 15}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Ionicons name="exit-outline" size={22} />
             <Text

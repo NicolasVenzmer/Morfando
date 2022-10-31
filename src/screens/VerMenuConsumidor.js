@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, SafeAreaView, ScrollView} from 'react-native';
+import {View, Text, SafeAreaView, ScrollView, Image} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Plato from '../components/Plato';
 import {useRoute} from '@react-navigation/native';
@@ -106,7 +106,7 @@ const VerMenuConsumidor = ({navigation}) => {
             marginRight: 25,
             fontSize: 30,
           }}
-          onPress={() => navigation.replace("RestaurantesDisponibles")}
+          onPress={() => navigation.replace('RestaurantesDisponibles')}
         />
         <Text
           style={{
@@ -123,9 +123,32 @@ const VerMenuConsumidor = ({navigation}) => {
           width: '100%',
           height: '100%',
         }}>
-        {menus?.map((plato, index) => (
-          <Plato key={index} plato={plato} />
-        ))}
+        {!menus?.length > 0 ? (
+          <View
+            style={{
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{
+                position: 'absolute',
+                fontSize: 20,
+                fontWeight: '450',
+                textAlign: 'center',
+              }}>
+              Aun no tiene menus este restaurante.
+            </Text>
+            <Image source={require('../assets/Images/empty-restaurants.png')} />
+          </View>
+        ) : (
+          // sacar los fragments
+          <>
+            {menus?.map((plato, index) => (
+              <Plato key={index} plato={plato} />
+            ))}
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

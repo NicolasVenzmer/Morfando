@@ -13,9 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Avatar} from 'react-native-paper';
 import {AuthContext} from '../context/AuthContext';
 import DefaultImageUser from "../assets/Images/default-user-image.png"
-
 import axios from '../api/axios';
-import {ListAccordionGroupContext} from 'react-native-paper/lib/typescript/components/List/ListAccordionGroup';
 const USER_URL = '/user';
 
 const ModalPoup = ({visible, children}) => {
@@ -159,7 +157,7 @@ const PerfilUsuario = ({navigation}) => {
           }}>
           <View>
             <Avatar.Image
-              style={{marginBottom: 20}}
+              style={{marginBottom: 20, objectFit: "fit"}}
               size={150}
               source={DefaultImageUser}
             />

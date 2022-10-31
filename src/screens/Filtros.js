@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from '../api/axios';
 import CardFavoritos from '../components/CardFavoritos';
 
-const Favoritos = ({navigation}) => {
+const Filtros = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const [restaurants, setRestaurants] = useState([]);
 
@@ -27,7 +27,6 @@ const Favoritos = ({navigation}) => {
   useEffect(() => {
     getFavorites();
   }, []);
-
 
   return (
     <SafeAreaView
@@ -65,7 +64,7 @@ const Favoritos = ({navigation}) => {
             fontSize: 20,
             fontFamily: 'Roboto',
           }}>
-          Favoritos
+          Filtros
         </Text>
       </View>
       <ScrollView
@@ -73,45 +72,10 @@ const Favoritos = ({navigation}) => {
           width: '100%',
           height: '100%',
         }}>
-        {!restaurants?.length > 0 ? (
-          <View
-            style={{
-              width: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Text
-              style={{
-                position: 'absolute',
-                fontSize: 20,
-                fontWeight: '450',
-                textAlign: 'center',
-              }}>
-              No tenes ningun favorito
-            </Text>
-            <Image source={require('../assets/Images/empty-restaurants.png')} />
-          </View>
-        ) : (
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            {restaurants?.map(restaurant => (
-              <CardFavoritos
-                key={restaurant.id}
-                restaurant={restaurant}
-                navigation={navigation}
-              />
-            ))}
-          </View>
-        )}
+        
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default Favoritos;
+export default Filtros;

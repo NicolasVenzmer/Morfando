@@ -12,10 +12,8 @@ import {
 } from 'react-native';
 import CardRestaurante from '../components/CardRestaurante';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {data} from '../data/data';
 import axios from '../api/axios';
 import {AuthContext, ErrorReference} from '../context/AuthContext';
-import {Dialog} from 'react-native-paper';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);

@@ -22,63 +22,10 @@ const CrearMenu = ({navigation}) => {
 
   const [platosTemp, setPlatosTemp] = useState([]);
   const [emptyMenus, setEmptyMenus] = useState(true);
-  
-  console.log(
-    'Estoy en el crear menu con el restaurante: ',
-    route.params.restaurant.id, // ID
-    route.params.restaurant.plates.map(
-      (
-        plato, // NOMBRE DEL PLATO
-      ) => console.log(plato.nombre),
-    ),
-    route.params.restaurant.plates.map(
-      (
-        plato, // NOMBRE DE LA CATEGORIA
-      ) => console.log(plato.category.nombre),
-    ),
-    //precio
-    route.params.restaurant.plates.map(
-      (
-        plato, // NOMBRE DEL INGREDIENTE
-      ) => console.log(plato.ingredientes),
-    ),
-    route.params.restaurant.plates.map(
-      (
-        plato, // APTO PARA VEGANOS
-      ) => console.log(plato.aptoVegano),
-    ),
-    route.params.restaurant.plates.map(
-      (
-        plato, // APTO PARA CELIACOS
-      ) => console.log(plato.aptoCeliaco),
-    ),
-    route.params.restaurant.plates.map(
-      (
-        plato, // APTO PARA CELIACOS
-      ) => console.log(plato.plato_imagen),
-    ),
-  );
-
-    // const [loading, setLoading] = useState(true);
-    // const [emptyMenus, setEmptyMenus] = useState(true);
-    // const [menus, setMenus] = useState([]);
-
-    // const getMenus = async () => {
-    //   axios
-    //     .get(MENUS_URL)
-    //     .then(res => {
-    //       //console.log('DATA_: ', res.data);
-    //       setMenus(res.data);
-    //       setEmptyMenus(false);
-    //     })
-    //     .catch(e => {
-    //       console.log(`Menus error ${e}`);
-    //     });
-    //   setLoading(false);
-    // };
 
     useEffect(() => {
-      setPlatosTemp(route.params.restaurant.plates);
+      const plates = route.params.restaurant.plates;
+      setPlatosTemp(plates);
       if(!!platosTemp){
         setEmptyMenus(false)
       }
