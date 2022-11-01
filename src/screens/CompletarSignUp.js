@@ -93,6 +93,7 @@ const CompletarSignUp = ({navigation}) => {
     axios
       .post(REGISTER_URL, {data: sendData})
       .then(res => {
+        console.log(res.data)
         if (res.status === 200) {
           navigation.navigate('AltaUsuarioConExito');
         }

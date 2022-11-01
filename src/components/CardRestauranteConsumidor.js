@@ -4,7 +4,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 
-const CardRestauranteConsumidor = ({restaurant, navigation}) => {
+const CardRestauranteConsumidor = ({restaurant, addFavorite, navigation}) => {
   return (
     <>
       {restaurant.activo ? (
@@ -36,7 +36,7 @@ const CardRestauranteConsumidor = ({restaurant, navigation}) => {
                 top: 5,
                 right: 10,
               }}
-              //onPress={() => }
+              onPress={addFavorite}
             />
             <Image
               style={{

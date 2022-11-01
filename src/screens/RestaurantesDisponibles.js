@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import CardRestauranteConsumidor from '../components/CardRestauranteConsumidor';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from '../api/axios';
 import {Searchbar} from 'react-native-paper';
+import {AuthContext} from '../context/AuthContext';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);
@@ -42,6 +43,7 @@ const RestaurantesDisponibles = ({navigation}) => {
   const [restaurants, setRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const onChangeSearch = query => setSearchQuery(query);
+  const {userInfo} = useContext(AuthContext);
 
   // Obtengo los restaurantes de un owner en especifico
   const getRestaurants = async () => {
@@ -61,6 +63,25 @@ const RestaurantesDisponibles = ({navigation}) => {
   useEffect(() => {
     getRestaurants();
   }, []);
+
+  const addFavorite = async (restaurant) => {
+    const ADD_FAVORITE_URL = '/user-favorites';
+    
+    const sendData = {
+      usuario_id: userInfo.id,
+      restaurante_id: restaurant.id,
+    };
+    console.log(sendData);
+    axios
+      .post(ADD_FAVORITE_URL, {data: sendData})
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(e => {
+        console.log(`Restaurants GET error ${e}`);
+      });
+    setLoading(false);
+  };
 
   return (
     <SafeAreaView
@@ -155,6 +176,7 @@ const RestaurantesDisponibles = ({navigation}) => {
             {restaurants?.map(restaurant => (
               <CardRestauranteConsumidor
                 key={restaurant.id}
+                addFavorite={() => addFavorite(restaurant)}
                 restaurant={restaurant}
                 navigation={navigation}
               />

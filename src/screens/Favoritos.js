@@ -1,21 +1,26 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {View, Text, Image, SafeAreaView, ScrollView} from 'react-native';
 import CardRestauranteConsumidor from '../components/CardRestauranteConsumidor';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from '../api/axios';
 import CardFavoritos from '../components/CardFavoritos';
+import {AuthContext, ErrorReference} from '../context/AuthContext';
 
 const Favoritos = ({navigation}) => {
+  const {userInfo} = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [restaurants, setRestaurants] = useState([]);
 
   // Obtengo los restaurantes de un owner en especifico
   const getFavorites = async () => {
-    const GET_FAVORITES_URL = '/restaurants';
+    //CHEQUEAR ESTO YA QUE NO FUNCIONA BIEN
+    setLoading(true);
+    const id = userInfo.id;
+    const GET_FAVORITES_URL = `/user/${id}/favorites`;
     axios
       .get(GET_FAVORITES_URL)
       .then(res => {
-        //console.log(res.data);
+        console.log(res.data);
         setRestaurants(res.data.favorite);
       })
       .catch(e => {
@@ -23,6 +28,8 @@ const Favoritos = ({navigation}) => {
       });
     setLoading(false);
   };
+
+  console.log(restaurants)
 
   useEffect(() => {
     getFavorites();
