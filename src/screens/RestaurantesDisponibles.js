@@ -162,57 +162,96 @@ const RestaurantesDisponibles = ({navigation}) => {
           </View>
         )}
       </ScrollView>
-      
+
       <ModalPoup visible={visibleFilters}>
-        <View style={{alignItems: 'flex-start'}}>
-          <Text style={{fontSize: 20, color: 'black'}}>
-            Esta seguro que desea eliminar el restaurante?
-          </Text>
+        <View style={{alignItems: 'center', height: '70%'}}>
           <View
             style={{
+              width: '100%',
               flexDirection: 'row',
               alignItems: 'center',
-              marginTop: '2%',
-              marginBottom: '2%',
-              marginHorizontal: '5%',
-            }}></View>
+              justifyContent: 'center',
+            }}>
+            <Ionicons
+              name="chevron-back-outline"
+              style={{
+                color: 'black',
+                position: 'absolute',
+                left: 1,
+                fontSize: 30,
+              }}
+              onPress={() => setVisibleFilters(false)}
+            />
+            <Text
+              style={{
+                color: 'black',
+                fontWeight: '500',
+                fontSize: 20,
+                fontFamily: 'Roboto',
+              }}>
+              Filtros
+            </Text>
+          </View>
+          <View style={{width: '100%', marginTop: 20}}>
+            <Text
+              style={{
+                color: 'black',
+                fontWeight: '500',
+                fontSize: 15,
+                fontFamily: 'Roboto',
+              }}>
+              Distancia respecto a tu ubicacion
+            </Text>
+          </View>
+          <View style={{width: '100%', marginTop: 20}}>
+            <Text
+              style={{
+                color: 'black',
+                fontWeight: '500',
+                fontSize: 15,
+                fontFamily: 'Roboto',
+              }}>
+              Categoria
+            </Text>
+          </View>
+          <View style={{width: '100%', marginTop: 20}}>
+            <Text
+              style={{
+                color: 'black',
+                fontWeight: '500',
+                fontSize: 15,
+                fontFamily: 'Roboto',
+              }}>
+              Rango de precio
+            </Text>
+          </View>
+          <View style={{width: '100%', marginTop: 20}}>
+            <Text
+              style={{
+                color: 'black',
+                fontWeight: '500',
+                fontSize: 15,
+                fontFamily: 'Roboto',
+              }}>
+              Cantidad de estrellas
+            </Text>
+          </View>
         </View>
-        <View
+        <Pressable
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: '1%',
-            marginBottom: '1%',
-            marginHorizontal: '1%',
-          }}>
-          <Pressable
-            style={{
-              alignSelf: 'center',
-              width: '50%',
-              marginVertical: 10,
-              paddingVertical: 10,
-              backgroundColor: '#E14852',
-              borderRadius: 30,
-            }}
-            onPress={""}
-            >
-            <Text style={{color: 'white', textAlign: 'center'}}>Cancelar</Text>
-          </Pressable>
-          <Pressable
-            style={{
-              alignSelf: 'center',
-              width: '50%',
-              marginVertical: 10,
-              paddingVertical: 10,
-              backgroundColor: '#E14852',
-              borderRadius: 30,
-            }}
-            onPress={""}>
-            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
-          </Pressable>
-        </View>
+            alignSelf: 'center',
+            position: 'absolute',
+            width: '100%',
+            marginVertical: 10,
+            paddingVertical: 10,
+            backgroundColor: '#E14852',
+            borderRadius: 30,
+            bottom: 30,
+          }}
+          onPress={() => setVisibleFilters(false)}>
+          <Text style={{color: 'white', textAlign: 'center'}}>Aplicar</Text>
+        </Pressable>
       </ModalPoup>
-
     </SafeAreaView>
   );
 };

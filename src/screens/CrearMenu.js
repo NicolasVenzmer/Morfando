@@ -12,10 +12,10 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import CardCrearPlato from '../components/CardCrearPlato';
 import axios from '../api/axios';
 const MENUS_URL = '/restaurant/';
-import {useRoute} from "@react-navigation/native"
+import {useRoute} from '@react-navigation/native';
 
 const CrearMenu = ({navigation}) => {
-  const route = useRoute()
+  const route = useRoute();
   const [nombrePlato, onChangeNombrePlato] = useState(false);
   const [precio, onChangePrecio] = useState(false);
   const [ingrediente, onChangeIngrediente] = useState(false);
@@ -23,15 +23,15 @@ const CrearMenu = ({navigation}) => {
   const [platosTemp, setPlatosTemp] = useState([]);
   const [emptyMenus, setEmptyMenus] = useState(true);
 
-    useEffect(() => {
-      const plates = route.params.restaurant.plates;
-      setPlatosTemp(plates);
-      if(!!platosTemp){
-        setEmptyMenus(false)
-      }
-    }, []);
+  useEffect(() => {
+    const plates = route.params.restaurant.plates;
+    setPlatosTemp(plates);
+    if (!!platosTemp) {
+      setEmptyMenus(false);
+    }
+  }, []);
 
-    console.log("Ya cargue los platos: ", platosTemp)
+  console.log('Ya cargue los platos: ', platosTemp);
 
   const [platos, setPlatos] = useState([{key: '', plato: ''}]);
   const addPlato = () => {

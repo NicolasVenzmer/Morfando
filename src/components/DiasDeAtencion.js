@@ -20,8 +20,6 @@ const DiasDeAtencion = ({
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
-  
-
   return (
     <View
       style={{

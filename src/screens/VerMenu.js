@@ -1,19 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, SafeAreaView, ScrollView} from 'react-native';
+import {View, Text, SafeAreaView, ScrollView, Image} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Plato from '../components/Plato';
 import {useRoute} from '@react-navigation/native';
 
-const VerMenu = ({restaurant, navigation}) => {
-  console.log("estoy en menus", restaurant)
+const VerMenu = ({navigation}) => {
   const route = useRoute();
   const [menus, setMenus] = useState([]);
   const [emptyMenus, setEmptyMenus] = useState(true);
 
   useEffect(() => {
-    //restaurant.map((restaurant) => setMenus(restaurant.plates))
-    //setMenus(route.params.platosTemp);
-    setMenus(platos)
+    const plates = route.params.restaurant.plates;
+    setMenus(plates);
+    //setMenus(platos)
     if (!!menus) {
       setEmptyMenus(false);
     }
@@ -125,9 +124,38 @@ const VerMenu = ({restaurant, navigation}) => {
           width: '100%',
           height: '100%',
         }}>
-        {menus?.map((plato, index) => (
-          <Plato key={index} plato={plato} />
-        ))}
+        {!menus?.length > 0 ? (
+          <View
+            style={{
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{
+                position: 'absolute',
+                fontSize: 20,
+                fontWeight: '450',
+                textAlign: 'center',
+              }}>
+              El restaurante no tiene menus disponibles
+            </Text>
+            <Image source={require('../assets/Images/empty-restaurants.png')} />
+          </View>
+        ) : (
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            {menus?.map((plato, index) => (
+              <Plato key={index} plato={plato} />
+            ))}
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

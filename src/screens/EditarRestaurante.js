@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -14,11 +14,12 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Feather from 'react-native-vector-icons/Feather';
 import FoodTypeChip from '../components/FoodTypeChip';
 import {Chip} from 'react-native-paper';
-
 import axios from '../api/axios';
+import {useRoute} from '@react-navigation/native';
 const RESTAURANT_URL = '/restaurant';
 
-const EditarRestaurante = ({navigation, restaurant}) => {
+const EditarRestaurante = ({navigation}) => {
+  const route = useRoute();
   const [nombreRestaurante, onChangenombreRestaurante] = useState(false);
   const [direccion, onChangeDireccion] = useState(false);
   const [selectedMoney1, setSelectedMoney1] = useState(false);
@@ -26,7 +27,15 @@ const EditarRestaurante = ({navigation, restaurant}) => {
   const [selectedMoney3, setSelectedMoney3] = useState(false);
   const [selectedMoney4, setSelectedMoney4] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [restaurant, setRestaurant] = useState(null);
   var rangoPrecios = 1;
+
+  useEffect(() => {
+    const restaurant = route.params.restaurant;
+
+    console.log(restaurant);
+    setRestaurant(restaurant);
+  }, []);
 
   const onSubmitRestaurant = () => {
     //Enviar los datos al back

@@ -10,7 +10,7 @@ const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
     <>
       {restaurant.activo ? (
         <Pressable
-          onPress={() => navigation.navigate('VerMenu')}
+          onPress={() => navigation.navigate('VerMenu', {restaurant})}
           style={{
             backgroundColor: '#F2F1F0',
             alignSelf: 'center',
@@ -41,7 +41,7 @@ const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
                 top: 10,
                 right: 25,
               }}
-              onPress={() => navigation.navigate('CrearMenu')}
+              onPress={() => navigation.navigate('CrearMenu', {restaurant})}
             />
             <MaterialCommunityIcons
               name="circle-edit-outline"
@@ -51,7 +51,7 @@ const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
                 top: 10,
                 right: 20,
               }}
-              onPress={() => navigation.navigate('EditarRestaurante')}
+              onPress={() => navigation.navigate('EditarRestaurante', {restaurant})}
             />
             <Feather
               name="trash-2"

@@ -107,7 +107,8 @@ const DetalleRestaurante = ({navigation}) => {
               color: '#E14852',
               fontWeight: '500',
               fontSize: 15,
-            }}>
+            }}
+            onPress={() => navigation.navigate('VerMenuConsumidor', {restaurant})}>
             Ver Menu
           </Text>
           <Text
