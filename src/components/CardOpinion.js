@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
+import StarRating from '../components/CardStarRating';
 
 const CardOpinion = ({restaurant}) => {
   return (
@@ -13,6 +14,7 @@ const CardOpinion = ({restaurant}) => {
         style={{
           width: '100%',
           alignSelf: 'center',
+          alignItems: 'center',
           flexDirection: 'row',
         }}>
         <Text
@@ -22,37 +24,30 @@ const CardOpinion = ({restaurant}) => {
             fontSize: 20,
             fontFamily: 'Roboto',
           }}>
-          {restaurant.nombre}
+          Nombre 
         </Text>
+        <StarRating givenWidth={20} givenHeight={20} left={20} />
+      </View>
+      <View style={{width: '100%', top: 20}}>
         <Text
           style={{
             color: 'black',
             fontWeight: '500',
-            fontSize: 20,
+            fontSize: 15,
             fontFamily: 'Roboto',
-            left: 20,
           }}>
-          Estrellas
+          Comentario
         </Text>
+        <View
+          style={{
+            backgroundColor: '#E14852',
+            width: '100%',
+            height: 2,
+            top: 10,
+            bottom: 0,
+          }}
+        />
       </View>
-      <Text
-        style={{
-          color: 'black',
-          fontWeight: '500',
-          fontSize: 15,
-          fontFamily: 'Roboto',
-        }}>
-        Comentario
-      </Text>
-      <View
-        style={{
-          backgroundColor: '#E14852',
-          width: '100%',
-          height: 2,
-          top: 10,
-          bottom: 0,
-        }}
-      />
     </View>
   );
 };

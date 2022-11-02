@@ -7,6 +7,7 @@ import CardFavoritos from '../components/CardFavoritos';
 import {AuthContext, ErrorReference} from '../context/AuthContext';
 import {useRoute} from '@react-navigation/native';
 import CardOpinion from '../components/CardOpinion';
+import StarRating from '../components/CardStarRating';
 
 const Opiniones = ({navigation}) => {
   const route = useRoute();

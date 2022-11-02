@@ -8,12 +8,12 @@ import {
   Pressable,
   TextInput,
 } from 'react-native';
-import CardRestauranteConsumidor from '../components/CardRestauranteConsumidor';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from '../api/axios';
-import CardFavoritos from '../components/CardFavoritos';
-import {AuthContext, ErrorReference} from '../context/AuthContext';
+import {AuthContext} from '../context/AuthContext';
 import {useRoute} from '@react-navigation/native';
+import StarRating from '../components/CardStarRating';
+
 
 const OpinarSobreRestaurante = ({navigation}) => {
   const route = useRoute();
@@ -86,16 +86,7 @@ const OpinarSobreRestaurante = ({navigation}) => {
             width: '100%',
             alignSelf: 'center',
           }}>
-          <Text
-            style={{
-              color: 'black',
-              fontWeight: '500',
-              fontSize: 20,
-              fontFamily: 'Roboto',
-              alignSelf: 'center',
-            }}>
-            Estrellas
-          </Text>
+          <StarRating givenWidth={40} givenHeight={40} left={0}/>
           <TextInput
             style={{
               top: 10,
