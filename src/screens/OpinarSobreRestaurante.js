@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
   Pressable,
+  TextInput,
 } from 'react-native';
 import CardRestauranteConsumidor from '../components/CardRestauranteConsumidor';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -17,6 +18,7 @@ import {useRoute} from '@react-navigation/native';
 const OpinarSobreRestaurante = ({navigation}) => {
   const route = useRoute();
   const {userInfo} = useContext(AuthContext);
+  const [opinion, setOpinion] = useState('');
   const [loading, setLoading] = useState(true);
   const [restaurant, setRestaurant] = useState('');
   const [opinions, setOpinions] = useState([]);
@@ -77,7 +79,41 @@ const OpinarSobreRestaurante = ({navigation}) => {
         style={{
           width: '100%',
           height: '100%',
-        }}></ScrollView>
+        }}>
+        <View
+          style={{
+            top: 10,
+            width: '100%',
+            alignSelf: 'center',
+          }}>
+          <Text
+            style={{
+              color: 'black',
+              fontWeight: '500',
+              fontSize: 20,
+              fontFamily: 'Roboto',
+              alignSelf: 'center',
+            }}>
+            Estrellas
+          </Text>
+          <TextInput
+            style={{
+              top: 10,
+              width: '80%',
+              minHeight: 200,
+              padding: 10,
+              backgroundColor: '#D9D9D9',
+              alignSelf: 'center',
+              justifyContent: 'flex-start',
+            }}
+            multiline={true}
+            textAlignVertical="top"
+            onChangeText={setOpinion}
+            value={opinion}
+            placeholder="Comparte detalles de tu experiencia en este lugar..."
+          />
+        </View>
+      </ScrollView>
       <Pressable
         style={{
           marginTop: 10,
@@ -91,7 +127,8 @@ const OpinarSobreRestaurante = ({navigation}) => {
           backgroundColor: '#E14852',
           borderRadius: 30,
         }}
-        onPress={() => navigation.navigate('VerMenu', {platosTemp})}>
+        // onPress={() => navigation.navigate('VerMenu', {platosTemp})}
+      >
         <Text
           style={{
             color: '#fdfdfd',

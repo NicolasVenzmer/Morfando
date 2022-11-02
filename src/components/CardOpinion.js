@@ -1,9 +1,5 @@
 import React from 'react';
-import Feather from 'react-native-vector-icons/Feather';
 import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 
 const CardOpinion = ({restaurant}) => {
   return (
