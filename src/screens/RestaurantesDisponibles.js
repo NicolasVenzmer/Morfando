@@ -40,8 +40,10 @@ const ModalPoup = ({visible, children}) => {
 const RestaurantesDisponibles = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const [visibleFilters, setVisibleFilters] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [restaurants, setRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState([]);
+  const {userInfo} = useContext(AuthContext);
   const onChangeSearch = query => {
     if (query) {
       const newData = restaurants.filter(restaurant => {
@@ -57,7 +59,6 @@ const RestaurantesDisponibles = ({navigation}) => {
       setSearchQuery(restaurants);
     }
   };
-  const {userInfo} = useContext(AuthContext);
 
   // Obtengo los restaurantes de un owner en especifico
   const getRestaurants = async () => {
@@ -67,7 +68,7 @@ const RestaurantesDisponibles = ({navigation}) => {
       .then(res => {
         //console.log(res.data);
         setRestaurants(res.data);
-        setSearchQuery(res.data)
+        setSearchQuery(res.data);
       })
       .catch(e => {
         console.log(`Restaurants GET error ${e}`);
@@ -80,11 +81,12 @@ const RestaurantesDisponibles = ({navigation}) => {
   }, []);
 
   const addFavorite = async restaurant => {
+    setLoading(true);
     const ADD_FAVORITE_URL = '/user-favorites';
 
     const sendData = {
       usuario_id: userInfo.id,
-      restaurante_id: restaurant.id
+      restaurante_id: restaurant.id,
     };
     console.log(sendData);
     axios
@@ -95,6 +97,7 @@ const RestaurantesDisponibles = ({navigation}) => {
       .catch(e => {
         console.log(`Favorite GET error ${e}`);
       });
+    setVisible(true);
     setLoading(false);
   };
 
@@ -199,6 +202,43 @@ const RestaurantesDisponibles = ({navigation}) => {
           </View>
         )}
       </ScrollView>
+
+      <ModalPoup visible={visible}>
+        <View style={{alignItems: 'flex-start'}}>
+          <Text style={{fontSize: 20, color: 'black'}}>
+            Restaurante agregado a favoritos con exito.
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '2%',
+              marginBottom: '2%',
+              marginHorizontal: '5%',
+            }}></View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: '1%',
+            marginBottom: '1%',
+            marginHorizontal: '1%',
+          }}>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '100%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: '#E14852',
+              borderRadius: 30,
+            }}
+            onPress={() => setVisible(false)}>
+            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
+          </Pressable>
+        </View>
+      </ModalPoup>
 
       <ModalPoup visible={visibleFilters}>
         <View style={{alignItems: 'center', height: '70%'}}>

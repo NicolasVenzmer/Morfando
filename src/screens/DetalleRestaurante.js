@@ -1,19 +1,75 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, Image, SafeAreaView, ScrollView} from 'react-native';
+import React, {useState, useEffect, useContext} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Modal,
+  StyleSheet,
+  Pressable,
+} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 import {Chip} from 'react-native-paper';
 import {useRoute} from '@react-navigation/native';
+import axios from '../api/axios';
+import {AuthContext} from '../context/AuthContext';
+
+const ModalPoup = ({visible, children}) => {
+  const [showModal, setShowModal] = useState(visible);
+  useEffect(() => {
+    toggleModal();
+  }, [visible]);
+  const toggleModal = () => {
+    if (visible) {
+      setShowModal(true);
+    } else {
+      setShowModal(false);
+    }
+  };
+
+  return (
+    <Modal transparent visible={showModal}>
+      <View style={styles.modalBackGround}>
+        <View style={[styles.modalContainer]}>{children}</View>
+      </View>
+    </Modal>
+  );
+};
 
 const DetalleRestaurante = ({navigation}) => {
   const route = useRoute();
+  const {userInfo} = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
+  const [visible, setVisible] = useState(false);
   const restaurant = route.params.restaurant;
   const [selectedMoney1, setSelectedMoney1] = useState(false);
   const [selectedMoney2, setSelectedMoney2] = useState(false);
-  const [selectedMoney3, setSelectedMoney3] = useState(true );
+  const [selectedMoney3, setSelectedMoney3] = useState(true);
   const [selectedMoney4, setSelectedMoney4] = useState(false);
+
+  const addFavorite = async restaurant => {
+    setLoading(true);
+    const ADD_FAVORITE_URL = '/user-favorites';
+
+    const sendData = {
+      usuario_id: userInfo.id,
+      restaurante_id: restaurant.id,
+    };
+    console.log(sendData);
+    axios
+      .post(ADD_FAVORITE_URL, sendData)
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(e => {
+        console.log(`Favorite GET error ${e}`);
+      });
+    setVisible(true);
+    setLoading(false);
+  };
 
   return (
     <SafeAreaView
@@ -70,9 +126,47 @@ const DetalleRestaurante = ({navigation}) => {
             right: 20,
             fontSize: 30,
           }}
-          //onPress={() => navigation.goBack()}
+          onPress={() => addFavorite(restaurant)}
         />
       </View>
+
+      <ModalPoup visible={visible}>
+        <View style={{alignItems: 'flex-start'}}>
+          <Text style={{fontSize: 20, color: 'black'}}>
+            Restaurante agregado a favoritos con exito.
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '2%',
+              marginBottom: '2%',
+              marginHorizontal: '5%',
+            }}></View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: '1%',
+            marginBottom: '1%',
+            marginHorizontal: '1%',
+          }}>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '100%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: '#E14852',
+              borderRadius: 30,
+            }}
+            onPress={() => setVisible(false)}>
+            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
+          </Pressable>
+        </View>
+      </ModalPoup>
+
       <ScrollView
         style={{
           width: '100%',
@@ -200,5 +294,48 @@ const DetalleRestaurante = ({navigation}) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#D6B1B1',
+  },
+
+  centerContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  scrollView: {
+    marginHorizontal: 1,
+    marginVertical: 1,
+  },
+  text: {
+    fontSize: 42,
+  },
+
+  modalBackGround: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: '80%',
+    backgroundColor: '#F7F4F4',
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    borderRadius: 20,
+    elevation: 20,
+  },
+  modalContainer2: {
+    width: '80%',
+    backgroundColor: 'transparent',
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    borderRadius: 20,
+    elevation: 20,
+  },
+});
 
 export default DetalleRestaurante;
