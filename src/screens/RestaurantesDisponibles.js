@@ -41,8 +41,22 @@ const RestaurantesDisponibles = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const [visibleFilters, setVisibleFilters] = useState(false);
   const [restaurants, setRestaurants] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const onChangeSearch = query => setSearchQuery(query);
+  const [searchQuery, setSearchQuery] = useState([]);
+  const onChangeSearch = query => {
+    if (query) {
+      const newData = restaurants.filter(restaurant => {
+        console.log('estoy en el searching', restaurant);
+        const itemData = restaurant.nombre
+          ? restaurant.nombre.toUpperCase()
+          : ''.toUpperCase();
+        const textData = query.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setSearchQuery(newData);
+    } else {
+      setSearchQuery(restaurants);
+    }
+  };
   const {userInfo} = useContext(AuthContext);
 
   // Obtengo los restaurantes de un owner en especifico
@@ -53,6 +67,7 @@ const RestaurantesDisponibles = ({navigation}) => {
       .then(res => {
         //console.log(res.data);
         setRestaurants(res.data);
+        setSearchQuery(res.data)
       })
       .catch(e => {
         console.log(`Restaurants GET error ${e}`);
@@ -64,9 +79,9 @@ const RestaurantesDisponibles = ({navigation}) => {
     getRestaurants();
   }, []);
 
-  const addFavorite = async (restaurant) => {
+  const addFavorite = async restaurant => {
     const ADD_FAVORITE_URL = '/user-favorites';
-    
+
     const sendData = {
       usuario_id: userInfo.id,
       restaurante_id: restaurant.id,
@@ -81,6 +96,22 @@ const RestaurantesDisponibles = ({navigation}) => {
         console.log(`Restaurants GET error ${e}`);
       });
     setLoading(false);
+  };
+
+  const searchFilterFunction = text => {
+    if (text) {
+      const newData = restaurants.filter(item => {
+        console.log('estoy en el searching', item);
+        const itemData = item.name.first
+          ? item.name.first.toUpperCase()
+          : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredData(newData);
+    } else {
+      setFilteredData(restaurants);
+    }
   };
 
   return (
@@ -173,7 +204,7 @@ const RestaurantesDisponibles = ({navigation}) => {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            {restaurants?.map(restaurant => (
+            {searchQuery?.map(restaurant => (
               <CardRestauranteConsumidor
                 key={restaurant.id}
                 addFavorite={() => addFavorite(restaurant)}
