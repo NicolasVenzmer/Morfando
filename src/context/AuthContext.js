@@ -7,7 +7,7 @@ export const AuthContext = createContext();
 
 export const ErrorReference = {
   500: 'Error de servidor',
-  400: 'Bad Request',
+  400: 'Usuario inactivo. Chequee su casilla de mail',
   404: 'Usuario no encontrado con ese correo o contraseña.',
 };
 
@@ -51,7 +51,7 @@ export const AuthProvider = ({children}) => {
       })
       .catch(e => {
         setError(ErrorReference[404]);
-        console.log("error: ", error[404])
+        setError(ErrorReference[400]);
         console.log(`Login error ${e}`);
       });
     setIsLoading(false);

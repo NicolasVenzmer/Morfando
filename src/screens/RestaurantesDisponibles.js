@@ -84,34 +84,18 @@ const RestaurantesDisponibles = ({navigation}) => {
 
     const sendData = {
       usuario_id: userInfo.id,
-      restaurante_id: restaurant.id,
+      restaurante_id: restaurant.id
     };
     console.log(sendData);
     axios
-      .post(ADD_FAVORITE_URL, {data: sendData})
+      .post(ADD_FAVORITE_URL, sendData)
       .then(res => {
         console.log(res.data);
       })
       .catch(e => {
-        console.log(`Restaurants GET error ${e}`);
+        console.log(`Favorite GET error ${e}`);
       });
     setLoading(false);
-  };
-
-  const searchFilterFunction = text => {
-    if (text) {
-      const newData = restaurants.filter(item => {
-        console.log('estoy en el searching', item);
-        const itemData = item.name.first
-          ? item.name.first.toUpperCase()
-          : ''.toUpperCase();
-        const textData = text.toUpperCase();
-        return itemData.indexOf(textData) > -1;
-      });
-      setFilteredData(newData);
-    } else {
-      setFilteredData(restaurants);
-    }
   };
 
   return (

@@ -74,15 +74,15 @@ const Login = ({navigation}) => {
   };
 
   // aca verifico si esta conectado a wifi o no
-  const wifi = () => {
-    if (netInfo.type === 'wifi') {
-      {
-        login(mail, password);
-      }
-    } else {
-      setNoWifi(true);
-    }
-  };
+  // const wifi = () => {
+  //   if (netInfo.type === 'wifi') {
+  //     {
+  //       login(mail, password);
+  //     }
+  //   } else {
+  //     setNoWifi(true);
+  //   }
+  // };
 
   useEffect(() => {
     if(error === ErrorReference[404]){

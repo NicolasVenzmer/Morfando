@@ -81,17 +81,18 @@ const CompletarSignUp = ({navigation}) => {
 
     //Chequear esto porque pide token
     const sendData = {
-      nombre: 'Prueba',
+      nombre: 'No seteado',
       correo: mail,
       contrasenia: password,
       preguntaSeguridad: 'Como se llamo tu primer mascota?',
       respuestaSeguridad: 'kiki',
-      duenio: false,
+      duenio: true,
       activo: false,
     };
+    console.log(sendData)
 
     axios
-      .post(REGISTER_URL, {data: sendData})
+      .post(REGISTER_URL, sendData)
       .then(res => {
         console.log(res.data)
         if (res.status === 200) {
