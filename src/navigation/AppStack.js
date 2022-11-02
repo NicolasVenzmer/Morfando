@@ -19,6 +19,8 @@ import EditarRestaurante from '../screens/EditarRestaurante';
 import RestaurantesDisponibles from '../screens/RestaurantesDisponibles';
 import DetalleRestaurante from '../screens/DetalleRestaurante';
 import VerMenuConsumidor from '../screens/VerMenuConsumidor';
+import Opiniones from '../screens/Opiniones';
+import OpinarSobreRestaurante from '../screens/OpinarSobreRestaurante';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -94,6 +96,11 @@ const FlowDeRestauranteConsumidor = ({navigation}) => {
       <Stack.Screen name="VerMenuConsumidor" component={VerMenuConsumidor} />
       <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
       <Stack.Screen name="DetalleRestaurante" component={DetalleRestaurante} />
+      <Stack.Screen name="Opiniones" component={Opiniones} />
+      <Stack.Screen
+        name="OpinarSobreRestaurante"
+        component={OpinarSobreRestaurante}
+      />
     </Stack.Navigator>
   );
 };

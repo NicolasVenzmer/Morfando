@@ -52,7 +52,7 @@ const DetalleRestaurante = ({navigation}) => {
             right: 40,
             fontSize: 30,
           }}
-          //onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate('Opiniones', {restaurant})}
         />
         <Ionicons
           name="share-social"
@@ -108,7 +108,9 @@ const DetalleRestaurante = ({navigation}) => {
               fontWeight: '500',
               fontSize: 15,
             }}
-            onPress={() => navigation.navigate('VerMenuConsumidor', {restaurant})}>
+            onPress={() =>
+              navigation.navigate('VerMenuConsumidor', {restaurant})
+            }>
             Ver Menu
           </Text>
           <Text
