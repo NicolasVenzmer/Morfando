@@ -6,6 +6,7 @@ import axios from '../api/axios';
 import CardFavoritos from '../components/CardFavoritos';
 import {AuthContext, ErrorReference} from '../context/AuthContext';
 import {useRoute} from '@react-navigation/native';
+import CardOpinion from '../components/CardOpinion';
 
 const Opiniones = ({navigation}) => {
   const route = useRoute();
@@ -70,7 +71,10 @@ const Opiniones = ({navigation}) => {
         style={{
           width: '100%',
           height: '100%',
-        }}></ScrollView>
+        }}>
+        {/* Mapeo esto en base a todas las opiniones */}
+        <CardOpinion restaurant={restaurant}/>
+      </ScrollView>
       <Pressable
         style={{
           marginTop: 10,
