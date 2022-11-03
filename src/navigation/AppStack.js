@@ -1,10 +1,6 @@
 import React, {useContext} from 'react';
 import {View, TouchableOpacity, Image} from 'react-native';
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-} from '@react-navigation/drawer';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
 import PerfilUsuario from '../screens/PerfilUsuario';
 import Favoritos from '../screens/Favoritos';
@@ -26,16 +22,13 @@ const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const NavigationDrawerStructure = props => {
-  //Structure for the navigatin Drawer
   const toggleDrawer = () => {
-    //Props to open/close the drawer
     props.navigationProps.toggleDrawer();
   };
 
   return (
     <View style={{flexDirection: 'row'}}>
       <TouchableOpacity onPress={toggleDrawer}>
-        {/*Donute Button Image */}
         <Image
           source={{
             uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/drawerWhite.png',
@@ -47,7 +40,7 @@ const NavigationDrawerStructure = props => {
   );
 };
 
-const FlowDeRestaurante = ({navigation}) => {
+const FlowDeOwner = ({navigation}) => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -55,11 +48,11 @@ const FlowDeRestaurante = ({navigation}) => {
           <NavigationDrawerStructure navigationProps={navigation} />
         ),
         headerStyle: {
-          backgroundColor: '#f4511e', //Set Header color
+          backgroundColor: '#f4511e',
         },
-        headerTintColor: '#fff', //Set Header text color
+        headerTintColor: '#fff',
         headerTitleStyle: {
-          fontWeight: 'bold', //Set Header text style
+          fontWeight: 'bold',
         },
         headerShown: false,
       }}>
@@ -73,7 +66,7 @@ const FlowDeRestaurante = ({navigation}) => {
   );
 };
 
-const FlowDeRestauranteConsumidor = ({navigation}) => {
+const FlowDeConsumer = ({navigation}) => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -81,11 +74,11 @@ const FlowDeRestauranteConsumidor = ({navigation}) => {
           <NavigationDrawerStructure navigationProps={navigation} />
         ),
         headerStyle: {
-          backgroundColor: '#f4511e', //Set Header color
+          backgroundColor: '#f4511e',
         },
-        headerTintColor: '#fff', //Set Header text color
+        headerTintColor: '#fff',
         headerTitleStyle: {
-          fontWeight: 'bold', //Set Header text style
+          fontWeight: 'bold',
         },
         headerShown: false,
       }}>
@@ -126,16 +119,11 @@ const AppStack = ({navigation}) => {
           ...props,
           state: {
             ...props.state,
-            routeNames: props.state.routeNames.filter(
-              // To hide single option
-              // (routeName) => routeName !== 'HiddenPage1',
-              // To hide multiple options you can add & condition
-              routeName => {
-                routeName !== 'HiddenPage1' &&
-                  routeName !== 'HiddenPage2' &&
-                  routeName !== 'HiddenPage3';
-              },
-            ),
+            routeNames: props.state.routeNames.filter(routeName => {
+              routeName !== 'HiddenPage1' &&
+                routeName !== 'HiddenPage2' &&
+                routeName !== 'HiddenPage3';
+            }),
             routes: props.state.routes.filter(
               route =>
                 route.name !== 'HiddenPage1' &&
@@ -150,7 +138,7 @@ const AppStack = ({navigation}) => {
         <>
           <Drawer.Screen
             name="Mis Restaurantes"
-            component={FlowDeRestaurante}
+            component={FlowDeOwner}
             options={{
               drawerIcon: ({color}) => (
                 <Ionicons name="home-outline" size={22} color={color} />
@@ -175,7 +163,7 @@ const AppStack = ({navigation}) => {
         <>
           <Drawer.Screen
             name="Restaurantes"
-            component={FlowDeRestauranteConsumidor}
+            component={FlowDeConsumer}
             options={{
               drawerIcon: ({color}) => (
                 <Ionicons name="home-outline" size={22} color={color} />
