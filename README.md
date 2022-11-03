@@ -114,11 +114,10 @@ This project was realized by the following contributors:
   
 ### Installation
 
-* `git clone https://github.com/PierinaTufillaro/morfando-inc-back`
-* `npm start`
+* To install the backend follow the steps in the readme of the following link [Project explanation](https://github.com/PierinaTufillaro/morfando-inc-back)
+* `initialize https://github.com/PierinaTufillaro/morfando-inc-back`
 * `git clone https://github.com/NicolasVenzmer/Morfando`
-* `cd react-native-device-info/example`
-* `yarn`
+* `npm install`
 * `npx react-native run-android`
 
 
