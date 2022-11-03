@@ -112,7 +112,7 @@ This project was realized by the following contributors:
 * `react-native run-android`
   
   
-### Installation
+## Installation
 
 * To install the backend follow the steps in the readme of the following link [Project explanation](https://github.com/PierinaTufillaro/morfando-inc-back)
 * `initialize https://github.com/PierinaTufillaro/morfando-inc-back`
