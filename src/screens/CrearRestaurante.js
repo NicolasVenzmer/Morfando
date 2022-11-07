@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   Text,
@@ -12,74 +12,95 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import DiasDeAtencion from '../components/DiasDeAtencion';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Feather from 'react-native-vector-icons/Feather';
-import FoodTypeChip from '../components/FoodTypeChip';
 import {Chip} from 'react-native-paper';
+import {AuthContext} from '../context/AuthContext';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import axios from '../api/axios';
-const RESTAURANT_URL = '/restaurant';
+import {useNetInfo} from '@react-native-community/netinfo';
+const CREATE_RESTAURANT_URL = '/restaurant';
 
 const CrearRestaurante = ({navigation}) => {
-  const [nombreRestaurante, onChangenombreRestaurante] = useState(false);
-  const [direccion, onChangeDireccion] = useState(false);
+  const {userInfo} = useContext(AuthContext);
+  const [nombreRestaurante, onChangenombreRestaurante] = useState('');
+  const [calle, onChangeCalle] = useState('');
+  const [numero, onChangeNumero] = useState('');
+  const [localidad, onChangeLocalidad] = useState('');
+  const [pais, onChangePais] = useState('');
   const [selectedMoney1, setSelectedMoney1] = useState(false);
   const [selectedMoney2, setSelectedMoney2] = useState(false);
   const [selectedMoney3, setSelectedMoney3] = useState(false);
   const [selectedMoney4, setSelectedMoney4] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  var rangoPrecios = 1;
+  const [rangoPrecio, setRangoPrecio] = useState(1);
 
-  const onSubmitRestaurant = () => {
+  const createRestaurant = () => {
     //Enviar los datos al back
     setIsLoading(true);
-    axios
-      .post(RESTAURANT_URL, {
-        nombreRestaurante,
-        direccion,
-        horarios,
-        rangoPrecios,
-        tipoDeComida,
-        images,
-      })
-      .then(res => {
-        console.log('User Data: ', res.data);
-      })
-      .catch(e => {
-        console.log(`Create restaurant error ${e}`);
-      });
+    const listaDeTipoDeComida = [];
+    value.forEach(value => {
+      listaDeTipoDeComida.push(value);
+    });
+    const tipoDeComida = listaDeTipoDeComida.toString();
+    const sendData = {
+      nombre: nombreRestaurante,
+      //Este dato como se lo paso si me pide un ID
+      direccion_id: 1,
+      usuario_id: userInfo.id,
+      latitud: -34.62289,
+      longitud: -58.40821,
+      cerradoTemporalmente: false,
+      tipoDeComida: tipoDeComida,
+      rangoPrecio: rangoPrecio,
+      calificacion: 1,
+      activo: true,
+      horas: horarios,
+    };
+    console.log('Los dato a enviar son: ', sendData);
+    //navigation.navigate('MisRestaurantes');
+    // axios
+    //   .post(CREATE_RESTAURANT_URL, sendData)
+    //   .then(res => {
+    //     console.log('User Data: ', res.data);
+    //   })
+    //   .catch(e => {
+    //     console.log(`Create restaurant error ${e}`);
+    //   });
     setIsLoading(false);
   };
 
+  //Seteo el rango de los precios
   const changeSelectedChip = num => {
     if (num === 1) {
       setSelectedMoney1(true);
       setSelectedMoney2(false);
       setSelectedMoney3(false);
       setSelectedMoney4(false);
-      rangoPrecios++;
+      setRangoPrecio(1);
     }
     if (num === 2) {
       setSelectedMoney2(true);
       setSelectedMoney1(false);
       setSelectedMoney3(false);
       setSelectedMoney4(false);
-      rangoPrecios = 2;
+      setRangoPrecio(2);
     }
     if (num === 3) {
       setSelectedMoney3(true);
       setSelectedMoney1(false);
       setSelectedMoney2(false);
       setSelectedMoney4(false);
-      rangoPrecios = 3;
+      setRangoPrecio(3);
     }
     if (num === 4) {
       setSelectedMoney4(true);
       setSelectedMoney1(false);
       setSelectedMoney2(false);
       setSelectedMoney3(false);
-      rangoPrecios = 4;
+      setRangoPrecio(4);
     }
   };
-  console.log(rangoPrecios);
+
   const FoodTypeChips = [
     {
       id: '1',
@@ -104,26 +125,6 @@ const CrearRestaurante = ({navigation}) => {
     {
       id: '6',
       title: 'Comida Cafeteria',
-    },
-  ];
-
-  //Money $ $$ $$$ $$$$
-  const MoneyChips = [
-    {
-      id: '1',
-      title: '$',
-    },
-    {
-      id: '2',
-      title: '$$',
-    },
-    {
-      id: '3',
-      title: '$$$',
-    },
-    {
-      id: '4',
-      title: '$$$$',
     },
   ];
 
@@ -215,9 +216,9 @@ const CrearRestaurante = ({navigation}) => {
       abiertoHasta: '',
     })),
   );
-  const addHandler = (dia,position) => {
+  const addHandler = (dia, position) => {
     const _horarios = [...horarios];
-    _horarios.splice(position,0,{
+    _horarios.splice(position, 0, {
       dia,
       abiertoDesde: '',
       abiertoHasta: '',
@@ -232,19 +233,50 @@ const CrearRestaurante = ({navigation}) => {
   };
 
   const inputHandlerAbiertoDesde = (abiertoDesde, key) => {
-    console.log(arguments);
+    //console.log(arguments);
     const _horarios = [...horarios];
     _horarios[key].abiertoDesde = abiertoDesde;
     sethorarios(_horarios);
   };
   const inputHandlerAbiertoHasta = (abiertoHasta, key) => {
-        console.log(arguments);
+    //console.log(arguments);
     const _horarios = [...horarios];
     _horarios[key].abiertoHasta = abiertoHasta;
     sethorarios(_horarios);
   };
 
-  console.log('Lista: ', horarios);
+  //console.log('Lista: ', horarios);
+
+  //DropDown
+  DropDownPicker.setLanguage('ES');
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState([]);
+  const [items, setItems] = useState([
+    {
+      label: 'Cocina de autor',
+      value: 'Cocina de autor',
+    },
+    {
+      label: 'Comida china',
+      value: 'Comida china',
+    },
+    {
+      label: 'Cocina general',
+      value: 'Cocina general',
+    },
+    {
+      label: 'Comida Mexicana',
+      value: 'Comida Mexicana',
+    },
+    {
+      label: 'Comida Peruana',
+      value: 'Comida Peruana',
+    },
+    {
+      label: 'Comida Cafeteria',
+      value: 'Comida Cafeteria',
+    },
+  ]);
 
   return (
     <SafeAreaView
@@ -286,6 +318,7 @@ const CrearRestaurante = ({navigation}) => {
         </Text>
       </View>
       <ScrollView
+        vertical
         style={{
           width: '100%',
           height: '100%',
@@ -319,7 +352,6 @@ const CrearRestaurante = ({navigation}) => {
         <View
           style={{
             alignSelf: 'center',
-            flexDirection: 'row',
             backgroundColor: 'white',
             width: '80%',
             height: 50,
@@ -336,14 +368,57 @@ const CrearRestaurante = ({navigation}) => {
               borderBottomWidth: 1,
               width: '90%',
             }}
-            onChangeText={onChangeDireccion}
-            placeholder="Direccion"
-            value={direccion}
+            onChangeText={onChangeCalle}
+            placeholder="Calle"
+            value={calle}
+          />
+          <TextInput
+            style={{
+              height: 40,
+              margin: 12,
+              padding: 10,
+              fontWeight: '400',
+              borderBottomColor: 'grey',
+              borderBottomWidth: 1,
+              width: '90%',
+            }}
+            keyboardType="numeric"
+            onChangeText={onChangeNumero}
+            placeholder="Numero"
+            value={numero}
+          />
+          <TextInput
+            style={{
+              height: 40,
+              margin: 12,
+              padding: 10,
+              fontWeight: '400',
+              borderBottomColor: 'grey',
+              borderBottomWidth: 1,
+              width: '90%',
+            }}
+            onChangeText={onChangeLocalidad}
+            placeholder="Localidad"
+            value={localidad}
+          />
+          <TextInput
+            style={{
+              height: 40,
+              margin: 12,
+              padding: 10,
+              fontWeight: '400',
+              borderBottomColor: 'grey',
+              borderBottomWidth: 1,
+              width: '90%',
+            }}
+            onChangeText={onChangePais}
+            placeholder="Pais"
+            value={pais}
           />
         </View>
         <View
           style={{
-            marginTop: 10,
+            marginTop: 220,
             alignSelf: 'center',
             backgroundColor: '#E2CACC',
             width: '80%',
@@ -353,10 +428,10 @@ const CrearRestaurante = ({navigation}) => {
           }}>
           <Text
             style={{
-              left: 10,
               top: 5,
               color: 'black',
               fontWeight: '400',
+              alignSelf: 'center',
             }}>
             Horario de atencion
           </Text>
@@ -415,14 +490,21 @@ const CrearRestaurante = ({navigation}) => {
           style={{
             alignSelf: 'center',
             justifyContent: 'center',
-            flexWrap: 'wrap',
-            flexDirection: 'row',
             width: '85%',
             marginTop: 10,
           }}>
-          {FoodTypeChips.map((food, index) => (
-            <FoodTypeChip key={index} food={food} />
-          ))}
+          <DropDownPicker
+            style={{alignSelf: 'center', width: '95%'}}
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            multiple={true}
+            min={1}
+            max={3}
+          />
         </View>
         {showImage ? (
           <Pressable
@@ -471,6 +553,7 @@ const CrearRestaurante = ({navigation}) => {
                   <View
                     style={{alignItems: 'center', justifyContent: 'center'}}>
                     <Image
+                      key={key}
                       source={{uri: image.uri.toString()}}
                       style={{
                         height: 110,
@@ -518,7 +601,7 @@ const CrearRestaurante = ({navigation}) => {
           backgroundColor: '#E14852',
           borderRadius: 30,
         }}
-        onPress={() => navigation.navigate('MisRestaurantes')}>
+        onPress={() => createRestaurant()}>
         <Text
           style={{
             color: '#fdfdfd',

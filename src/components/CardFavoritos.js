@@ -4,7 +4,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 
-const CardFavoritos = ({restaurant, navigation}) => {
+const CardFavoritos = ({restaurant, navigation, deleteFavorite}) => {
   return (
     <>
       {restaurant.activo ? (
@@ -36,7 +36,7 @@ const CardFavoritos = ({restaurant, navigation}) => {
                 top: 5,
                 right: 10,
               }}
-              //onPress={() => }
+              onPress={deleteFavorite}
             />
             <Image
               style={{
@@ -62,7 +62,7 @@ const CardFavoritos = ({restaurant, navigation}) => {
                 fontWeight: '500',
                 flexWrap: 'wrap',
               }}>
-              {restaurant.nombre}
+              {restaurant.restaurante.nombre}
             </Text>
             <Text
               style={{

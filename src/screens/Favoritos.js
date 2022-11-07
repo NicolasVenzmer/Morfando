@@ -1,41 +1,77 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {View, Text, Image, SafeAreaView, ScrollView} from 'react-native';
+import {View, Text, Image, SafeAreaView, ScrollView, Pressable} from 'react-native';
 import CardRestauranteConsumidor from '../components/CardRestauranteConsumidor';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from '../api/axios';
 import CardFavoritos from '../components/CardFavoritos';
 import {AuthContext, ErrorReference} from '../context/AuthContext';
+import ModalPoup from '../components/ModalPopUp';
+import Theme from '../assets/fonts/Theme';
 
 const Favoritos = ({navigation}) => {
   const {userInfo} = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [restaurants, setRestaurants] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [confirm, setConfirm] = useState({ok: () => {}, cancel: () => {}});
 
-  // Obtengo los restaurantes de un owner en especifico
+  // Obtengo los favoritos
   const getFavorites = async () => {
-    //CHEQUEAR ESTO YA QUE NO FUNCIONA BIEN
     setLoading(true);
     const id = userInfo.id;
     const GET_FAVORITES_URL = `/user/${id}/favorites`;
     axios
       .get(GET_FAVORITES_URL)
       .then(res => {
-        console.log(res.data);
-        setRestaurants(res.data.favorite);
+        setRestaurants(res.data);
       })
       .catch(e => {
         console.log(`Restaurants GET error ${e}`);
-      });
-    setLoading(false);
+      })
+      .finally(() => setLoading(false));
   };
 
-  console.log(restaurants)
+    const withVisibleFalse = func => {
+      return async () => {
+        await Promise.resolve(func());
+        setVisible(false);
+      };
+    };
+    const withConfirmationDialog = function (onConfirmed, onCancelled) {
+      const defaultCallback = () => {};
+
+      return () => {
+        const ok = withVisibleFalse(onConfirmed || defaultCallback);
+        const cancel = withVisibleFalse(onCancelled || defaultCallback);
+        setConfirm({ok, cancel});
+        setVisible(true);
+      };
+    };
+
+  // Elimino un favorito en especifico
+  const deleteFavorite = async restaurant => {
+    const sendData = {
+      usuario_id: userInfo.id,
+      restaurante_id: restaurant.restaurante.id,
+      activo: false,
+    };
+    console.log('El favorito a eliminar es: ', sendData);
+    const DELETE_FAVORITE_URL = '/user-favorites';
+    axios
+      .delete(DELETE_FAVORITE_URL, {data: sendData})
+      .then(res => {
+        const dataDelete = [...restaurants];
+        const filteredData = dataDelete.filter(el => el.id != restaurant.id);
+        setRestaurants(filteredData);
+      })
+      .catch(e => {
+        console.log(`Restaurants DELETE error ${e}`);
+      });
+  };
 
   useEffect(() => {
     getFavorites();
   }, []);
-
-
   return (
     <SafeAreaView
       style={{
@@ -112,11 +148,63 @@ const Favoritos = ({navigation}) => {
                 key={restaurant.id}
                 restaurant={restaurant}
                 navigation={navigation}
+                deleteFavorite={withConfirmationDialog(() =>
+                  deleteFavorite(restaurant),
+                )}
               />
             ))}
           </View>
         )}
       </ScrollView>
+
+      <ModalPoup visible={visible}>
+        <View style={{alignItems: 'flex-start'}}>
+          <Text style={{fontSize: 20, color: 'black'}}>
+            Esta seguro que desea eliminar el restaurante de sus favoritos?
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '2%',
+              marginBottom: '2%',
+              marginHorizontal: '5%',
+            }}></View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: '1%',
+            marginBottom: '1%',
+            marginHorizontal: '1%',
+          }}>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '50%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: '#E14852',
+              borderRadius: 30,
+            }}
+            onPress={confirm?.cancel}>
+            <Text style={{color: 'white', textAlign: 'center'}}>Cancelar</Text>
+          </Pressable>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '50%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: '#E14852',
+              borderRadius: 30,
+            }}
+            onPress={confirm?.ok}>
+            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
+          </Pressable>
+        </View>
+      </ModalPoup>
     </SafeAreaView>
   );
 };
