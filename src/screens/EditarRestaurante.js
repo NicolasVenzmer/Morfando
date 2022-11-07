@@ -12,129 +12,88 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import DiasDeAtencion from '../components/DiasDeAtencion';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Feather from 'react-native-vector-icons/Feather';
-import FoodTypeChip from '../components/FoodTypeChip';
 import {Chip} from 'react-native-paper';
 import axios from '../api/axios';
 import {useRoute} from '@react-navigation/native';
+import DropDownPicker from 'react-native-dropdown-picker';
+
 const RESTAURANT_URL = '/restaurant';
 
 const EditarRestaurante = ({navigation}) => {
   const route = useRoute();
-  const [nombreRestaurante, onChangenombreRestaurante] = useState(false);
-  const [direccion, onChangeDireccion] = useState(false);
+  const [nombreRestaurante, onChangenombreRestaurante] = useState("");
+  const [calle, onChangeCalle] = useState('');
+  const [numero, onChangeNumero] = useState('');
+  const [localidad, onChangeLocalidad] = useState('');
+  const [pais, onChangePais] = useState('');
   const [selectedMoney1, setSelectedMoney1] = useState(false);
   const [selectedMoney2, setSelectedMoney2] = useState(false);
   const [selectedMoney3, setSelectedMoney3] = useState(false);
   const [selectedMoney4, setSelectedMoney4] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [restaurant, setRestaurant] = useState(null);
-  var rangoPrecios = 1;
+  const [rangoPrecio, setRangoPrecio] = useState(1);
+  const [restaurant, setRestaurant] = useState("");
 
   useEffect(() => {
     const restaurant = route.params.restaurant;
-
-    console.log(restaurant);
+    console.log('Estoy en el restaurante: ', restaurant.hour.dia);
+    onChangenombreRestaurante(restaurant.nombre)
+    onChangeCalle(restaurant.calle)
+    onChangeNumero(restaurant.numero)
+    onChangeLocalidad(restaurant.localidad)
+    onChangePais(restaurant.pais)
+    if(restaurant.rangoPrecio === 1){
+      setSelectedMoney1(true)
+    } else if(restaurant.rangoPrecio === 2){
+      setSelectedMoney2(true)
+    } else if(restaurant.rangoPrecio === 3){
+      setSelectedMoney3(true)
+    } else{
+      setSelectedMoney4(true)
+    }
+    sethorarios(
+      restaurant.hour.map(horario => ({
+        dia: horario.dia,
+        abiertoDesde: horario.horaDesde,
+        abiertoHasta: horario.horaHasta,
+      })),
+    );
+    
+    console.log('horarios despues de carga: ', horarios);
     setRestaurant(restaurant);
   }, []);
 
-  const onSubmitRestaurant = () => {
-    //Enviar los datos al back
-    setIsLoading(true);
-    axios
-      .post(RESTAURANT_URL, {
-        nombreRestaurante,
-        direccion,
-        //aca horarios
-        rangoPrecios,
-        tipoDeComida,
-        images,
-      })
-      .then(res => {
-        console.log('User Data: ', res.data);
-      })
-      .catch(e => {
-        console.log(`Create restaurant error ${e}`);
-      });
-    setIsLoading(false);
-  };
-
+  //Seteo el rango de los precios
   const changeSelectedChip = num => {
     if (num === 1) {
       setSelectedMoney1(true);
       setSelectedMoney2(false);
       setSelectedMoney3(false);
       setSelectedMoney4(false);
-      rangoPrecios++;
+      setRangoPrecio(1);
     }
     if (num === 2) {
       setSelectedMoney2(true);
       setSelectedMoney1(false);
       setSelectedMoney3(false);
       setSelectedMoney4(false);
-      rangoPrecios = 2;
+      setRangoPrecio(2);
     }
     if (num === 3) {
       setSelectedMoney3(true);
       setSelectedMoney1(false);
       setSelectedMoney2(false);
       setSelectedMoney4(false);
-      rangoPrecios = 3;
+      setRangoPrecio(3);
     }
     if (num === 4) {
       setSelectedMoney4(true);
       setSelectedMoney1(false);
       setSelectedMoney2(false);
       setSelectedMoney3(false);
-      rangoPrecios = 4;
+      setRangoPrecio(4);
     }
   };
-  console.log(rangoPrecios);
-  const FoodTypeChips = [
-    {
-      id: '1',
-      title: 'Cocina de autor',
-    },
-    {
-      id: '2',
-      title: 'Comida china',
-    },
-    {
-      id: '3',
-      title: 'Cocina general',
-    },
-    {
-      id: '4',
-      title: 'Comida Mexicana',
-    },
-    {
-      id: '5',
-      title: 'Comida Peruana',
-    },
-    {
-      id: '6',
-      title: 'Comida Cafeteria',
-    },
-  ];
-
-  //Money $ $$ $$$ $$$$
-  const MoneyChips = [
-    {
-      id: '1',
-      title: '$',
-    },
-    {
-      id: '2',
-      title: '$$',
-    },
-    {
-      id: '3',
-      title: '$$$',
-    },
-    {
-      id: '4',
-      title: '$$$$',
-    },
-  ];
 
   //Images
   const [images, setImages] = useState([]);
@@ -178,7 +137,6 @@ const EditarRestaurante = ({navigation}) => {
       const _images = images.filter((image, index) => index != key);
       setImages(_images);
     }
-    console.log(images.length);
     if (images.length === 1) {
       setShowImage(true);
     }
@@ -215,6 +173,76 @@ const EditarRestaurante = ({navigation}) => {
       title: 'DOMINGO',
     },
   ];
+
+  //Metodos para poder cargar los dias y horarios
+  const [horarios, sethorarios] = useState(
+    listaDeDias.map(dia => ({
+      dia: dia.title,
+      abiertoDesde: '',
+      abiertoHasta: '',
+    })),
+  );
+  const addHandler = (dia, position) => {
+    const _horarios = [...horarios];
+    _horarios.splice(position, 0, {
+      dia,
+      abiertoDesde: '',
+      abiertoHasta: '',
+    });
+    sethorarios(_horarios);
+  };
+  const deleteHandler = key => {
+    if (horarios.length > 1) {
+      const _horarios = horarios.filter((input, index) => index != key);
+      sethorarios(_horarios);
+    }
+  };
+
+  const inputHandlerAbiertoDesde = (abiertoDesde, key) => {
+    //console.log(arguments);
+    const _horarios = [...horarios];
+    _horarios[key].abiertoDesde = abiertoDesde;
+    sethorarios(_horarios);
+  };
+  const inputHandlerAbiertoHasta = (abiertoHasta, key) => {
+    //console.log(arguments);
+    const _horarios = [...horarios];
+    _horarios[key].abiertoHasta = abiertoHasta;
+    sethorarios(_horarios);
+  };
+
+  //console.log('Lista: ', horarios);
+
+  //DropDown
+  DropDownPicker.setLanguage('ES');
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(restaurant?.tipoDeComida);
+  const [items, setItems] = useState([
+    {
+      label: 'Cocina de autor',
+      value: 'Cocina de autor',
+    },
+    {
+      label: 'Comida china',
+      value: 'Comida china',
+    },
+    {
+      label: 'Cocina general',
+      value: 'Cocina general',
+    },
+    {
+      label: 'Comida Mexicana',
+      value: 'Comida Mexicana',
+    },
+    {
+      label: 'Comida Peruana',
+      value: 'Comida Peruana',
+    },
+    {
+      label: 'Comida Cafeteria',
+      value: 'Comida Cafeteria',
+    },
+  ]);
 
   return (
     <SafeAreaView
@@ -256,6 +284,7 @@ const EditarRestaurante = ({navigation}) => {
         </Text>
       </View>
       <ScrollView
+        vertical
         style={{
           width: '100%',
           height: '100%',
@@ -264,7 +293,6 @@ const EditarRestaurante = ({navigation}) => {
           style={{
             marginBottom: 10,
             alignSelf: 'center',
-            flexDirection: 'row',
             backgroundColor: 'white',
             width: '80%',
             height: 50,
@@ -285,17 +313,6 @@ const EditarRestaurante = ({navigation}) => {
             placeholder="Nombre Restaurante"
             value={nombreRestaurante}
           />
-        </View>
-        <View
-          style={{
-            alignSelf: 'center',
-            flexDirection: 'row',
-            backgroundColor: 'white',
-            width: '80%',
-            height: 50,
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-          }}>
           <TextInput
             style={{
               height: 40,
@@ -306,14 +323,57 @@ const EditarRestaurante = ({navigation}) => {
               borderBottomWidth: 1,
               width: '90%',
             }}
-            onChangeText={onChangeDireccion}
-            placeholder="Direccion"
-            value={direccion}
+            onChangeText={onChangeCalle}
+            placeholder="Calle"
+            value={calle}
+          />
+          <TextInput
+            style={{
+              height: 40,
+              margin: 12,
+              padding: 10,
+              fontWeight: '400',
+              borderBottomColor: 'grey',
+              borderBottomWidth: 1,
+              width: '90%',
+            }}
+            keyboardType="numeric"
+            onChangeText={onChangeNumero}
+            placeholder="Numero"
+            value={numero}
+          />
+          <TextInput
+            style={{
+              height: 40,
+              margin: 12,
+              padding: 10,
+              fontWeight: '400',
+              borderBottomColor: 'grey',
+              borderBottomWidth: 1,
+              width: '90%',
+            }}
+            onChangeText={onChangeLocalidad}
+            placeholder="Localidad"
+            value={localidad}
+          />
+          <TextInput
+            style={{
+              height: 40,
+              margin: 12,
+              padding: 10,
+              fontWeight: '400',
+              borderBottomColor: 'grey',
+              borderBottomWidth: 1,
+              width: '90%',
+            }}
+            onChangeText={onChangePais}
+            placeholder="Pais"
+            value={pais}
           />
         </View>
         <View
           style={{
-            marginTop: 10,
+            marginTop: 260,
             alignSelf: 'center',
             backgroundColor: '#E2CACC',
             width: '80%',
@@ -323,16 +383,26 @@ const EditarRestaurante = ({navigation}) => {
           }}>
           <Text
             style={{
-              left: 10,
               top: 5,
               color: 'black',
               fontWeight: '400',
+              alignSelf: 'center',
             }}>
             Horario de atencion
           </Text>
-          {listaDeDias.map((dia, index) => (
-            <DiasDeAtencion key={index} dia={dia} />
-          ))}
+          <ScrollView vertical>
+            {horarios.map((input, index) => (
+              <DiasDeAtencion
+                key={index}
+                id={index}
+                input={input}
+                addHandler={addHandler}
+                deleteHandler={deleteHandler}
+                inputHandlerAbiertoDesde={inputHandlerAbiertoDesde}
+                inputHandlerAbiertoHasta={inputHandlerAbiertoHasta}
+              />
+            ))}
+          </ScrollView>
         </View>
         <View
           style={{
@@ -375,14 +445,21 @@ const EditarRestaurante = ({navigation}) => {
           style={{
             alignSelf: 'center',
             justifyContent: 'center',
-            flexWrap: 'wrap',
-            flexDirection: 'row',
             width: '85%',
             marginTop: 10,
           }}>
-          {FoodTypeChips.map((food, index) => (
-            <FoodTypeChip key={index} food={food} />
-          ))}
+          <DropDownPicker
+            style={{alignSelf: 'center', width: '95%'}}
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            multiple={true}
+            min={1}
+            max={3}
+          />
         </View>
         {showImage ? (
           <Pressable
@@ -431,6 +508,7 @@ const EditarRestaurante = ({navigation}) => {
                   <View
                     style={{alignItems: 'center', justifyContent: 'center'}}>
                     <Image
+                      key={key}
                       source={{uri: image.uri.toString()}}
                       style={{
                         height: 110,

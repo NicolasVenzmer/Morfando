@@ -101,33 +101,6 @@ const CrearRestaurante = ({navigation}) => {
     }
   };
 
-  const FoodTypeChips = [
-    {
-      id: '1',
-      title: 'Cocina de autor',
-    },
-    {
-      id: '2',
-      title: 'Comida china',
-    },
-    {
-      id: '3',
-      title: 'Cocina general',
-    },
-    {
-      id: '4',
-      title: 'Comida Mexicana',
-    },
-    {
-      id: '5',
-      title: 'Comida Peruana',
-    },
-    {
-      id: '6',
-      title: 'Comida Cafeteria',
-    },
-  ];
-
   //Images
   const [images, setImages] = useState([]);
   const [showImage, setShowImage] = useState(true);
@@ -170,7 +143,6 @@ const CrearRestaurante = ({navigation}) => {
       const _images = images.filter((image, index) => index != key);
       setImages(_images);
     }
-    //console.log(images.length);
     if (images.length === 1) {
       setShowImage(true);
     }
@@ -327,7 +299,6 @@ const CrearRestaurante = ({navigation}) => {
           style={{
             marginBottom: 10,
             alignSelf: 'center',
-            flexDirection: 'row',
             backgroundColor: 'white',
             width: '80%',
             height: 50,
@@ -348,16 +319,6 @@ const CrearRestaurante = ({navigation}) => {
             placeholder="Nombre Restaurante"
             value={nombreRestaurante}
           />
-        </View>
-        <View
-          style={{
-            alignSelf: 'center',
-            backgroundColor: 'white',
-            width: '80%',
-            height: 50,
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-          }}>
           <TextInput
             style={{
               height: 40,
@@ -418,7 +379,7 @@ const CrearRestaurante = ({navigation}) => {
         </View>
         <View
           style={{
-            marginTop: 220,
+            marginTop: 260,
             alignSelf: 'center',
             backgroundColor: '#E2CACC',
             width: '80%',
