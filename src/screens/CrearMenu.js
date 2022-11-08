@@ -146,6 +146,34 @@ const CrearMenu = ({navigation}) => {
           }}>
           Crear Menu
         </Text>
+        <Pressable
+          style={{
+            width: '25%',
+            position: "absolute",
+            right: 10,
+            flexDirection: 'row',
+            borderColor: 'grey',
+            borderWidth: 1,
+            borderRadius: 30,
+          }}
+          onPress={() => navigation.navigate('CrearCategoria')}>
+          <Ionicons
+            name="add-circle"
+            style={{
+              color: '#E14852',
+              fontSize: 20,
+            }}
+          />
+          <Text
+            style={{
+              color: 'black',
+              fontWeight: '500',
+              fontSize: 15,
+              fontFamily: 'Roboto',
+            }}>
+            Categoria
+          </Text>
+        </Pressable>
       </View>
       <ScrollView
         style={{
