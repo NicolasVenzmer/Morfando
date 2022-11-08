@@ -151,6 +151,35 @@ const MisRestaurantes = ({navigation}) => {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
+            <Pressable
+              style={{
+                alignSelf: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '45%',
+                flexDirection: 'row',
+                borderColor: 'grey',
+                borderWidth: 1,
+                borderRadius: 30,
+              }}
+              onPress={() => getRestaurants()}>
+              <Ionicons
+                name="reload-circle"
+                style={{
+                  color: '#E14852',
+                  fontSize: 20,
+                }}
+              />
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: '500',
+                  fontSize: 15,
+                  fontFamily: 'Roboto',
+                }}>
+                Buscar Restaurantes
+              </Text>
+            </Pressable>
             <Text
               style={{
                 position: 'absolute',
@@ -164,8 +193,36 @@ const MisRestaurantes = ({navigation}) => {
             <Image source={require('../assets/Images/empty-restaurants.png')} />
           </View>
         ) : (
-          // sacar los fragments
           <>
+            <Pressable
+              style={{
+                alignSelf: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '45%',
+                flexDirection: 'row',
+                borderColor: 'grey',
+                borderWidth: 1,
+                borderRadius: 30,
+              }}
+              onPress={() => getRestaurants()}>
+              <Ionicons
+                name="reload-circle"
+                style={{
+                  color: '#E14852',
+                  fontSize: 20,
+                }}
+              />
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: '500',
+                  fontSize: 15,
+                  fontFamily: 'Roboto',
+                }}>
+                Buscar Restaurantes
+              </Text>
+            </Pressable>
             {restaurants?.map(restaurant => (
               <CardRestaurante
                 key={restaurant.id}

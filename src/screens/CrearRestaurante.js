@@ -19,7 +19,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import axios from '../api/axios';
 
 const CrearRestaurante = ({navigation}) => {
-  const {userInfo} = useContext(AuthContext);
+  const {userInfo, userToken} = useContext(AuthContext);
   const [nombreRestaurante, onChangenombreRestaurante] = useState('');
   const [calle, onChangeCalle] = useState('');
   const [numero, onChangeNumero] = useState('');
@@ -42,9 +42,6 @@ const CrearRestaurante = ({navigation}) => {
       listaDeTipoDeComida.push(value);
     });
     const tipoDeComida = listaDeTipoDeComida.toString();
-    const config = {
-      headers: {Authorization: `Token ${userInfo.token}`},
-    };
     const sendData = {
       nombre: nombreRestaurante,
       direccion_id: 1,
@@ -62,14 +59,19 @@ const CrearRestaurante = ({navigation}) => {
       provincia: provincia,
       pais: pais,
       activo: true,
+      //Chequear porque se mandan los horarios vacios
       horas: horarios,
       imagenes: images,
     };
-    //console.log('Los dato a enviar son: ', sendData);
+    console.log('Los dato a enviar son: ', sendData);
 
     const CREATE_RESTAURANT_URL = '/restaurant';
     axios
-      .post(CREATE_RESTAURANT_URL, sendData, config)
+      .post(CREATE_RESTAURANT_URL, sendData, {
+        headers: {
+          Authorization: `${userToken}`,
+        },
+      })
       .then(res => {
         if (res.status === 200) {
           navigation.navigate('MisRestaurantes');

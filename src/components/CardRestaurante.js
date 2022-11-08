@@ -6,6 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 
 const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
+  console.log("estoy en la card de mis restaurantes: ", restaurant)
   return (
     <>
       {restaurant.activo ? (
@@ -51,7 +52,9 @@ const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
                 top: 10,
                 right: 20,
               }}
-              onPress={() => navigation.navigate('EditarRestaurante', {restaurant})}
+              onPress={() =>
+                navigation.navigate('EditarRestaurante', {restaurant})
+              }
             />
             <Feather
               name="trash-2"
@@ -76,7 +79,12 @@ const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
               height: 150,
             }}
             resizeMode="contain"
-            source={restaurant.restaurantImage === '' || DefaultRestaurantImage}
+            // source={{
+            //   uri:
+            //     restaurant?.restaurantImage?.imagen.toString() ||
+            //     DefaultRestaurantImage,
+            // }}
+             source={restaurant.restaurantImage === '' || DefaultRestaurantImage}
           />
         </Pressable>
       ) : null}

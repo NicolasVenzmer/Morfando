@@ -171,6 +171,36 @@ const RestaurantesDisponibles = ({navigation}) => {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
+            <Pressable
+              style={{
+                marginTop: 10,
+                alignSelf: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '45%',
+                flexDirection: 'row',
+                borderColor: 'grey',
+                borderWidth: 1,
+                borderRadius: 30,
+              }}
+              onPress={() => getRestaurants()}>
+              <Ionicons
+                name="reload-circle"
+                style={{
+                  color: '#E14852',
+                  fontSize: 20,
+                }}
+              />
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: '500',
+                  fontSize: 15,
+                  fontFamily: 'Roboto',
+                }}>
+                Buscar Restaurantes
+              </Text>
+            </Pressable>
             <Text
               style={{
                 position: 'absolute',
@@ -183,23 +213,55 @@ const RestaurantesDisponibles = ({navigation}) => {
             <Image source={require('../assets/Images/empty-restaurants.png')} />
           </View>
         ) : (
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            {searchQuery?.map(restaurant => (
-              <CardRestauranteConsumidor
-                key={restaurant.id}
-                addFavorite={() => addFavorite(restaurant)}
-                restaurant={restaurant}
-                navigation={navigation}
+          <>
+            <Pressable
+              style={{
+                marginTop: 10,
+                alignSelf: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '45%',
+                flexDirection: 'row',
+                borderColor: 'grey',
+                borderWidth: 1,
+                borderRadius: 30,
+              }}
+              onPress={() => getRestaurants()}>
+              <Ionicons
+                name="reload-circle"
+                style={{
+                  color: '#E14852',
+                  fontSize: 20,
+                }}
               />
-            ))}
-          </View>
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: '500',
+                  fontSize: 15,
+                  fontFamily: 'Roboto',
+                }}>
+                Buscar Restaurantes
+              </Text>
+            </Pressable>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              {searchQuery?.map(restaurant => (
+                <CardRestauranteConsumidor
+                  key={restaurant.id}
+                  addFavorite={() => addFavorite(restaurant)}
+                  restaurant={restaurant}
+                  navigation={navigation}
+                />
+              ))}
+            </View>
+          </>
         )}
       </ScrollView>
 

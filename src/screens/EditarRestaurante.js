@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -16,15 +16,19 @@ import {Chip} from 'react-native-paper';
 import axios from '../api/axios';
 import {useRoute} from '@react-navigation/native';
 import DropDownPicker from 'react-native-dropdown-picker';
-
-const RESTAURANT_URL = '/restaurant';
+import ModalPoup from '../components/ModalPopUp';
+import Theme from '../assets/fonts/Theme';
+import {AuthContext} from '../context/AuthContext';
 
 const EditarRestaurante = ({navigation}) => {
+  const {userInfo, userToken} = useContext(AuthContext);
   const route = useRoute();
-  const [nombreRestaurante, onChangenombreRestaurante] = useState("");
+  const [nombreRestaurante, onChangenombreRestaurante] = useState('');
   const [calle, onChangeCalle] = useState('');
   const [numero, onChangeNumero] = useState('');
   const [localidad, onChangeLocalidad] = useState('');
+  const [barrio, onChangeBarrio] = useState('');
+  const [provincia, onChangeProvincia] = useState('');
   const [pais, onChangePais] = useState('');
   const [selectedMoney1, setSelectedMoney1] = useState(false);
   const [selectedMoney2, setSelectedMoney2] = useState(false);
@@ -32,24 +36,27 @@ const EditarRestaurante = ({navigation}) => {
   const [selectedMoney4, setSelectedMoney4] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [rangoPrecio, setRangoPrecio] = useState(1);
-  const [restaurant, setRestaurant] = useState("");
+  const [restaurant, setRestaurant] = useState('');
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const restaurant = route.params.restaurant;
-    console.log('Estoy en el restaurante: ', restaurant.hour.dia);
-    onChangenombreRestaurante(restaurant.nombre)
-    onChangeCalle(restaurant.calle)
-    onChangeNumero(restaurant.numero)
-    onChangeLocalidad(restaurant.localidad)
-    onChangePais(restaurant.pais)
-    if(restaurant.rangoPrecio === 1){
-      setSelectedMoney1(true)
-    } else if(restaurant.rangoPrecio === 2){
-      setSelectedMoney2(true)
-    } else if(restaurant.rangoPrecio === 3){
-      setSelectedMoney3(true)
-    } else{
-      setSelectedMoney4(true)
+    console.log('Estoy en el restaurante: ', restaurant);
+    onChangenombreRestaurante(restaurant.nombre);
+    onChangeCalle(restaurant.calle);
+    onChangeNumero(parseInt(restaurant.numero));
+    onChangeLocalidad(restaurant.localidad);
+    onChangeBarrio(restaurant.barrio)
+    onChangeProvincia(restaurant.provincia)
+    onChangePais(restaurant.pais);
+    if (restaurant.rangoPrecio === 1) {
+      setSelectedMoney1(true);
+    } else if (restaurant.rangoPrecio === 2) {
+      setSelectedMoney2(true);
+    } else if (restaurant.rangoPrecio === 3) {
+      setSelectedMoney3(true);
+    } else {
+      setSelectedMoney4(true);
     }
     sethorarios(
       restaurant.hour.map(horario => ({
@@ -58,10 +65,63 @@ const EditarRestaurante = ({navigation}) => {
         abiertoHasta: horario.horaHasta,
       })),
     );
-    
-    //console.log('horarios despues de carga: ', horarios);
+    console.log(horarios)
+    setImages(restaurant.restaurantImage);
     setRestaurant(restaurant);
   }, []);
+
+  const editRestaurant = () => {
+    //Enviar los datos al back
+    setIsLoading(true);
+    setVisible(true)
+    const listaDeTipoDeComida = [];
+    value?.forEach(value => {
+      listaDeTipoDeComida.push(value);
+    });
+    const tipoDeComida = listaDeTipoDeComida.toString();
+    const sendData = {
+      id: restaurant.id,
+      nombre: nombreRestaurante,
+      usuario_id: userInfo.id,
+      latitud: -34.62289,
+      longitud: -58.40821,
+      cerradoTemporalmente: false,
+      tipoDeComida: tipoDeComida,
+      rangoPrecio: rangoPrecio,
+      calificacion: 1,
+      calle: calle,
+      numero: parseInt(numero),
+      barrio: barrio,
+      localidad: localidad,
+      provincia: provincia,
+      pais: pais,
+      activo: true,
+      horas: horarios,
+      imagenes: images,
+    };
+    //console.log('Los dato a enviar son: ', sendData);
+
+    const EDIT_RESTAURANT_URL = '/restaurant';
+    if(visible)
+    axios
+      .put(EDIT_RESTAURANT_URL, sendData, 
+      //   {
+      //   headers: {
+      //     Authorization: `${userToken}`,
+      //   },
+      // }
+      )
+      .then(res => {
+        if (res.status === 200) {
+          navigation.navigate('MisRestaurantes');
+        }
+        console.log('Restaurant Edited Data: ', res.data);
+      })
+      .catch(e => {
+        console.log(`Edit restaurant error ${e}`);
+      });
+    setIsLoading(false);
+  };
 
   //Seteo el rango de los precios
   const changeSelectedChip = num => {
@@ -119,9 +179,9 @@ const EditarRestaurante = ({navigation}) => {
         let _resultType = _response.map(a => a.type);
         let _resultfileName = _response.map(a => a.fileName);
         const img = {
-          uri: _resultUri,
-          type: _resultType,
-          name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
+          imagen: _resultUri.toString(),
+          //type: _resultType,
+          //name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
         };
 
         setImages(prevImages => prevImages.concat(img));
@@ -130,7 +190,7 @@ const EditarRestaurante = ({navigation}) => {
     setShowImage(false);
   };
 
-  console.log("imagenes", images)
+  //console.log("imagenes", images)
 
   const deleteImage = key => {
     if (images.length) {
@@ -352,9 +412,38 @@ const EditarRestaurante = ({navigation}) => {
               borderBottomWidth: 1,
               width: '90%',
             }}
+            keyboardType="numeric"
+            onChangeText={onChangeBarrio}
+            placeholder="Barrio"
+            value={barrio}
+          />
+          <TextInput
+            style={{
+              height: 40,
+              margin: 12,
+              padding: 10,
+              fontWeight: '400',
+              borderBottomColor: 'grey',
+              borderBottomWidth: 1,
+              width: '90%',
+            }}
             onChangeText={onChangeLocalidad}
             placeholder="Localidad"
             value={localidad}
+          />
+          <TextInput
+            style={{
+              height: 40,
+              margin: 12,
+              padding: 10,
+              fontWeight: '400',
+              borderBottomColor: 'grey',
+              borderBottomWidth: 1,
+              width: '90%',
+            }}
+            onChangeText={onChangeProvincia}
+            placeholder="Provincia"
+            value={provincia}
           />
           <TextInput
             style={{
@@ -373,7 +462,7 @@ const EditarRestaurante = ({navigation}) => {
         </View>
         <View
           style={{
-            marginTop: 260,
+            marginTop: 390,
             alignSelf: 'center',
             backgroundColor: '#E2CACC',
             width: '80%',
@@ -461,7 +550,7 @@ const EditarRestaurante = ({navigation}) => {
             max={3}
           />
         </View>
-        {showImage ? (
+        {!images?.length > 0 ? (
           <Pressable
             style={{
               backgroundColor: '#E2CACC',
@@ -509,7 +598,7 @@ const EditarRestaurante = ({navigation}) => {
                     style={{alignItems: 'center', justifyContent: 'center'}}>
                     <Image
                       key={key}
-                      source={{uri: image.uri.toString()}}
+                      source={{uri: image.imagen.toString()}}
                       style={{
                         height: 110,
                         width: 100,
@@ -543,6 +632,71 @@ const EditarRestaurante = ({navigation}) => {
           </View>
         )}
       </ScrollView>
+
+      <ModalPoup visible={visible}>
+        <View style={{alignItems: 'flex-start'}}>
+          <Text
+            style={{
+              fontSize: Theme.fonts.LARGE,
+              color: Theme.colors.SECONDARY,
+            }}>
+            Esta seguro que desea editar el restaurante?
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '2%',
+              marginBottom: '2%',
+              marginHorizontal: '5%',
+            }}></View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: '1%',
+            marginBottom: '1%',
+            marginHorizontal: '1%',
+          }}>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '50%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: '#E14852',
+              borderRadius: 30,
+            }}
+            onPress={() => {
+              setVisible(false);
+            }}>
+            <Text style={{color: Theme.colors.THIRD, textAlign: 'center'}}>
+              Cancelar
+            </Text>
+          </Pressable>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '50%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: Theme.colors.PRIMARY,
+              borderRadius: 30,
+            }}
+            onPress={() => {
+              {
+                editRestaurant();
+              }
+              setVisible(false);
+            }}>
+            <Text style={{color: Theme.colors.THIRD, textAlign: 'center'}}>
+              Aceptar
+            </Text>
+          </Pressable>
+        </View>
+      </ModalPoup>
+
       <Pressable
         style={{
           marginTop: 10,
@@ -556,7 +710,7 @@ const EditarRestaurante = ({navigation}) => {
           backgroundColor: '#E14852',
           borderRadius: 30,
         }}
-        onPress={() => navigation.navigate('MisRestaurantes')}>
+        onPress={() => editRestaurant()}>
         <Text
           style={{
             color: '#fdfdfd',
