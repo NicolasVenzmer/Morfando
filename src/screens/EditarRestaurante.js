@@ -53,13 +53,13 @@ const EditarRestaurante = ({navigation}) => {
     }
     sethorarios(
       restaurant.hour.map(horario => ({
-        dia: horario.dia,
+        dia: horario.dia.toUpperCase(),
         abiertoDesde: horario.horaDesde,
         abiertoHasta: horario.horaHasta,
       })),
     );
     
-    console.log('horarios despues de carga: ', horarios);
+    //console.log('horarios despues de carga: ', horarios);
     setRestaurant(restaurant);
   }, []);
 
@@ -130,7 +130,7 @@ const EditarRestaurante = ({navigation}) => {
     setShowImage(false);
   };
 
-  //console.log("imagenes", images)
+  console.log("imagenes", images)
 
   const deleteImage = key => {
     if (images.length) {

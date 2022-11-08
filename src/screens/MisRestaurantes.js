@@ -6,14 +6,13 @@ import {
   Pressable,
   SafeAreaView,
   ScrollView,
-  Alert,
   Modal,
   StyleSheet,
 } from 'react-native';
 import CardRestaurante from '../components/CardRestaurante';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from '../api/axios';
-import {AuthContext, ErrorReference} from '../context/AuthContext';
+import {AuthContext} from '../context/AuthContext';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);

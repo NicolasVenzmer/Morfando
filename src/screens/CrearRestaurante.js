@@ -17,8 +17,6 @@ import {AuthContext} from '../context/AuthContext';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 import axios from '../api/axios';
-import {useNetInfo} from '@react-native-community/netinfo';
-const CREATE_RESTAURANT_URL = '/restaurant';
 
 const CrearRestaurante = ({navigation}) => {
   const {userInfo} = useContext(AuthContext);
@@ -26,6 +24,8 @@ const CrearRestaurante = ({navigation}) => {
   const [calle, onChangeCalle] = useState('');
   const [numero, onChangeNumero] = useState('');
   const [localidad, onChangeLocalidad] = useState('');
+  const [barrio, onChangeBarrio] = useState('');
+  const [provincia, onChangeProvincia] = useState('');
   const [pais, onChangePais] = useState('');
   const [selectedMoney1, setSelectedMoney1] = useState(false);
   const [selectedMoney2, setSelectedMoney2] = useState(false);
@@ -42,9 +42,11 @@ const CrearRestaurante = ({navigation}) => {
       listaDeTipoDeComida.push(value);
     });
     const tipoDeComida = listaDeTipoDeComida.toString();
+    const config = {
+      headers: {Authorization: `Token ${userInfo.token}`},
+    };
     const sendData = {
       nombre: nombreRestaurante,
-      //Este dato como se lo paso si me pide un ID
       direccion_id: 1,
       usuario_id: userInfo.id,
       latitud: -34.62289,
@@ -53,19 +55,30 @@ const CrearRestaurante = ({navigation}) => {
       tipoDeComida: tipoDeComida,
       rangoPrecio: rangoPrecio,
       calificacion: 1,
+      calle: calle,
+      numero: numero,
+      barrio: barrio,
+      localidad: localidad,
+      provincia: provincia,
+      pais: pais,
       activo: true,
       horas: horarios,
+      imagenes: images,
     };
-    console.log('Los dato a enviar son: ', sendData);
-    //navigation.navigate('MisRestaurantes');
-    // axios
-    //   .post(CREATE_RESTAURANT_URL, sendData)
-    //   .then(res => {
-    //     console.log('User Data: ', res.data);
-    //   })
-    //   .catch(e => {
-    //     console.log(`Create restaurant error ${e}`);
-    //   });
+    //console.log('Los dato a enviar son: ', sendData);
+
+    const CREATE_RESTAURANT_URL = '/restaurant';
+    axios
+      .post(CREATE_RESTAURANT_URL, sendData, config)
+      .then(res => {
+        if (res.status === 200) {
+          navigation.navigate('MisRestaurantes');
+        }
+        console.log('Restaurant Created Data: ', res.data);
+      })
+      .catch(e => {
+        console.log(`Create restaurant error ${e}`);
+      });
     setIsLoading(false);
   };
 
@@ -125,9 +138,9 @@ const CrearRestaurante = ({navigation}) => {
         let _resultType = _response.map(a => a.type);
         let _resultfileName = _response.map(a => a.fileName);
         const img = {
-          uri: _resultUri,
-          type: _resultType,
-          name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
+          imagen: _resultUri.toString(),
+          //type: _resultType,
+          //name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
         };
 
         setImages(prevImages => prevImages.concat(img));
@@ -136,7 +149,7 @@ const CrearRestaurante = ({navigation}) => {
     setShowImage(false);
   };
 
-  //console.log("imagenes", images)
+  //console.log('imagenes', images);
 
   const deleteImage = key => {
     if (images.length) {
@@ -358,9 +371,38 @@ const CrearRestaurante = ({navigation}) => {
               borderBottomWidth: 1,
               width: '90%',
             }}
+            keyboardType="numeric"
+            onChangeText={onChangeBarrio}
+            placeholder="Barrio"
+            value={barrio}
+          />
+          <TextInput
+            style={{
+              height: 40,
+              margin: 12,
+              padding: 10,
+              fontWeight: '400',
+              borderBottomColor: 'grey',
+              borderBottomWidth: 1,
+              width: '90%',
+            }}
             onChangeText={onChangeLocalidad}
             placeholder="Localidad"
             value={localidad}
+          />
+          <TextInput
+            style={{
+              height: 40,
+              margin: 12,
+              padding: 10,
+              fontWeight: '400',
+              borderBottomColor: 'grey',
+              borderBottomWidth: 1,
+              width: '90%',
+            }}
+            onChangeText={onChangeProvincia}
+            placeholder="Provincia"
+            value={provincia}
           />
           <TextInput
             style={{
@@ -379,7 +421,7 @@ const CrearRestaurante = ({navigation}) => {
         </View>
         <View
           style={{
-            marginTop: 260,
+            marginTop: 390,
             alignSelf: 'center',
             backgroundColor: '#E2CACC',
             width: '80%',
@@ -515,7 +557,7 @@ const CrearRestaurante = ({navigation}) => {
                     style={{alignItems: 'center', justifyContent: 'center'}}>
                     <Image
                       key={key}
-                      source={{uri: image.uri.toString()}}
+                      source={{uri: image.imagen.toString()}}
                       style={{
                         height: 110,
                         width: 100,
