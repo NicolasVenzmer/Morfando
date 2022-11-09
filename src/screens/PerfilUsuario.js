@@ -12,10 +12,9 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Avatar} from 'react-native-paper';
 import {AuthContext} from '../context/AuthContext';
-import DefaultImageUser from "../assets/Images/default-user-image.png"
+import DefaultImageUser from '../assets/Images/default-user-image.png';
 import {launchImageLibrary} from 'react-native-image-picker';
 import axios from '../api/axios';
-const USER_URL = '/user';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);
@@ -46,19 +45,56 @@ const PerfilUsuario = ({navigation}) => {
   const [visibleUserEdited, setVisibleUserEdited] = useState(false);
   const [visibleDeleteUser, setVisibleDeleteUser] = useState(false);
 
-  const {
-    id,
-    correo,
-    contrasenia,
-    preguntaSeguridad,
-    respuestaSeguridad,
-    duenio,
-    activo,
-  } = userInfo;
+  const {id, correo, contrasenia, duenio, activo} = userInfo;
+
+  //EN PROCESO A LA ESPERA DEL CAMBIO DEL BACK
+  // // Obtengo los datos de usuario
+  // const getUserInfo = () => {
+  //   //Enviar los datos al back
+  //   const USER_URL = `/user${userInfo.id}`;
+  //   setIsLoading(true);
+  //   axios
+  //     .get(USER_URL)
+  //     .then(res => {
+  //       setUser(res.data);
+  //       console.log('User Data: ', res.data);
+  //     })
+  //     .catch(e => {
+  //       console.log(`User Data  error ${e}`);
+  //     });
+  //   setIsLoading(false);
+  // };
+
+  // useEffect(() => {
+  //   getUserInfo();
+  // }, []);
+
+  // // Cambio los datos del usuario
+  // const onChangeUserData = () => {
+  //   //Enviar los datos al back
+
+  //   const USER_URL = '/user';
+  //   setIsLoading(true);
+  //   const {...copiaDeUser} = user;
+  //   copiaDeUser[0].usuario_imagen.imagen = image.imagen.toString();
+  //   setUser({...copiaDeUser});
+  //   axios
+  //     .put(USER_URL, user)
+  //     .then(res => {
+  //       console.log('Edited User: ', res.data);
+  //     })
+  //     .catch(e => {
+  //       console.log(`Create mi cuenta error ${e}`);
+  //     });
+  //   setVisibleUserEdited(true);
+  //   setIsLoading(false);
+  // };
 
   // Cambio los datos del usuario
   const onChangeUserData = () => {
     //Enviar los datos al back
+
+    const USER_URL = '/user';
     setIsLoading(true);
     const sendData = {
       id: id,
@@ -69,7 +105,7 @@ const PerfilUsuario = ({navigation}) => {
       duenio: duenio,
       activo: activo,
     };
-    console.log(sendData)
+    console.log(sendData);
     axios
       .put(USER_URL, sendData)
       .then(res => {

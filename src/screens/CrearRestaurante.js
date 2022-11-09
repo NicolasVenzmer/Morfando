@@ -63,24 +63,24 @@ const CrearRestaurante = ({navigation}) => {
       imagenes: images,
     };
     console.log('Los datos a enviar son: ', sendData);
-    console.log(userToken)
-    const CREATE_RESTAURANT_URL = '/restaurant';
-    axios
-      .post(CREATE_RESTAURANT_URL, sendData, {
-        headers: {
-          Authorization: `${userToken}`,
-        },
-      })
-      .then(res => {
-        if (res.status === 200) {
-          navigation.navigate('MisRestaurantes');
-        }
-        console.log('Restaurant Created Data: ', res.data);
-      })
-      .catch(e => {
-        console.log(`Create restaurant error ${e}`);
-      });
-    setIsLoading(false);
+    //console.log(userToken)
+    // const CREATE_RESTAURANT_URL = '/restaurant';
+    // axios
+    //   .post(CREATE_RESTAURANT_URL, sendData, {
+    //     headers: {
+    //       Authorization: `${userToken}`,
+    //     },
+    //   })
+    //   .then(res => {
+    //     if (res.status === 200) {
+    //       navigation.navigate('MisRestaurantes');
+    //     }
+    //     console.log('Restaurant Created Data: ', res.data);
+    //   })
+    //   .catch(e => {
+    //     console.log(`Create restaurant error ${e}`);
+    //   });
+    // setIsLoading(false);
   };
 
   //Seteo el rango de los precios

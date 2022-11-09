@@ -120,6 +120,7 @@ const EditarRestaurante = ({navigation}) => {
           abiertoHasta: horario.horaHasta,
         })),
       );
+      console.log("horarios: ", horarios);
       setImages(restaurant.restaurantImage);
       setRestaurant(restaurant);
     }, []);

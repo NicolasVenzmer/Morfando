@@ -19,19 +19,20 @@ const CrearMenu = ({navigation}) => {
   const [nombrePlato, onChangeNombrePlato] = useState(false);
   const [precio, onChangePrecio] = useState(false);
   const [ingrediente, onChangeIngrediente] = useState(false);
+  const [restaurant, setRestaurant] = useState("")
 
   const [platosTemp, setPlatosTemp] = useState([]);
   const [emptyMenus, setEmptyMenus] = useState(true);
 
   useEffect(() => {
     const plates = route.params.restaurant.plates;
+    const restaurant = route.params.restaurant;
+    setRestaurant(restaurant)
     setPlatosTemp(plates);
     if (!!platosTemp) {
       setEmptyMenus(false);
     }
   }, []);
-
-  console.log('Ya cargue los platos: ', platosTemp);
 
   const [platos, setPlatos] = useState([{key: '', plato: ''}]);
   const addPlato = () => {
@@ -156,7 +157,7 @@ const CrearMenu = ({navigation}) => {
             borderWidth: 1,
             borderRadius: 30,
           }}
-          onPress={() => navigation.navigate('CrearCategoria')}>
+          onPress={() => navigation.navigate('CrearCategoria', {restaurant})}>
           <Ionicons
             name="add-circle"
             style={{

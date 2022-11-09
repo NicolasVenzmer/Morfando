@@ -1,20 +1,40 @@
-import React, {useContext} from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
 import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { AuthContext } from '../context/AuthContext';
+import {AuthContext} from '../context/AuthContext';
 import DefaultImageUser from '../assets/Images/default-user-image.png';
+import axios from '../api/axios';
 
 const CustomDrawer = props => {
-  const {logout, userInfo} = useContext(AuthContext)
+  const {logout, userInfo} = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState('');
+
+  // Obtengo los datos de usuario
+  const getUserInfo = () => {
+    //Enviar los datos al back
+    const USER_URL = `/user${userInfo.id}`;
+    setIsLoading(true);
+    axios
+      .get(USER_URL)
+      .then(res => {
+        setUser(res.data);
+        console.log('User Data: ', res.data);
+      })
+      .catch(e => {
+        console.log(`User Data  error ${e}`);
+      });
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView
@@ -22,7 +42,8 @@ const CustomDrawer = props => {
         contentContainerStyle={{backgroundColor: '#E14852'}}>
         <View style={{padding: 20, backgroundColor: '#E14852'}}>
           <Image
-            source={DefaultImageUser}
+            source={{DefaultImageUser}}
+            //source={{uri: user?.usuario_imagen?.imagen}}
             style={{height: 80, width: 80, borderRadius: 40, marginBottom: 10}}
           />
           <Text
