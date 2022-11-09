@@ -6,7 +6,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 
 const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
-  console.log("estoy en la card de mis restaurantes: ", restaurant)
   return (
     <>
       {restaurant.activo ? (
@@ -79,12 +78,7 @@ const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
               height: 150,
             }}
             resizeMode="contain"
-            // source={{
-            //   uri:
-            //     restaurant?.restaurantImage?.imagen.toString() ||
-            //     DefaultRestaurantImage,
-            // }}
-             source={restaurant.restaurantImage === '' || DefaultRestaurantImage}
+            source={{uri: restaurant?.restaurantImage[0]?.imagen}}
           />
         </Pressable>
       ) : null}

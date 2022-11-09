@@ -13,6 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Avatar} from 'react-native-paper';
 import {AuthContext} from '../context/AuthContext';
 import DefaultImageUser from "../assets/Images/default-user-image.png"
+import {launchImageLibrary} from 'react-native-image-picker';
 import axios from '../api/axios';
 const USER_URL = '/user';
 
@@ -59,17 +60,18 @@ const PerfilUsuario = ({navigation}) => {
   const onChangeUserData = () => {
     //Enviar los datos al back
     setIsLoading(true);
+    const sendData = {
+      id: id,
+      nombre: nombreUsuario,
+      correo: correo,
+      contrasenia: contrasenia,
+      imagen: image.imagen.toString(),
+      duenio: duenio,
+      activo: activo,
+    };
+    console.log(sendData)
     axios
-      .put(USER_URL, {
-        id: id,
-        nombre: nombreUsuario,
-        correo: correo,
-        contrasenia: contrasenia,
-        preguntaSeguridad: preguntaSeguridad,
-        respuestaSeguridad: respuestaSeguridad,
-        duenio: duenio,
-        activo: activo,
-      })
+      .put(USER_URL, sendData)
       .then(res => {
         console.log('Edited User: ', res.data);
       })
@@ -104,6 +106,41 @@ const PerfilUsuario = ({navigation}) => {
   };
 
   useEffect(() => {}, [userInfo]);
+
+  //Images
+  const [image, setImage] = useState();
+  const [showImage, setShowImage] = useState(true);
+
+  const addImage = () => {
+    // const options = {
+    //   selectionLimit: 1,
+    //   mediaType: 'photo',
+    //   includeBase64: false,
+    // };
+    launchImageLibrary(
+      {
+        height: 100,
+        width: 100,
+      },
+      response => {
+        if (response.didCancel) {
+          return;
+        }
+        const _response = response.assets;
+        let _resultUri = _response.map(a => a.uri);
+        let _resultType = _response.map(a => a.type);
+        let _resultfileName = _response.map(a => a.fileName);
+        const img = {
+          imagen: _resultUri.toString(),
+          //type: _resultType,
+          //name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
+        };
+
+        setImage(img);
+      },
+    );
+    setShowImage(false);
+  };
 
   return (
     <SafeAreaView
@@ -157,9 +194,13 @@ const PerfilUsuario = ({navigation}) => {
           }}>
           <View>
             <Avatar.Image
-              style={{marginBottom: 20, objectFit: "fit"}}
+              source={{uri: image?.imagen?.toString()}}
+              style={{
+                marginBottom: 20,
+                objectFit: 'fit',
+                resizeMode: 'contain',
+              }}
               size={150}
-              source={DefaultImageUser}
             />
             <Pressable
               style={{
@@ -167,8 +208,7 @@ const PerfilUsuario = ({navigation}) => {
                 height: 20,
                 marginBottom: 10,
               }}
-              //onPress={() => navigation.navigate('OlvideMiContraseña')}
-            >
+              onPress={addImage}>
               <Text
                 style={{color: '#E14852', fontSize: 15, fontWeight: 'bold'}}>
                 Cambiar foto de perfil

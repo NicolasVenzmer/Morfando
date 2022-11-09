@@ -1,5 +1,12 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {View, Text, Image, SafeAreaView, ScrollView, Pressable} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Pressable,
+} from 'react-native';
 import CardRestauranteConsumidor from '../components/CardRestauranteConsumidor';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from '../api/axios';
@@ -31,22 +38,22 @@ const Favoritos = ({navigation}) => {
       .finally(() => setLoading(false));
   };
 
-    const withVisibleFalse = func => {
-      return async () => {
-        await Promise.resolve(func());
-        setVisible(false);
-      };
+  const withVisibleFalse = func => {
+    return async () => {
+      await Promise.resolve(func());
+      setVisible(false);
     };
-    const withConfirmationDialog = function (onConfirmed, onCancelled) {
-      const defaultCallback = () => {};
+  };
+  const withConfirmationDialog = function (onConfirmed, onCancelled) {
+    const defaultCallback = () => {};
 
-      return () => {
-        const ok = withVisibleFalse(onConfirmed || defaultCallback);
-        const cancel = withVisibleFalse(onCancelled || defaultCallback);
-        setConfirm({ok, cancel});
-        setVisible(true);
-      };
+    return () => {
+      const ok = withVisibleFalse(onConfirmed || defaultCallback);
+      const cancel = withVisibleFalse(onCancelled || defaultCallback);
+      setConfirm({ok, cancel});
+      setVisible(true);
     };
+  };
 
   // Elimino un favorito en especifico
   const deleteFavorite = async restaurant => {
@@ -117,43 +124,109 @@ const Favoritos = ({navigation}) => {
           height: '100%',
         }}>
         {!restaurants?.length > 0 ? (
-          <View
-            style={{
-              width: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Text
+          <>
+            <Pressable
               style={{
-                position: 'absolute',
-                fontSize: 20,
-                fontWeight: '450',
-                textAlign: 'center',
-              }}>
-              No tenes ningun favorito
-            </Text>
-            <Image source={require('../assets/Images/empty-restaurants.png')} />
-          </View>
-        ) : (
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            {restaurants?.map(restaurant => (
-              <CardFavoritos
-                key={restaurant.id}
-                restaurant={restaurant}
-                navigation={navigation}
-                deleteFavorite={withConfirmationDialog(() =>
-                  deleteFavorite(restaurant),
-                )}
+                marginTop: 10,
+                alignSelf: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '45%',
+                flexDirection: 'row',
+                borderColor: 'grey',
+                borderWidth: 1,
+                borderRadius: 30,
+              }}
+              onPress={() => getFavorites()}>
+              <Ionicons
+                name="reload-circle"
+                style={{
+                  color: '#E14852',
+                  fontSize: 20,
+                }}
               />
-            ))}
-          </View>
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: '500',
+                  fontSize: 15,
+                  fontFamily: 'Roboto',
+                }}>
+                Buscar Restaurantes
+              </Text>
+            </Pressable>
+            <View
+              style={{
+                width: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={{
+                  position: 'absolute',
+                  fontSize: 20,
+                  fontWeight: '450',
+                  textAlign: 'center',
+                }}>
+                No tenes ningun favorito
+              </Text>
+              <Image
+                source={require('../assets/Images/empty-restaurants.png')}
+              />
+            </View>
+          </>
+        ) : (
+          <>
+            <Pressable
+              style={{
+                marginTop: 10,
+                alignSelf: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '45%',
+                flexDirection: 'row',
+                borderColor: 'grey',
+                borderWidth: 1,
+                borderRadius: 30,
+              }}
+              onPress={() => getFavorites()}>
+              <Ionicons
+                name="reload-circle"
+                style={{
+                  color: '#E14852',
+                  fontSize: 20,
+                }}
+              />
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: '500',
+                  fontSize: 15,
+                  fontFamily: 'Roboto',
+                }}>
+                Buscar Restaurantes
+              </Text>
+            </Pressable>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              {restaurants?.map(restaurant => (
+                <CardFavoritos
+                  key={restaurant.id}
+                  restaurant={restaurant}
+                  navigation={navigation}
+                  deleteFavorite={withConfirmationDialog(() =>
+                    deleteFavorite(restaurant),
+                  )}
+                />
+              ))}
+            </View>
+          </>
         )}
       </ScrollView>
 

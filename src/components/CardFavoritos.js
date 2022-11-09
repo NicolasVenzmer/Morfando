@@ -5,6 +5,8 @@ import Feather from 'react-native-vector-icons/Feather';
 import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 
 const CardFavoritos = ({restaurant, navigation, deleteFavorite}) => {
+  //NO ME TRAE LA IMAGEN EN FAVORITOS
+  //console.log("favorito",restaurant)
   return (
     <>
       {restaurant.activo ? (
@@ -49,9 +51,7 @@ const CardFavoritos = ({restaurant, navigation, deleteFavorite}) => {
                 width: '100%',
                 height: 140,
               }}
-              source={
-                restaurant.restaurantImage === '' || DefaultRestaurantImage
-              }
+              //source={{uri: restaurant?.restaurantImage[0]?.imagen}}
             />
           </View>
           <View style={{width: '100%', alignItems: 'center'}}>

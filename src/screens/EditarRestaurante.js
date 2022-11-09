@@ -25,7 +25,7 @@ const EditarRestaurante = ({navigation}) => {
   const route = useRoute();
   const [nombreRestaurante, onChangenombreRestaurante] = useState('');
   const [calle, onChangeCalle] = useState('');
-  const [numero, onChangeNumero] = useState('');
+  const [numero, onChangeNumero] = useState("");
   const [localidad, onChangeLocalidad] = useState('');
   const [barrio, onChangeBarrio] = useState('');
   const [provincia, onChangeProvincia] = useState('');
@@ -39,89 +39,90 @@ const EditarRestaurante = ({navigation}) => {
   const [restaurant, setRestaurant] = useState('');
   const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    const restaurant = route.params.restaurant;
-    console.log('Estoy en el restaurante: ', restaurant);
-    onChangenombreRestaurante(restaurant.nombre);
-    onChangeCalle(restaurant.calle);
-    onChangeNumero(parseInt(restaurant.numero));
-    onChangeLocalidad(restaurant.localidad);
-    onChangeBarrio(restaurant.barrio)
-    onChangeProvincia(restaurant.provincia)
-    onChangePais(restaurant.pais);
-    if (restaurant.rangoPrecio === 1) {
-      setSelectedMoney1(true);
-    } else if (restaurant.rangoPrecio === 2) {
-      setSelectedMoney2(true);
-    } else if (restaurant.rangoPrecio === 3) {
-      setSelectedMoney3(true);
-    } else {
-      setSelectedMoney4(true);
-    }
-    sethorarios(
-      restaurant.hour.map(horario => ({
-        dia: horario.dia.toUpperCase(),
-        abiertoDesde: horario.horaDesde,
-        abiertoHasta: horario.horaHasta,
-      })),
-    );
-    console.log(horarios)
-    setImages(restaurant.restaurantImage);
-    setRestaurant(restaurant);
-  }, []);
-
-  const editRestaurant = () => {
-    //Enviar los datos al back
-    setIsLoading(true);
-    setVisible(true)
-    const listaDeTipoDeComida = [];
-    value?.forEach(value => {
-      listaDeTipoDeComida.push(value);
-    });
-    const tipoDeComida = listaDeTipoDeComida.toString();
-    const sendData = {
-      id: restaurant.id,
-      nombre: nombreRestaurante,
-      usuario_id: userInfo.id,
-      latitud: -34.62289,
-      longitud: -58.40821,
-      cerradoTemporalmente: false,
-      tipoDeComida: tipoDeComida,
-      rangoPrecio: rangoPrecio,
-      calificacion: 1,
-      calle: calle,
-      numero: parseInt(numero),
-      barrio: barrio,
-      localidad: localidad,
-      provincia: provincia,
-      pais: pais,
-      activo: true,
-      horas: horarios,
-      imagenes: images,
-    };
-    //console.log('Los dato a enviar son: ', sendData);
-
-    const EDIT_RESTAURANT_URL = '/restaurant';
-    if(visible)
-    axios
-      .put(EDIT_RESTAURANT_URL, sendData, 
-      //   {
-      //   headers: {
-      //     Authorization: `${userToken}`,
-      //   },
-      // }
-      )
-      .then(res => {
-        if (res.status === 200) {
-          navigation.navigate('MisRestaurantes');
-        }
-        console.log('Restaurant Edited Data: ', res.data);
-      })
-      .catch(e => {
-        console.log(`Edit restaurant error ${e}`);
+    const editRestaurant = () => {
+      //Enviar los datos al back
+      setIsLoading(true);
+      setVisible(true);
+      const listaDeTipoDeComida = [];
+      value?.forEach(value => {
+        listaDeTipoDeComida.push(value);
       });
-    setIsLoading(false);
-  };
+      const tipoDeComida = listaDeTipoDeComida.toString();
+      const sendData = {
+        id: restaurant.id,
+        nombre: nombreRestaurante,
+        usuario_id: userInfo.id,
+        latitud: -34.62289,
+        longitud: -58.40821,
+        cerradoTemporalmente: false,
+        tipoDeComida: tipoDeComida,
+        rangoPrecio: rangoPrecio,
+        calificacion: 1,
+        calle: calle,
+        numero: numero,
+        barrio: barrio,
+        localidad: localidad,
+        provincia: provincia,
+        pais: pais,
+        activo: true,
+        horas: horarios,
+        imagenes: images,
+      };
+      console.log('Los datos a enviar son: ', sendData);
+
+      const EDIT_RESTAURANT_URL = '/restaurant';
+      if (visible)
+        axios
+          .put(
+            EDIT_RESTAURANT_URL,
+            sendData,
+            //   {
+            //   headers: {
+            //     Authorization: `${userToken}`,
+            //   },
+            // }
+          )
+          .then(res => {
+            if (res.status === 200) {
+              navigation.navigate('MisRestaurantes');
+            }
+            console.log('Restaurant Edited Data: ', res.data);
+          })
+          .catch(e => {
+            console.log(`Edit restaurant error ${e}`);
+          });
+      setIsLoading(false);
+    };
+
+    useEffect(() => {
+      const restaurant = route.params.restaurant;
+      //console.log('Estoy en el restaurante: ', restaurant.restaurantImage.imagen);
+      onChangenombreRestaurante(restaurant.nombre);
+      onChangeCalle(restaurant.calle);
+      onChangeNumero(restaurant.numero);
+      onChangeLocalidad(restaurant.localidad);
+      onChangeBarrio(restaurant.barrio);
+      onChangeProvincia(restaurant.provincia);
+      onChangePais(restaurant.pais);
+      if (restaurant.rangoPrecio === 1) {
+        setSelectedMoney1(true);
+      } else if (restaurant.rangoPrecio === 2) {
+        setSelectedMoney2(true);
+      } else if (restaurant.rangoPrecio === 3) {
+        setSelectedMoney3(true);
+      } else {
+        setSelectedMoney4(true);
+      }
+      sethorarios(
+        restaurant?.hour.map(horario => ({
+          dia: horario.dia.toUpperCase(),
+          abiertoDesde: horario.horaDesde,
+          abiertoHasta: horario.horaHasta,
+        })),
+      );
+      setImages(restaurant.restaurantImage);
+      setRestaurant(restaurant);
+    }, []);
 
   //Seteo el rango de los precios
   const changeSelectedChip = num => {
@@ -270,8 +271,7 @@ const EditarRestaurante = ({navigation}) => {
     _horarios[key].abiertoHasta = abiertoHasta;
     sethorarios(_horarios);
   };
-
-  //console.log('Lista: ', horarios);
+  //console.log('horarios: ', horarios);
 
   //DropDown
   DropDownPicker.setLanguage('ES');
@@ -397,7 +397,7 @@ const EditarRestaurante = ({navigation}) => {
               borderBottomWidth: 1,
               width: '90%',
             }}
-            keyboardType="numeric"
+            //keyboardType="numeric"
             onChangeText={onChangeNumero}
             placeholder="Numero"
             value={numero}

@@ -44,7 +44,6 @@ const CrearRestaurante = ({navigation}) => {
     const tipoDeComida = listaDeTipoDeComida.toString();
     const sendData = {
       nombre: nombreRestaurante,
-      direccion_id: 1,
       usuario_id: userInfo.id,
       latitud: -34.62289,
       longitud: -58.40821,
@@ -63,8 +62,8 @@ const CrearRestaurante = ({navigation}) => {
       horas: horarios,
       imagenes: images,
     };
-    console.log('Los dato a enviar son: ', sendData);
-
+    console.log('Los datos a enviar son: ', sendData);
+    console.log(userToken)
     const CREATE_RESTAURANT_URL = '/restaurant';
     axios
       .post(CREATE_RESTAURANT_URL, sendData, {
@@ -358,7 +357,7 @@ const CrearRestaurante = ({navigation}) => {
               borderBottomWidth: 1,
               width: '90%',
             }}
-            keyboardType="numeric"
+            //keyboardType="numeric"
             onChangeText={onChangeNumero}
             placeholder="Numero"
             value={numero}
