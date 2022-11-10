@@ -23,7 +23,7 @@ const CustomDrawer = props => {
       .get(USER_URL)
       .then(res => {
         setUser(res.data);
-        console.log('User Data: ', res.data);
+        //console.log('User Data: ', res.data);
       })
       .catch(e => {
         console.log(`User Data  error ${e}`);
@@ -42,8 +42,7 @@ const CustomDrawer = props => {
         contentContainerStyle={{backgroundColor: '#E14852'}}>
         <View style={{padding: 20, backgroundColor: '#E14852'}}>
           <Image
-            source={{DefaultImageUser}}
-            //source={{uri: user?.usuario_imagen?.imagen}}
+            source={{uri: user[0]?.imagen?.imagen}}
             style={{height: 80, width: 80, borderRadius: 40, marginBottom: 10}}
           />
           <Text

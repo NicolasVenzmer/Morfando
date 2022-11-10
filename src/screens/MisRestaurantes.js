@@ -38,7 +38,7 @@ const ModalPoup = ({visible, children}) => {
 
 const MisRestaurantes = ({navigation}) => {
   const {userInfo, userToken} = useContext(AuthContext);
-  console.log('Token: ', userToken);
+  //console.log('Token: ', userToken);
   const [loading, setLoading] = useState(false);
   const [restaurants, setRestaurants] = useState([]);
   const [visible, setVisible] = useState(false);

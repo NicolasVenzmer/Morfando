@@ -91,7 +91,7 @@ const EditarRestaurante = ({navigation}) => {
 
     useEffect(() => {
       const restaurant = route.params.restaurant;
-      console.log('Estoy en el restaurante: ', restaurant.numero);
+      console.log('Estoy en el restaurante: ', restaurant);
       onChangenombreRestaurante(restaurant.nombre);
       onChangeCalle(restaurant.calle);
       onChangeNumero(restaurant.numero);
@@ -109,7 +109,7 @@ const EditarRestaurante = ({navigation}) => {
         setSelectedMoney4(true);
       }
       sethorarios(
-        restaurant?.hour.map(horario => ({
+        restaurant?.horas.map(horario => ({
           dia: horario.dia.toUpperCase(),
           horaDesde: horario.horaDesde,
           horaHasta: horario.horaHasta,
@@ -118,7 +118,7 @@ const EditarRestaurante = ({navigation}) => {
       const comidas = restaurant.tipoDeComida.split(',');;
       setValue(comidas);
       //console.log("horarios: ", horarios);
-      setImages(restaurant.restaurantImage);
+      setImages(restaurant.imagenes);
       setRestaurant(restaurant);
     }, []);
 

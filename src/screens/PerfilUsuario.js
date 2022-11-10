@@ -44,56 +44,30 @@ const PerfilUsuario = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [visibleUserEdited, setVisibleUserEdited] = useState(false);
   const [visibleDeleteUser, setVisibleDeleteUser] = useState(false);
+  const [user, setUser] = useState('');
 
   const {id, correo, contrasenia, duenio, activo} = userInfo;
 
-  //EN PROCESO A LA ESPERA DEL CAMBIO DEL BACK
-  // // Obtengo los datos de usuario
-  // const getUserInfo = () => {
-  //   //Enviar los datos al back
-  //   const USER_URL = `/user${userInfo.id}`;
-  //   setIsLoading(true);
-  //   axios
-  //     .get(USER_URL)
-  //     .then(res => {
-  //       setUser(res.data);
-  //       console.log('User Data: ', res.data);
-  //     })
-  //     .catch(e => {
-  //       console.log(`User Data  error ${e}`);
-  //     });
-  //   setIsLoading(false);
-  // };
-
-  // useEffect(() => {
-  //   getUserInfo();
-  // }, []);
-
-  // // Cambio los datos del usuario
-  // const onChangeUserData = () => {
-  //   //Enviar los datos al back
-
-  //   const USER_URL = '/user';
-  //   setIsLoading(true);
-  //   const {...copiaDeUser} = user;
-  //   copiaDeUser[0].usuario_imagen.imagen = image.imagen.toString();
-  //   setUser({...copiaDeUser});
-  //   axios
-  //     .put(USER_URL, user)
-  //     .then(res => {
-  //       console.log('Edited User: ', res.data);
-  //     })
-  //     .catch(e => {
-  //       console.log(`Create mi cuenta error ${e}`);
-  //     });
-  //   setVisibleUserEdited(true);
-  //   setIsLoading(false);
-  // };
+  // Obtengo los datos de usuario
+  const getUserInfo = () => {
+    //Enviar los datos al back
+    const USER_URL = `/user${userInfo.id}`;
+    setIsLoading(true);
+    axios
+      .get(USER_URL)
+      .then(res => {
+        setUser(res.data);
+        //console.log('User Data: ', res.data);
+      })
+      .catch(e => {
+        console.log(`User Data  error ${e}`);
+      });
+    setIsLoading(false);
+  };
 
   // Cambio los datos del usuario
   const onChangeUserData = () => {
     //Enviar los datos al back
-
     const USER_URL = '/user';
     setIsLoading(true);
     const sendData = {
@@ -140,6 +114,11 @@ const PerfilUsuario = ({navigation}) => {
     }
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    getUserInfo()
+    setImage(user[0]?.imagen?.imagen);
+  }, []);
 
   //Images
   const [image, setImage] = useState();
@@ -228,7 +207,7 @@ const PerfilUsuario = ({navigation}) => {
           }}>
           <View>
             <Avatar.Image
-              source={{uri: image?.imagen?.toString()}}
+              source={{uri: user[0]?.imagen?.imagen}}
               style={{
                 marginBottom: 20,
                 objectFit: 'fit',
