@@ -7,8 +7,8 @@ const DiasDeAtencion = ({
   dia,
   input,
   addHandler,
-  inputHandlerAbiertoDesde,
-  inputHandlerAbiertoHasta,
+  inputHandlerHoraDesde,
+  inputHandlerHoraHasta,
   deleteHandler,
   id,
 }) => {
@@ -76,10 +76,8 @@ const DiasDeAtencion = ({
           fontSize: 10,
           textAlign: 'center',
         }}
-        value={input.abiertoDesde}
-        onChangeText={abiertoDesde =>
-          inputHandlerAbiertoDesde(abiertoDesde, id)
-        }
+        value={input.horaDesde}
+        onChangeText={horaDesde => inputHandlerHoraDesde(horaDesde, id)}
         placeholder="00:00"
       />
       <Text
@@ -102,10 +100,8 @@ const DiasDeAtencion = ({
           fontSize: 10,
           textAlign: 'center',
         }}
-        value={input.abiertoHasta}
-        onChangeText={abiertoHasta =>
-          inputHandlerAbiertoHasta(abiertoHasta, id)
-        }
+        value={input.horaHasta}
+        onChangeText={horaHasta => inputHandlerHoraHasta(horaHasta, id)}
         placeholder="00:00"
       />
       <Ionicons
@@ -116,7 +112,7 @@ const DiasDeAtencion = ({
           top: 5,
           fontSize: 20,
         }}
-        onPress={() => addHandler(input.dia,id)}
+        onPress={() => addHandler(input.dia, id)}
       />
       <Feather
         name="trash-2"

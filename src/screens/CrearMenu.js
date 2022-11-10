@@ -11,7 +11,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {launchImageLibrary} from 'react-native-image-picker';
 import CardCrearPlato from '../components/CardCrearPlato';
 import axios from '../api/axios';
-const MENUS_URL = '/restaurant/';
 import {useRoute} from '@react-navigation/native';
 
 const CrearMenu = ({navigation}) => {
@@ -19,19 +18,38 @@ const CrearMenu = ({navigation}) => {
   const [nombrePlato, onChangeNombrePlato] = useState(false);
   const [precio, onChangePrecio] = useState(false);
   const [ingrediente, onChangeIngrediente] = useState(false);
-  const [restaurant, setRestaurant] = useState("")
+  const [restaurant, setRestaurant] = useState('');
+  const [categorias, setCategorias] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [platosTemp, setPlatosTemp] = useState([]);
   const [emptyMenus, setEmptyMenus] = useState(true);
 
+  const getRestaurant = async () => {
+    setIsLoading(true);
+    const id = restaurant.id;
+    const GET_RESTAURANTS_URL = `/restaurant${id}`;
+    axios
+      .get(GET_RESTAURANTS_URL)
+      .then(res => {
+        const categorias = res.data[0].category;
+        setCategorias(categorias);
+      })
+      .catch(e => {
+        console.log(`Restaurant GET error ${e}`);
+      })
+      .finally(() => setIsLoading(false));
+  };
+
   useEffect(() => {
     const plates = route.params.restaurant.plates;
     const restaurant = route.params.restaurant;
-    setRestaurant(restaurant)
+    setRestaurant(restaurant);
     setPlatosTemp(plates);
     if (!!platosTemp) {
       setEmptyMenus(false);
     }
+    getRestaurant();
   }, []);
 
   const [platos, setPlatos] = useState([{key: '', plato: ''}]);
@@ -150,7 +168,7 @@ const CrearMenu = ({navigation}) => {
         <Pressable
           style={{
             width: '25%',
-            position: "absolute",
+            position: 'absolute',
             right: 10,
             flexDirection: 'row',
             borderColor: 'grey',
@@ -181,12 +199,43 @@ const CrearMenu = ({navigation}) => {
           width: '100%',
           height: '100%',
         }}>
+        <Pressable
+          style={{
+            alignSelf: 'center',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '45%',
+            flexDirection: 'row',
+            borderColor: 'grey',
+            borderWidth: 1,
+            borderRadius: 30,
+          }}
+          onPress={() => getRestaurant()}>
+          <Ionicons
+            name="reload-circle"
+            style={{
+              color: '#E14852',
+              fontSize: 20,
+            }}
+          />
+          <Text
+            style={{
+              color: 'black',
+              fontWeight: '500',
+              fontSize: 15,
+              fontFamily: 'Roboto',
+            }}>
+            Buscar Menus
+          </Text>
+        </Pressable>
         {emptyMenus ? (
           <>
             {platosTemp?.map((plato, index) => (
               <CardCrearPlato
                 key={index}
                 plato={plato}
+                value={value}
+                items={items}
                 deletePlato={() => deletePlato(index)}
               />
             ))}

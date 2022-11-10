@@ -14,7 +14,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Feather from 'react-native-vector-icons/Feather';
 import {Checkbox} from 'react-native-paper';
 
-const CardCrearPlato = ({deletePlato, navigation, plato}) => {
+const CardCrearPlato = ({deletePlato, plato, value, items}) => {
   const [nombrePlato, onChangeNombrePlato] = useState(plato?.nombre || '');
   const [precio, onChangePrecio] = useState(plato?.precio || '');
   const [ingrediente, onChangeIngrediente] = useState(
@@ -28,20 +28,6 @@ const CardCrearPlato = ({deletePlato, navigation, plato}) => {
   const [checkedVeganos, setCheckedVeganos] = useState(
     plato?.aptoVegano || false,
   );
-
-  const onSubmitRestaurant = () => {
-    //Enviar los datos al back
-  };
-
-  //Dropdown
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState([]);
-  const [items, setItems] = useState([
-    {label: 'Entrada', value: 'apple'},
-    {label: 'Plato Fuerte', value: 'banana'},
-    {label: 'Postre', value: 'banana1'},
-    {label: 'Plato Principal', value: 'banana2'},
-  ]);
 
   //Images
   const [images, setImages] = useState([]);

@@ -22,7 +22,7 @@ const CrearRestaurante = ({navigation}) => {
   const {userInfo, userToken} = useContext(AuthContext);
   const [nombreRestaurante, onChangenombreRestaurante] = useState('');
   const [calle, onChangeCalle] = useState('');
-  const [numero, onChangeNumero] = useState('');
+  const [numero, onChangeNumero] = useState(null);
   const [localidad, onChangeLocalidad] = useState('');
   const [barrio, onChangeBarrio] = useState('');
   const [provincia, onChangeProvincia] = useState('');
@@ -64,23 +64,23 @@ const CrearRestaurante = ({navigation}) => {
     };
     console.log('Los datos a enviar son: ', sendData);
     //console.log(userToken)
-    // const CREATE_RESTAURANT_URL = '/restaurant';
-    // axios
-    //   .post(CREATE_RESTAURANT_URL, sendData, {
-    //     headers: {
-    //       Authorization: `${userToken}`,
-    //     },
-    //   })
-    //   .then(res => {
-    //     if (res.status === 200) {
-    //       navigation.navigate('MisRestaurantes');
-    //     }
-    //     console.log('Restaurant Created Data: ', res.data);
-    //   })
-    //   .catch(e => {
-    //     console.log(`Create restaurant error ${e}`);
-    //   });
-    // setIsLoading(false);
+    const CREATE_RESTAURANT_URL = '/restaurant';
+    axios
+      .post(CREATE_RESTAURANT_URL, sendData, {
+        headers: {
+          Authorization: `${userToken}`,
+        },
+      })
+      .then(res => {
+        if (res.status === 200) {
+          navigation.navigate('MisRestaurantes');
+        }
+        console.log('Restaurant Created Data: ', res.data);
+      })
+      .catch(e => {
+        console.log(`Create restaurant error ${e}`);
+      });
+    setIsLoading(false);
   };
 
   //Seteo el rango de los precios
@@ -198,16 +198,16 @@ const CrearRestaurante = ({navigation}) => {
   const [horarios, sethorarios] = useState(
     listaDeDias.map(dia => ({
       dia: dia.title,
-      abiertoDesde: '',
-      abiertoHasta: '',
+      horaDesde: '',
+      horaHasta: '',
     })),
   );
   const addHandler = (dia, position) => {
     const _horarios = [...horarios];
     _horarios.splice(position, 0, {
       dia,
-      abiertoDesde: '',
-      abiertoHasta: '',
+      horaDesde: '',
+      horaHasta: '',
     });
     sethorarios(_horarios);
   };
@@ -218,16 +218,16 @@ const CrearRestaurante = ({navigation}) => {
     }
   };
 
-  const inputHandlerAbiertoDesde = (abiertoDesde, key) => {
+  const inputHandlerHoraDesde = (horaDesde, key) => {
     //console.log(arguments);
     const _horarios = [...horarios];
-    _horarios[key].abiertoDesde = abiertoDesde;
+    _horarios[key].horaDesde = horaDesde;
     sethorarios(_horarios);
   };
-  const inputHandlerAbiertoHasta = (abiertoHasta, key) => {
+  const inputHandlerHoraHasta = (horaHasta, key) => {
     //console.log(arguments);
     const _horarios = [...horarios];
-    _horarios[key].abiertoHasta = abiertoHasta;
+    _horarios[key].horaHasta = horaHasta;
     sethorarios(_horarios);
   };
 
@@ -357,7 +357,7 @@ const CrearRestaurante = ({navigation}) => {
               borderBottomWidth: 1,
               width: '90%',
             }}
-            //keyboardType="numeric"
+            keyboardType="numeric"
             onChangeText={onChangeNumero}
             placeholder="Numero"
             value={numero}
@@ -447,8 +447,8 @@ const CrearRestaurante = ({navigation}) => {
                 input={input}
                 addHandler={addHandler}
                 deleteHandler={deleteHandler}
-                inputHandlerAbiertoDesde={inputHandlerAbiertoDesde}
-                inputHandlerAbiertoHasta={inputHandlerAbiertoHasta}
+                inputHandlerHoraDesde={inputHandlerHoraDesde}
+                inputHandlerHoraHasta={inputHandlerHoraHasta}
               />
             ))}
           </ScrollView>

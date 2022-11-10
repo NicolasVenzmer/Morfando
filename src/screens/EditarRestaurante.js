@@ -25,7 +25,7 @@ const EditarRestaurante = ({navigation}) => {
   const route = useRoute();
   const [nombreRestaurante, onChangenombreRestaurante] = useState('');
   const [calle, onChangeCalle] = useState('');
-  const [numero, onChangeNumero] = useState("");
+  const [numero, onChangeNumero] = useState(null);
   const [localidad, onChangeLocalidad] = useState('');
   const [barrio, onChangeBarrio] = useState('');
   const [provincia, onChangeProvincia] = useState('');
@@ -35,7 +35,7 @@ const EditarRestaurante = ({navigation}) => {
   const [selectedMoney3, setSelectedMoney3] = useState(false);
   const [selectedMoney4, setSelectedMoney4] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [rangoPrecio, setRangoPrecio] = useState(1);
+  const [rangoPrecio, setRangoPrecio] = useState(null);
   const [restaurant, setRestaurant] = useState('');
   const [visible, setVisible] = useState(false);
 
@@ -76,11 +76,6 @@ const EditarRestaurante = ({navigation}) => {
           .put(
             EDIT_RESTAURANT_URL,
             sendData,
-            //   {
-            //   headers: {
-            //     Authorization: `${userToken}`,
-            //   },
-            // }
           )
           .then(res => {
             if (res.status === 200) {
@@ -96,7 +91,7 @@ const EditarRestaurante = ({navigation}) => {
 
     useEffect(() => {
       const restaurant = route.params.restaurant;
-      //console.log('Estoy en el restaurante: ', restaurant.restaurantImage.imagen);
+      console.log('Estoy en el restaurante: ', restaurant.numero);
       onChangenombreRestaurante(restaurant.nombre);
       onChangeCalle(restaurant.calle);
       onChangeNumero(restaurant.numero);
@@ -116,11 +111,13 @@ const EditarRestaurante = ({navigation}) => {
       sethorarios(
         restaurant?.hour.map(horario => ({
           dia: horario.dia.toUpperCase(),
-          abiertoDesde: horario.horaDesde,
-          abiertoHasta: horario.horaHasta,
+          horaDesde: horario.horaDesde,
+          horaHasta: horario.horaHasta,
         })),
       );
-      console.log("horarios: ", horarios);
+      const comidas = restaurant.tipoDeComida.split(',');;
+      setValue(comidas);
+      //console.log("horarios: ", horarios);
       setImages(restaurant.restaurantImage);
       setRestaurant(restaurant);
     }, []);
@@ -240,16 +237,16 @@ const EditarRestaurante = ({navigation}) => {
   const [horarios, sethorarios] = useState(
     listaDeDias.map(dia => ({
       dia: dia.title,
-      abiertoDesde: '',
-      abiertoHasta: '',
+      horaDesde: '',
+      horaHasta: '',
     })),
   );
   const addHandler = (dia, position) => {
     const _horarios = [...horarios];
     _horarios.splice(position, 0, {
       dia,
-      abiertoDesde: '',
-      abiertoHasta: '',
+      horaDesde: '',
+      horaHasta: '',
     });
     sethorarios(_horarios);
   };
@@ -260,16 +257,16 @@ const EditarRestaurante = ({navigation}) => {
     }
   };
 
-  const inputHandlerAbiertoDesde = (abiertoDesde, key) => {
+  const inputHandlerHoraDesde = (horaDesde, key) => {
     //console.log(arguments);
     const _horarios = [...horarios];
-    _horarios[key].abiertoDesde = abiertoDesde;
+    _horarios[key].horaDesde = horaDesde;
     sethorarios(_horarios);
   };
-  const inputHandlerAbiertoHasta = (abiertoHasta, key) => {
+  const inputHandlerHoraHasta = (horaHasta, key) => {
     //console.log(arguments);
     const _horarios = [...horarios];
-    _horarios[key].abiertoHasta = abiertoHasta;
+    _horarios[key].horaHasta = horaHasta;
     sethorarios(_horarios);
   };
   //console.log('horarios: ', horarios);
@@ -277,7 +274,7 @@ const EditarRestaurante = ({navigation}) => {
   //DropDown
   DropDownPicker.setLanguage('ES');
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(restaurant?.tipoDeComida);
+  const [value, setValue] = useState();
   const [items, setItems] = useState([
     {
       label: 'Cocina de autor',
@@ -398,7 +395,7 @@ const EditarRestaurante = ({navigation}) => {
               borderBottomWidth: 1,
               width: '90%',
             }}
-            //keyboardType="numeric"
+            keyboardType="numeric"
             onChangeText={onChangeNumero}
             placeholder="Numero"
             value={numero}
@@ -488,8 +485,8 @@ const EditarRestaurante = ({navigation}) => {
                 input={input}
                 addHandler={addHandler}
                 deleteHandler={deleteHandler}
-                inputHandlerAbiertoDesde={inputHandlerAbiertoDesde}
-                inputHandlerAbiertoHasta={inputHandlerAbiertoHasta}
+                inputHandlerHoraDesde={inputHandlerHoraDesde}
+                inputHandlerHoraHasta={inputHandlerHoraHasta}
               />
             ))}
           </ScrollView>

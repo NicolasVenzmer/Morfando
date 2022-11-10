@@ -101,7 +101,7 @@ const PerfilUsuario = ({navigation}) => {
       nombre: nombreUsuario,
       correo: correo,
       contrasenia: contrasenia,
-      imagen: image.imagen.toString(),
+      imagen: image?.imagen.toString(),
       duenio: duenio,
       activo: activo,
     };
@@ -129,7 +129,7 @@ const PerfilUsuario = ({navigation}) => {
     };
     if (visibleDeleteUser) {
       axios
-        .delete(USER_URL, {data: sendData})
+        .delete(USER_URL, {sendData: sendData})
         .then(res => {
           logout();
           console.log('Deleted User: ', res.data);
@@ -140,8 +140,6 @@ const PerfilUsuario = ({navigation}) => {
     }
     setIsLoading(false);
   };
-
-  useEffect(() => {}, [userInfo]);
 
   //Images
   const [image, setImage] = useState();
