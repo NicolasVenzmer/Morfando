@@ -32,7 +32,7 @@ const CrearMenu = ({navigation}) => {
     axios
       .get(GET_RESTAURANTS_URL)
       .then(res => {
-        const categorias = res.data[0].category;
+        const categorias = res.data.categorias;
         setCategorias(categorias);
       })
       .catch(e => {
@@ -42,7 +42,8 @@ const CrearMenu = ({navigation}) => {
   };
 
   useEffect(() => {
-    const plates = route.params.restaurant.plates;
+    console.log('restaurant', route.params.restaurant);
+    const plates = route.params.restaurant.platos;
     const restaurant = route.params.restaurant;
     setRestaurant(restaurant);
     setPlatosTemp(plates);

@@ -29,6 +29,7 @@ const CrearCategoria = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [confirm, setConfirm] = useState({ok: () => {}, cancel: () => {}});
+  const [categoriaCreada, setVisibleCategoriaCreada] = useState(false);
 
   const createCategory = () => {
     //Enviar los datos al back
@@ -37,7 +38,7 @@ const CrearCategoria = ({navigation}) => {
       nombre: categoria,
       activo: true,
     };
-    console.log('Los datos a enviar son: ', sendData);
+    //console.log('Los datos a enviar son: ', sendData);
     //console.log(userToken)
     const CREATE_CATEGORY_URL = '/category';
     axios
@@ -48,6 +49,7 @@ const CrearCategoria = ({navigation}) => {
       .catch(e => {
         console.log(`Create category error ${e}`);
       });
+    setVisibleCategoriaCreada(true);
     setIsLoading(false);
   };
 
@@ -58,7 +60,7 @@ const CrearCategoria = ({navigation}) => {
       activo: false,
     };
     const DELETE_CATEGORY_URL = '/category';
-    console.log("deleteCategory", sendData)
+    console.log('deleteCategory', sendData);
     axios
       .delete(DELETE_CATEGORY_URL, {data: sendData})
       .then(res => {
@@ -78,7 +80,7 @@ const CrearCategoria = ({navigation}) => {
     axios
       .get(GET_RESTAURANTS_URL)
       .then(res => {
-        const categorias = res.data[0].category;
+        const categorias = res.data[0].categorias;
         setCategorias(categorias);
       })
       .catch(e => {
@@ -251,6 +253,45 @@ const CrearCategoria = ({navigation}) => {
               borderRadius: 30,
             }}
             onPress={confirm?.ok}>
+            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
+          </Pressable>
+        </View>
+      </ModalPoup>
+
+      <ModalPoup visible={categoriaCreada}>
+        <View style={{alignItems: 'flex-start'}}>
+          <Text style={{fontSize: 20, color: 'black'}}>Categoria creada.</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '2%',
+              marginBottom: '2%',
+              marginHorizontal: '5%',
+            }}
+          />
+        </View>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: '1%',
+            marginBottom: '1%',
+            marginHorizontal: '1%',
+          }}>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '100%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: '#E14852',
+              borderRadius: 30,
+            }}
+            onPress={() => {
+              setVisibleCategoriaCreada(false);
+            }}>
             <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
           </Pressable>
         </View>

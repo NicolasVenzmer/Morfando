@@ -57,7 +57,7 @@ const PerfilUsuario = ({navigation}) => {
       .get(USER_URL)
       .then(res => {
         setUser(res.data);
-        //console.log('User Data: ', res.data);
+        console.log('User Data: ', res.data);
       })
       .catch(e => {
         console.log(`User Data  error ${e}`);
@@ -116,9 +116,8 @@ const PerfilUsuario = ({navigation}) => {
   };
 
   useEffect(() => {
-    getUserInfo()
-    setImage(user[0]?.imagen?.imagen);
-  }, []);
+    getUserInfo();
+  }, [image, nombreUsuario]);
 
   //Images
   const [image, setImage] = useState();
@@ -248,18 +247,6 @@ const PerfilUsuario = ({navigation}) => {
           />
         </View>
       </ScrollView>
-      {/* <Pressable
-        style={{
-          width: '80%',
-          height: 20,
-          marginBottom: 10,
-        }}
-        //onPress={() => navigation.navigate('OlvideMiContraseña')}
-      >
-        <Text style={{color: '#E14852', fontSize: 15, fontWeight: 'bold'}}>
-          Cerrar Sesion
-        </Text>
-      </Pressable> */}
       <Pressable
         style={{
           width: '80%',

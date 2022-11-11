@@ -120,7 +120,7 @@ const Plato = ({plato}) => {
                 fontWeight: '250',
                 bottom: -20,
               }}>
-              {plato.precio || '$2599'}
+              {`$${plato.precio}` || 'No disponible'}
             </Text>
             <PlatoType {...plato} />
           </View>

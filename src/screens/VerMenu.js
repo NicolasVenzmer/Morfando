@@ -10,7 +10,7 @@ const VerMenu = ({navigation}) => {
   const [emptyMenus, setEmptyMenus] = useState(true);
 
   useEffect(() => {
-    const plates = route.params.restaurant.plates;
+    const plates = route.params.restaurant.platos;
     setMenus(plates);
     //setMenus(platos)
     if (!!menus) {
