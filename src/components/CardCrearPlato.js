@@ -14,12 +14,24 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Feather from 'react-native-vector-icons/Feather';
 import {Checkbox} from 'react-native-paper';
 
-const CardCrearPlato = ({deletePlato, plato, value, items}) => {
+const CardCrearPlato = ({
+  deletePlato,
+  plato,
+  value,
+  items,
+  open,
+  setOpen,
+  setItems,
+  setValue,
+  index,
+}) => {
   const [nombrePlato, onChangeNombrePlato] = useState(plato?.nombre || '');
   const [precio, onChangePrecio] = useState(plato?.precio || '');
   const [ingrediente, onChangeIngrediente] = useState(
     plato?.ingredientes || '',
   );
+
+  console.log("INDEXXXX: ", index);
 
   //Checkbox celiaco o vegetariano
   const [checkedCeliacos, setCheckedCeliacos] = useState(
@@ -251,12 +263,13 @@ const CardCrearPlato = ({deletePlato, plato, value, items}) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  {images.map((image, key) => (
+                  {images.map((image, index) => (
                     <View
                       style={{
                         alignItems: 'center',
                         justifyContent: 'center',
-                      }}>
+                      }}
+                      key={index}>
                       <Image
                         source={{uri: image.uri.toString()}}
                         style={{
@@ -292,6 +305,8 @@ const CardCrearPlato = ({deletePlato, plato, value, items}) => {
             </View>
           )}
         </View>
+        <Text>{index}</Text>
+
         <Feather
           name="trash-2"
           style={{
@@ -301,7 +316,10 @@ const CardCrearPlato = ({deletePlato, plato, value, items}) => {
             marginTop: 5,
             fontSize: 20,
           }}
-          onPress={deletePlato}
+          onPress={() => {
+            console.log('INDEX onpress: ', index);
+            deletePlato(index);
+          }}
         />
       </ScrollView>
     </SafeAreaView>

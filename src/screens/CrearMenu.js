@@ -53,17 +53,19 @@ const CrearMenu = ({navigation}) => {
     getRestaurant();
   }, []);
 
-  const [platos, setPlatos] = useState([{key: '', plato: ''}]);
+  const [platos, setPlatos] = useState([{plato: ''}]);
   const addPlato = () => {
     const _platosTemp = [...platosTemp];
-    _platosTemp.push({key: '', plato: ''});
+    _platosTemp.push({plato: ''});
     setPlatosTemp(_platosTemp);
   };
   const deletePlato = key => {
-    if (platosTemp.length > 1) {
-      const _platosTemp = platosTemp.filter((plato, index) => index != key);
-      setPlatosTemp(_platosTemp);
-    }
+    const _platosTemp = [
+      ...platosTemp.slice(0, key),
+      ...platosTemp.slice(key + 1),
+    ];
+    console.log("platos temp: " ,_platosTemp)
+    setPlatosTemp(_platosTemp);
   };
 
   //Checkbox celiaco o vegetariano
@@ -234,10 +236,14 @@ const CrearMenu = ({navigation}) => {
             {platosTemp?.map((plato, index) => (
               <CardCrearPlato
                 key={index}
+                index={index}
                 plato={plato}
                 value={value}
                 items={items}
-                deletePlato={() => deletePlato(index)}
+                setOpen={setOpen}
+                setItems={setItems}
+                setValue={setValue}
+                deletePlato={i => deletePlato(i)}
               />
             ))}
             <Pressable
@@ -274,8 +280,14 @@ const CrearMenu = ({navigation}) => {
             {platosTemp.map((plato, index) => (
               <CardCrearPlato
                 key={index}
+                index={index}
                 plato={plato}
-                deletePlato={() => deletePlato(index)}
+                value={value}
+                items={items}
+                setOpen={setOpen}
+                setItems={setItems}
+                setValue={setValue}
+                deletePlato={i => deletePlato(i)}
               />
             ))}
             <Pressable
