@@ -13,6 +13,7 @@ import CardRestaurante from '../components/CardRestaurante';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from '../api/axios';
 import {AuthContext} from '../context/AuthContext';
+import {useRoute} from '@react-navigation/native';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);
@@ -38,6 +39,7 @@ const ModalPoup = ({visible, children}) => {
 
 const MisRestaurantes = ({navigation}) => {
   const {userInfo, userToken} = useContext(AuthContext);
+  const route = useRoute();
   //console.log('Token: ', userToken);
   const [loading, setLoading] = useState(false);
   const [restaurants, setRestaurants] = useState([]);
@@ -99,7 +101,11 @@ const MisRestaurantes = ({navigation}) => {
 
   useEffect(() => {
     getRestaurants();
-  }, []);
+    const restaurant = route.params?.restaurant;
+    if (restaurant) {
+      setRestaurants([...restaurants, restaurant]);
+    }
+  }, [route.params]);
 
   return (
     <SafeAreaView

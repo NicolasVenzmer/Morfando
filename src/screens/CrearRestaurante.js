@@ -72,10 +72,11 @@ const CrearRestaurante = ({navigation}) => {
         },
       })
       .then(res => {
+        //console.log("estoy en create: ", res)
         if (res.status === 200) {
-          navigation.navigate('MisRestaurantes');
+          navigation.navigate('MisRestaurantes', sendData);
         }
-        console.log('Restaurant Created Data: ', res.data);
+        //console.log('Restaurant Created Data: ', res.data);
       })
       .catch(e => {
         console.log(`Create restaurant error ${e}`);
