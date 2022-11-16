@@ -15,28 +15,9 @@ import {AuthContext} from '../context/AuthContext';
 import DefaultImageUser from '../assets/Images/default-user-image.png';
 import {launchImageLibrary} from 'react-native-image-picker';
 import axios from '../api/axios';
-
-const ModalPoup = ({visible, children}) => {
-  const [showModal, setShowModal] = useState(visible);
-  useEffect(() => {
-    toggleModal();
-  }, [visible]);
-  const toggleModal = () => {
-    if (visible) {
-      setShowModal(true);
-    } else {
-      setShowModal(false);
-    }
-  };
-
-  return (
-    <Modal transparent visible={showModal}>
-      <View style={styles.modalBackGround}>
-        <View style={[styles.modalContainer]}>{children}</View>
-      </View>
-    </Modal>
-  );
-};
+import ModalPoup from '../components/ModalPopUp';
+import Theme from '../assets/fonts/Theme';
+import Helper from '../helper/helper';
 
 const PerfilUsuario = ({navigation}) => {
   const {userInfo, logout} = useContext(AuthContext);
@@ -48,6 +29,40 @@ const PerfilUsuario = ({navigation}) => {
 
   const {id, correo, contrasenia, duenio, activo} = userInfo;
 
+  //Images
+  const [image, setImage] = useState();
+  const [showImage, setShowImage] = useState(true);
+
+  const addImage = () => {
+    // const options = {
+    //   selectionLimit: 1,
+    //   mediaType: 'photo',
+    //   includeBase64: false,
+    // };
+    launchImageLibrary(
+      {
+        height: 100,
+        width: 100,
+      },
+      response => {
+        if (response.didCancel) {
+          return;
+        }
+        const _response = response.assets;
+        let _resultUri = _response.map(a => a.uri);
+        let _resultType = _response.map(a => a.type);
+        let _resultfileName = _response.map(a => a.fileName);
+        const img = {
+          imagen: _resultUri.toString(),
+          //type: _resultType,
+          //name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
+        };
+
+        setImage(img);
+      },
+    );
+  };
+
   // Obtengo los datos de usuario
   const getUserInfo = () => {
     //Enviar los datos al back
@@ -57,7 +72,10 @@ const PerfilUsuario = ({navigation}) => {
       .get(USER_URL)
       .then(res => {
         setUser(res.data);
-        console.log('User Data: ', res.data);
+        if (image === '' || image === undefined) {
+          setImage(res.data[0].imagen.imagen);
+        }
+        //console.log('User Data: ', res.data);
       })
       .catch(e => {
         console.log(`User Data  error ${e}`);
@@ -68,6 +86,7 @@ const PerfilUsuario = ({navigation}) => {
   // Cambio los datos del usuario
   const onChangeUserData = () => {
     //Enviar los datos al back
+    if (!Helper.validateEmail(nombreUsuario) || Helper.isEmpty(image)) return;
     const USER_URL = '/user';
     setIsLoading(true);
     const sendData = {
@@ -79,7 +98,7 @@ const PerfilUsuario = ({navigation}) => {
       duenio: duenio,
       activo: activo,
     };
-    console.log(sendData);
+    console.log('IMAGEN', image?.imagen);
     axios
       .put(USER_URL, sendData)
       .then(res => {
@@ -118,41 +137,6 @@ const PerfilUsuario = ({navigation}) => {
   useEffect(() => {
     getUserInfo();
   }, [image, nombreUsuario]);
-
-  //Images
-  const [image, setImage] = useState();
-  const [showImage, setShowImage] = useState(true);
-
-  const addImage = () => {
-    // const options = {
-    //   selectionLimit: 1,
-    //   mediaType: 'photo',
-    //   includeBase64: false,
-    // };
-    launchImageLibrary(
-      {
-        height: 100,
-        width: 100,
-      },
-      response => {
-        if (response.didCancel) {
-          return;
-        }
-        const _response = response.assets;
-        let _resultUri = _response.map(a => a.uri);
-        let _resultType = _response.map(a => a.type);
-        let _resultfileName = _response.map(a => a.fileName);
-        const img = {
-          imagen: _resultUri.toString(),
-          //type: _resultType,
-          //name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
-        };
-
-        setImage(img);
-      },
-    );
-    setShowImage(false);
-  };
 
   return (
     <SafeAreaView
@@ -206,7 +190,7 @@ const PerfilUsuario = ({navigation}) => {
           }}>
           <View>
             <Avatar.Image
-              source={{uri: user[0]?.imagen?.imagen}}
+              source={{uri: image}}
               style={{
                 marginBottom: 20,
                 objectFit: 'fit',
@@ -261,7 +245,13 @@ const PerfilUsuario = ({navigation}) => {
 
       <ModalPoup visible={visibleUserEdited}>
         <View style={{alignItems: 'flex-start'}}>
-          <Text style={{fontSize: 20, color: 'black'}}>Cambios guardados.</Text>
+          <Text
+            style={{
+              fontSize: Theme.fonts.LARGE,
+              color: Theme.colors.SECONDARY,
+            }}>
+            Cambios guardados.
+          </Text>
           <View
             style={{
               flexDirection: 'row',
@@ -272,7 +262,6 @@ const PerfilUsuario = ({navigation}) => {
             }}
           />
         </View>
-
         <View
           style={{
             flexDirection: 'row',
@@ -287,20 +276,26 @@ const PerfilUsuario = ({navigation}) => {
               width: '100%',
               marginVertical: 10,
               paddingVertical: 10,
-              backgroundColor: '#E14852',
+              backgroundColor: Theme.colors.PRIMARY,
               borderRadius: 30,
             }}
             onPress={() => {
               setVisibleUserEdited(false);
             }}>
-            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
+            <Text style={{color: Theme.colors.THIRD, textAlign: 'center'}}>
+              Aceptar
+            </Text>
           </Pressable>
         </View>
       </ModalPoup>
 
       <ModalPoup visible={visibleDeleteUser}>
         <View style={{alignItems: 'flex-start'}}>
-          <Text style={{fontSize: 20, color: 'black'}}>
+          <Text
+            style={{
+              fontSize: Theme.fonts.LARGE,
+              color: Theme.colors.SECONDARY,
+            }}>
             Esta seguro que desea eliminar la cuenta?
           </Text>
           <View
@@ -332,7 +327,9 @@ const PerfilUsuario = ({navigation}) => {
             onPress={() => {
               setVisibleDeleteUser(false);
             }}>
-            <Text style={{color: 'white', textAlign: 'center'}}>Cancelar</Text>
+            <Text style={{color: Theme.colors.THIRD, textAlign: 'center'}}>
+              Cancelar
+            </Text>
           </Pressable>
           <Pressable
             style={{
@@ -340,7 +337,7 @@ const PerfilUsuario = ({navigation}) => {
               width: '50%',
               marginVertical: 10,
               paddingVertical: 10,
-              backgroundColor: '#E14852',
+              backgroundColor: Theme.colors.PRIMARY,
               borderRadius: 30,
             }}
             onPress={() => {
@@ -349,7 +346,9 @@ const PerfilUsuario = ({navigation}) => {
               }
               setVisibleDeleteUser(false);
             }}>
-            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
+            <Text style={{color: Theme.colors.THIRD, textAlign: 'center'}}>
+              Aceptar
+            </Text>
           </Pressable>
         </View>
       </ModalPoup>
@@ -381,48 +380,5 @@ const PerfilUsuario = ({navigation}) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#D6B1B1',
-  },
-
-  centerContent: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  scrollView: {
-    marginHorizontal: 1,
-    marginVertical: 1,
-  },
-  text: {
-    fontSize: 42,
-  },
-
-  modalBackGround: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContainer: {
-    width: '80%',
-    backgroundColor: '#F7F4F4',
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-    borderRadius: 20,
-    elevation: 20,
-  },
-  modalContainer2: {
-    width: '80%',
-    backgroundColor: 'transparent',
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-    borderRadius: 20,
-    elevation: 20,
-  },
-});
 
 export default PerfilUsuario;

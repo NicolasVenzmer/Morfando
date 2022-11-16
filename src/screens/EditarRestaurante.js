@@ -79,7 +79,7 @@ const EditarRestaurante = ({navigation}) => {
           )
           .then(res => {
             if (res.status === 200) {
-              navigation.navigate('MisRestaurantes');
+              navigation.navigate('MisRestaurantes', sendData);
             }
             console.log('Restaurant Edited Data: ', res.data);
           })
@@ -115,7 +115,7 @@ const EditarRestaurante = ({navigation}) => {
           horaHasta: horario.horaHasta,
         })),
       );
-      const comidas = restaurant.tipoDeComida.split(',');;
+      const comidas = restaurant.tipoDeComida.split(',');
       setValue(comidas);
       //console.log("horarios: ", horarios);
       setImages(restaurant.imagenes);

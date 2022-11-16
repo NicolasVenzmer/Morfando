@@ -45,8 +45,6 @@ const CrearRestaurante = ({navigation}) => {
     const sendData = {
       nombre: nombreRestaurante,
       usuario_id: userInfo.id,
-      latitud: -34.62289,
-      longitud: -58.40821,
       cerradoTemporalmente: false,
       tipoDeComida: tipoDeComida,
       rangoPrecio: rangoPrecio,
@@ -556,7 +554,8 @@ const CrearRestaurante = ({navigation}) => {
                 }}>
                 {images.map((image, key) => (
                   <View
-                    style={{alignItems: 'center', justifyContent: 'center'}}>
+                    style={{alignItems: 'center', justifyContent: 'center'}}
+                    key={key}>
                     <Image
                       key={key}
                       source={{uri: image.imagen.toString()}}

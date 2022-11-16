@@ -19,11 +19,9 @@ const CardCrearPlato = ({
   plato,
   value,
   items,
-  open,
-  setOpen,
   setItems,
   setValue,
-  index,
+  id,
 }) => {
   const [nombrePlato, onChangeNombrePlato] = useState(plato?.nombre || '');
   const [precio, onChangePrecio] = useState(plato?.precio || '');
@@ -31,7 +29,7 @@ const CardCrearPlato = ({
     plato?.ingredientes || '',
   );
 
-  console.log("INDEXXXX: ", index);
+  const [open, setOpen] = useState(false);
 
   //Checkbox celiaco o vegetariano
   const [checkedCeliacos, setCheckedCeliacos] = useState(
@@ -65,9 +63,9 @@ const CardCrearPlato = ({
         let _resultType = _response.map(a => a.type);
         let _resultfileName = _response.map(a => a.fileName);
         const img = {
-          uri: _resultUri,
-          type: _resultType,
-          name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
+          imagen: _resultUri.toString(),
+          //type: _resultType,
+          //name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
         };
 
         setImages(prevImages => prevImages.concat(img));
@@ -76,16 +74,40 @@ const CardCrearPlato = ({
     setShowImage(false);
   };
 
+  //console.log('imagenes', images);
+
   const deleteImage = key => {
     if (images.length) {
       const _images = images.filter((image, index) => index != key);
       setImages(_images);
     }
-    console.log(images.length);
     if (images.length === 1) {
       setShowImage(true);
     }
   };
+
+  const setPlato = () => {
+    console.log('estoy', value);
+    console.log('estoy', items);
+    items.find(item => {
+      if (item.value === value) {
+        const id = item.id;
+      }
+    });
+    const data = {
+      categoria_id: id,
+      nombre: nombrePlato,
+      ingredientes: ingrediente,
+      aptoVegano: checkedVeganos,
+      aptoCeliaco: checkedCeliacos,
+      activo: true,
+      precio: precio,
+      imagenes: images,
+    };
+    console.log('Datos a enviar por plato: ', data);
+  };
+
+  setPlato();
 
   return (
     <SafeAreaView
@@ -263,15 +285,16 @@ const CardCrearPlato = ({
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  {images.map((image, index) => (
+                  {images.map((image, key) => (
                     <View
                       style={{
                         alignItems: 'center',
                         justifyContent: 'center',
                       }}
-                      key={index}>
+                      key={key}>
                       <Image
-                        source={{uri: image.uri.toString()}}
+                        key={key}
+                        source={{uri: image.imagen.toString()}}
                         style={{
                           height: 110,
                           width: 100,
@@ -305,8 +328,6 @@ const CardCrearPlato = ({
             </View>
           )}
         </View>
-        <Text>{index}</Text>
-
         <Feather
           name="trash-2"
           style={{
@@ -317,8 +338,7 @@ const CardCrearPlato = ({
             fontSize: 20,
           }}
           onPress={() => {
-            console.log('INDEX onpress: ', index);
-            deletePlato(index);
+            deletePlato(id);
           }}
         />
       </ScrollView>

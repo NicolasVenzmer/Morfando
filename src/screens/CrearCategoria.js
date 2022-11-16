@@ -74,13 +74,13 @@ const CrearCategoria = ({navigation}) => {
   };
 
   const getRestaurant = async () => {
-    setIsLoading(true);
     const id = restaurant.id;
     const GET_RESTAURANTS_URL = `/restaurant${id}`;
     axios
       .get(GET_RESTAURANTS_URL)
       .then(res => {
         const categorias = res.data[0].categorias;
+        console.log(categorias)
         setCategorias(categorias);
       })
       .catch(e => {
