@@ -52,7 +52,8 @@ const PlatoType = plato => {
   );
 };
 
-const Plato = ({plato}) => {
+const Plato = ({categoria}) => {
+  console.log("estoy en plato", categoria)
   return (
     <View
       style={{
@@ -67,7 +68,7 @@ const Plato = ({plato}) => {
           left: 5,
           marginBottom: 5,
         }}>
-        {plato?.category?.nombre}
+        {categoria.nombre}
       </Text>
       <View
         style={{

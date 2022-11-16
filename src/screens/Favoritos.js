@@ -26,11 +26,12 @@ const Favoritos = ({navigation}) => {
   const getFavorites = async () => {
     setLoading(true);
     const id = userInfo.id;
-    const GET_FAVORITES_URL = `/user/${id}/favorites`;
+    const GET_FAVORITES_URL = `/user${id}`;
     axios
       .get(GET_FAVORITES_URL)
       .then(res => {
-        setRestaurants(res.data);
+        setRestaurants(res.data[0].favorite);
+        //console.log("favoritos:", res.data[0].favorite)
       })
       .catch(e => {
         console.log(`Restaurants GET error ${e}`);

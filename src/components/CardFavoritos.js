@@ -6,7 +6,7 @@ import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.pn
 
 const CardFavoritos = ({restaurant, navigation, deleteFavorite}) => {
   //NO ME TRAE LA IMAGEN EN FAVORITOS
-  console.log("favorito",restaurant)
+  console.log("Card de Favoritos: ",restaurant.restaurante.imagenes[0].imagen)
   return (
     <>
       {restaurant.activo ? (
@@ -51,7 +51,7 @@ const CardFavoritos = ({restaurant, navigation, deleteFavorite}) => {
                 width: '100%',
                 height: 140,
               }}
-              //source={{uri: restaurant.imagenes[0]?.imagen}}
+              source={{uri: restaurant.restaurante.imagenes[0].imagen}}
             />
           </View>
           <View style={{width: '100%', alignItems: 'center'}}>

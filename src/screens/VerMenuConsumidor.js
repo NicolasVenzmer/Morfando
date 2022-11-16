@@ -8,77 +8,32 @@ const VerMenuConsumidor = ({navigation}) => {
   const route = useRoute();
   const [menus, setMenus] = useState([]);
   const [emptyMenus, setEmptyMenus] = useState(true);
+  const [platos, setPlatos] = useState([])
 
   useEffect(() => {
-    const plates = route.params.restaurant.plates;
-    setMenus(plates)
+    const plates = route.params.restaurant.categorias;
+    setMenus(plates);
     if (!!menus) {
       setEmptyMenus(false);
     }
-  }, []);
+  }, [route.params]);
 
-  console.log('Ya cargue los menus: ', route.params.restaurant);
+  useEffect(() => {
+    const dataList = menus.map(({nombre, platos}) => ({
+      nombre: nombre,
+      platos: platos,
+    }));
+    console.log(dataList);
+    setPlatos(dataList);
+  }, [menus]);
 
-  const platos = [
-    {
-      id: 1,
-      title: 'Entradas',
-      nombre: 'Patitas de pollo Rosa Negras',
-      descripcion: 'Patitas de pollo , arroz, huevo',
-      precio: '$2500',
-      image: require('../assets/Images/plato-prueba.jpg'),
-      celiaco: true,
-    },
-    {
-      id: 2,
-      title: 'Postre',
-      nombre: 'Patitas de pollo Rosa Negras',
-      descripcion: 'Patitas de pollo , arroz, huevo',
-      precio: '$2500',
-      image: require('../assets/Images/plato-prueba.jpg'),
-      vegano: true,
-    },
-    {
-      id: 3,
-      title: 'Plato Principal',
-      nombre: 'Patitas de pollo Rosa Negras',
-      descripcion: 'Patitas de pollo , arroz, huevo',
-      precio: '$2500',
-      image: require('../assets/Images/plato-prueba.jpg'),
-      celiaco: true,
-      vegano: true,
-    },
-    {
-      id: 4,
-      title: 'Plato Principal',
-      nombre: 'Patitas de pollo Rosa Negras',
-      descripcion: 'Patitas de pollo , arroz, huevo',
-      precio: '$2500',
-      image: require('../assets/Images/plato-prueba.jpg'),
-      celiaco: true,
-      vegano: true,
-    },
-    {
-      id: 5,
-      title: 'Plato Principal',
-      nombre: 'Patitas de pollo Rosa Negras',
-      descripcion: 'Patitas de pollo , arroz, huevo',
-      precio: '$2500',
-      image: require('../assets/Images/plato-prueba.jpg'),
-      celiaco: true,
-      vegano: true,
-    },
-    {
-      id: 6,
-      title: 'Plato Principal',
-      nombre: 'Patitas de pollo Rosa Negras',
-      descripcion: 'Patitas de pollo , arroz, huevo',
-      precio: '$2500',
-      image: require('../assets/Images/plato-prueba.jpg'),
-      celiaco: true,
-      vegano: true,
-    },
-  ];
+  console.log('Ya cargue los menus: ', menus);
+
+  {
+    platos.map((categoria) => (
+   console.log(categoria)
+            ))
+  }
 
   return (
     <SafeAreaView
@@ -142,10 +97,9 @@ const VerMenuConsumidor = ({navigation}) => {
             <Image source={require('../assets/Images/empty-restaurants.png')} />
           </View>
         ) : (
-          // sacar los fragments
           <>
-            {menus?.map((plato, index) => (
-              <Plato key={index} plato={plato} />
+            {platos.map((categoria, index) => (
+              <Plato key={index} categoria={categoria} />
             ))}
           </>
         )}

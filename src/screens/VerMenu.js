@@ -11,6 +11,7 @@ const VerMenu = ({navigation}) => {
 
   useEffect(() => {
     const plates = route.params.restaurant.platos;
+    //console.log("plates:", plates)
     setMenus(plates);
     //setMenus(platos)
     if (!!menus) {
@@ -18,7 +19,7 @@ const VerMenu = ({navigation}) => {
     }
   }, []);
 
-  console.log('Ya cargue los menus: ', menus);
+  //console.log('Ya cargue los menus: ', menus);
 
   const platos = [
     {
