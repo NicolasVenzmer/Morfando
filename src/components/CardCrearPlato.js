@@ -14,36 +14,54 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Feather from 'react-native-vector-icons/Feather';
 import {Checkbox} from 'react-native-paper';
 
-const CardCrearPlato = ({
-  deletePlato,
-  plato,
-  value,
-  items,
-  setItems,
-  setValue,
-  id,
-}) => {
-  const [nombrePlato, onChangeNombrePlato] = useState(plato?.nombre || '');
-  const [precio, onChangePrecio] = useState(plato?.precio || '');
-  const [ingrediente, onChangeIngrediente] = useState(
-    plato?.ingredientes || '',
-  );
+const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
+  const [showCategories, setShowCategories] = useState(false);
+  // const setPlato = () => {
+  //   //console.log('estoy', value);
+  //   //console.log('estoy', items);
+  //   items.find(item => {
+  //     if (item.value === value) {
+  //       const id = item.id;
+  //     }
+  //   });
+  //   const data = {
+  //     categoria_id: id,
+  //     nombre: nombrePlato,
+  //     ingredientes: ingrediente,
+  //     aptoVegano: checkedVeganos,
+  //     aptoCeliaco: checkedCeliacos,
+  //     activo: true,
+  //     precio: precio,
+  //     imagenes: images,
+  //   };
+  //   console.log('Datos a enviar por plato: ', data);
+  // };
+  const onChangeName = name => {
+    onUpdate({...plato, nombre: name});
+  };
+  const updateCategory = callback => {
+    const id = callback()
+    console.log("id: ",id)
 
-  const [open, setOpen] = useState(false);
+    onUpdate({...plato, categoria_id: id});
+  };
+  const onUpdateImages = function (images) {
+    onUpdate({...plato, imagenes: images});
+  };
+  const onChangePrice = price => {
+    onUpdate({...plato, precio: Number(price)});
+  };
+  const onChangeIngredients = ingredients => {
+    onUpdate({...plato, ingredientes: ingredients});
+  };
+  const setCheckedCeliacos = bool => {
+    onUpdate({...plato, aptoCeliaco: !!bool});
+  };
+  const setCheckedVeganos = bool => {
+    onUpdate({...plato, aptoVegano: !!bool});
+  };
 
-  //Checkbox celiaco o vegetariano
-  const [checkedCeliacos, setCheckedCeliacos] = useState(
-    plato?.aptoCeliaco || false,
-  );
-  const [checkedVeganos, setCheckedVeganos] = useState(
-    plato?.aptoVegano || false,
-  );
-
-  //Images
-  const [images, setImages] = useState([]);
-  const [showImage, setShowImage] = useState(true);
-
-  const addImage = () => {
+  const onAddImage = () => {
     // const options = {
     //   selectionLimit: 1,
     //   mediaType: 'photo',
@@ -68,46 +86,16 @@ const CardCrearPlato = ({
           //name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
         };
 
-        setImages(prevImages => prevImages.concat(img));
+        onUpdateImages([...(plato?.imagenes||[]), img]);
       },
     );
-    setShowImage(false);
   };
 
-  //console.log('imagenes', images);
-
-  const deleteImage = key => {
-    if (images.length) {
-      const _images = images.filter((image, index) => index != key);
-      setImages(_images);
-    }
-    if (images.length === 1) {
-      setShowImage(true);
-    }
-  };
-
-  const setPlato = () => {
-    console.log('estoy', value);
-    console.log('estoy', items);
-    items.find(item => {
-      if (item.value === value) {
-        const id = item.id;
-      }
-    });
-    const data = {
-      categoria_id: id,
-      nombre: nombrePlato,
-      ingredientes: ingrediente,
-      aptoVegano: checkedVeganos,
-      aptoCeliaco: checkedCeliacos,
-      activo: true,
-      precio: precio,
-      imagenes: images,
+  const onDeleteImageFn = image => {
+    return function () {
+      onUpdateImages(plato?.imagenes?.filter(el => el.imagen !== image.imagen)||[]);
     };
-    console.log('Datos a enviar por plato: ', data);
   };
-
-  setPlato();
 
   return (
     <SafeAreaView
@@ -144,10 +132,10 @@ const CardCrearPlato = ({
               backgroundColor: 'white',
               width: '90%',
             }}
-            onChangeText={onChangeNombrePlato}
+            onChangeText={onChangeName}
             placeholder="Nombre del plato"
             placeholderTextColor="black"
-            value={nombrePlato}
+            value={plato.nombre}
           />
           <DropDownPicker
             placeholder="Categoria"
@@ -162,12 +150,15 @@ const CardCrearPlato = ({
               alignSelf: 'center',
             }}
             min={1}
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
+            schema={{
+              label: 'nombre',
+              value: 'id',
+            }}
+            open={showCategories}
+            value={plato.categoria_id}
+            items={categories}
+            setOpen={setShowCategories}
+            setValue={updateCategory}
           />
           <TextInput
             style={{
@@ -179,11 +170,11 @@ const CardCrearPlato = ({
               backgroundColor: 'white',
               width: '90%',
             }}
-            onChangeText={onChangePrecio}
+            onChangeText={onChangePrice}
             keyboardType="numeric"
             placeholder="Precio $$"
             placeholderTextColor="black"
-            value={precio}
+            value={plato.precio.toString()}
           />
           <TextInput
             style={{
@@ -195,10 +186,10 @@ const CardCrearPlato = ({
               backgroundColor: 'white',
               width: '90%',
             }}
-            onChangeText={onChangeIngrediente}
+            onChangeText={onChangeIngredients}
             placeholder="Ingredientes / Descripcion del plato"
             placeholderTextColor="black"
-            value={ingrediente}
+            value={plato.ingredientes} // es en plural porque sino no muestra la data que trae existente
           />
           <View
             style={{
@@ -214,10 +205,10 @@ const CardCrearPlato = ({
                 left: 10,
               }}>
               <Checkbox
-                status={checkedCeliacos ? 'checked' : 'unchecked'}
+                status={plato.aptoCeliaco ? 'checked' : 'unchecked'}
                 color="blue"
                 onPress={() => {
-                  setCheckedCeliacos(!checkedCeliacos);
+                  setCheckedCeliacos(!plato.aptoCeliaco);
                 }}
               />
               <Text style={{fontWeight: '300', color: 'black'}}>
@@ -232,10 +223,10 @@ const CardCrearPlato = ({
                 left: 10,
               }}>
               <Checkbox
-                status={checkedVeganos ? 'checked' : 'unchecked'}
+                status={plato.aptoVegano ? 'checked' : 'unchecked'}
                 color="blue"
                 onPress={() => {
-                  setCheckedVeganos(!checkedVeganos);
+                  setCheckedVeganos(!plato.aptoVegano);
                 }}
               />
               <Text style={{fontWeight: '300', color: 'black'}}>
@@ -243,7 +234,7 @@ const CardCrearPlato = ({
               </Text>
             </View>
           </View>
-          {showImage ? (
+          {!plato?.imagenes?.length ? (
             <Pressable
               style={{
                 backgroundColor: '#EFECEC',
@@ -262,7 +253,7 @@ const CardCrearPlato = ({
                   fontSize: 30,
                   right: 10,
                 }}
-                onPress={addImage}
+                onPress={onAddImage}
               />
             </Pressable>
           ) : (
@@ -285,7 +276,7 @@ const CardCrearPlato = ({
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  {images.map((image, key) => (
+                  {plato?.imagenes?.map((image, key) => {
                     <View
                       style={{
                         alignItems: 'center',
@@ -308,10 +299,10 @@ const CardCrearPlato = ({
                           top: 3,
                           fontSize: 20,
                         }}
-                        onPress={() => deleteImage(key)}
+                        onPress={onDeleteImageFn(image)}
                       />
-                    </View>
-                  ))}
+                    </View>;
+                  })}
                   <Ionicons
                     name="add-circle"
                     style={{
@@ -321,7 +312,7 @@ const CardCrearPlato = ({
                       width: 100,
                       heigh: 100,
                     }}
-                    onPress={addImage}
+                    onPress={onAddImage}
                   />
                 </View>
               </ScrollView>
@@ -337,9 +328,7 @@ const CardCrearPlato = ({
             marginTop: 5,
             fontSize: 20,
           }}
-          onPress={() => {
-            deletePlato(id);
-          }}
+          onPress={onDelete}
         />
       </ScrollView>
     </SafeAreaView>

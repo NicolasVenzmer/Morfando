@@ -85,7 +85,7 @@ const MisRestaurantes = ({navigation}) => {
       id: restaurant.id,
       activo: false,
     };
-    console.log('El ID del restaurante a eliminar es: ', sendData.id);
+    //console.log('El ID del restaurante a eliminar es: ', sendData.id);
     const DELETE_RESTAURANTS_URL = '/restaurant';
     axios
       .delete(DELETE_RESTAURANTS_URL, {data: sendData})

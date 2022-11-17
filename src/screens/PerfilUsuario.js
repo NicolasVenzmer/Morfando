@@ -50,15 +50,15 @@ const PerfilUsuario = ({navigation}) => {
         }
         const _response = response.assets;
         let _resultUri = _response.map(a => a.uri);
-        let _resultType = _response.map(a => a.type);
-        let _resultfileName = _response.map(a => a.fileName);
+        // let _resultType = _response.map(a => a.type);
+        // let _resultfileName = _response.map(a => a.fileName);
         const img = {
           imagen: _resultUri.toString(),
           //type: _resultType,
           //name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
         };
 
-        setImage(img);
+        setImage(img.imagen);
       },
     );
   };
@@ -84,9 +84,9 @@ const PerfilUsuario = ({navigation}) => {
   };
 
   // Cambio los datos del usuario
-  const onChangeUserData = () => {
+  const onChangeUserData = async () => {
     //Enviar los datos al back
-    if (!Helper.validateEmail(nombreUsuario) || Helper.isEmpty(image)) return;
+   //if (!Helper.isEmpty(nombreUsuario) || Helper.isEmpty(image)) return;
     const USER_URL = '/user';
     setIsLoading(true);
     const sendData = {
@@ -94,12 +94,12 @@ const PerfilUsuario = ({navigation}) => {
       nombre: nombreUsuario,
       correo: correo,
       contrasenia: contrasenia,
-      imagen: image?.imagen.toString(),
+      imagen: image,
       duenio: duenio,
       activo: activo,
     };
     console.log('IMAGEN', image?.imagen);
-    axios
+    await axios
       .put(USER_URL, sendData)
       .then(res => {
         console.log('Edited User: ', res.data);
@@ -136,6 +136,7 @@ const PerfilUsuario = ({navigation}) => {
 
   useEffect(() => {
     getUserInfo();
+    console.log("useEffect", image)
   }, [image, nombreUsuario]);
 
   return (
@@ -190,7 +191,7 @@ const PerfilUsuario = ({navigation}) => {
           }}>
           <View>
             <Avatar.Image
-              source={{uri: image}}
+              source={{uri:image}}
               style={{
                 marginBottom: 20,
                 objectFit: 'fit',

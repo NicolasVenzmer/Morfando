@@ -15,21 +15,10 @@ import {useRoute} from '@react-navigation/native';
 
 const CrearMenu = ({navigation}) => {
   const route = useRoute();
-  const [nombrePlato, onChangeNombrePlato] = useState(false);
-  const [precio, onChangePrecio] = useState(false);
-  const [ingrediente, onChangeIngrediente] = useState(false);
   const [restaurant, setRestaurant] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [platosTemp, setPlatosTemp] = useState([]);
-  const [checkedCeliacos, setCheckedCeliacos] = useState(false);
-  const [checkedVeganos, setCheckedVeganos] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState([]);
-  const [items, setItems] = useState([]);
-  const [images, setImages] = useState([]);
-  const [showImage, setShowImage] = useState(true);
-  const [categorias, setCategorias] = useState([]);
-  const [platos, setPlatos] = useState([]);
+  const [categoryOptions, setCategoryOptions] = useState([]);
 
   const getRestaurant = () => {
     if (!restaurant?.id) return;
@@ -40,13 +29,8 @@ const CrearMenu = ({navigation}) => {
       .get(GET_RESTAURANTS_URL)
       .then(res => {
         const categorias = res.data[0].categorias;
-        const dataList = categorias.map(({id, nombre}) => ({
-          id: id,
-          label: nombre,
-          value: nombre,
-        }));
-        console.log(dataList)
-        setItems(dataList);
+        const dataList = categorias 
+        setCategoryOptions(dataList);
       })
       .catch(e => {
         console.log(`Restaurant GET error ${e}`);
@@ -65,17 +49,20 @@ const CrearMenu = ({navigation}) => {
   useEffect(getRestaurant, [restaurant]);
 
   const addPlato = () => {
-    const _platosTemp = [...platosTemp];
-    _platosTemp.push({plato: ''});
-    setPlatosTemp(_platosTemp);
-  };
-  const deletePlato = key => {
-    const _platosTemp = [
-      ...platosTemp.slice(0, key),
-      ...platosTemp.slice(key + 1),
-    ];
-    console.log('platos temp: ', _platosTemp);
-    setPlatosTemp(_platosTemp);
+    const newPlatos = [...platosTemp];
+    const id = Date.now()
+    newPlatos.push({ 
+      id: id,
+      categoria_id: null,
+      nombre: '',
+      ingredientes: '',
+      aptoVegano: false,
+      aptoCeliaco: false,
+      activo: true,
+      precio: 0,
+      imagenes:  []
+    });
+    setPlatosTemp(newPlatos);
   };
 
   const onSubmitRestaurant = () => {
@@ -112,49 +99,22 @@ const CrearMenu = ({navigation}) => {
     // }
   };
 
-  const addImage = () => {
-    // const options = {
-    //   selectionLimit: 1,
-    //   mediaType: 'photo',
-    //   includeBase64: false,
-    // };
-    launchImageLibrary(
-      {
-        height: 100,
-        width: 100,
-      },
-      response => {
-        if (response.didCancel) {
-          return;
-        }
-        const _response = response.assets;
-        let _resultUri = _response.map(a => a.uri);
-        let _resultType = _response.map(a => a.type);
-        let _resultfileName = _response.map(a => a.fileName);
-        const img = {
-          uri: _resultUri,
-          type: _resultType,
-          name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
-        };
-
-        setImages(prevImages => prevImages.concat(img));
-      },
-    );
-    setShowImage(false);
+  const deletePlatoFn = plato => {
+    return function () {
+      const filteredPlates = platosTemp.filter(el => el.id !== plato.id);
+      setPlatosTemp(filteredPlates);
+    };
   };
-
-  const deleteImage = key => {
-    if (images.length) {
-      const _images = images.filter((image, index) => index != key);
-      setImages(_images);
-    }
-    console.log(images.length);
-    if (images.length === 1) {
-      setShowImage(true);
-    }
+  const updatePlateFn = plato => {
+    return function (newPlate) {
+      const index = platosTemp.findIndex(el => el.id === plato.id);
+      const newPlatos = [...platosTemp];
+      newPlatos[index] = newPlate;
+      setPlatosTemp(newPlatos);
+      console.log('Plato a envar: ', newPlatos);
+    };
+    
   };
-
-
 
   return (
     <SafeAreaView
@@ -226,16 +186,14 @@ const CrearMenu = ({navigation}) => {
           width: '100%',
           height: '100%',
         }}>
-        {platosTemp.map((plato, index) => (
+        {platosTemp?.map((plato, index) => (
           <CardCrearPlato
             key={index}
             id={index}
             plato={plato}
-            value={value}
-            items={items}
-            setItems={setItems}
-            setValue={setValue}
-            deletePlato={i => deletePlato(i)}
+            categories={categoryOptions}
+            onUpdate={updatePlateFn(plato)}
+            onDelete={deletePlatoFn(plato)}
           />
         ))}
         <Pressable

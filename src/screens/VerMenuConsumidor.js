@@ -8,7 +8,6 @@ const VerMenuConsumidor = ({navigation}) => {
   const route = useRoute();
   const [menus, setMenus] = useState([]);
   const [emptyMenus, setEmptyMenus] = useState(true);
-  const [platos, setPlatos] = useState([])
 
   useEffect(() => {
     const plates = route.params.restaurant.categorias;
@@ -18,22 +17,7 @@ const VerMenuConsumidor = ({navigation}) => {
     }
   }, [route.params]);
 
-  useEffect(() => {
-    const dataList = menus.map(({nombre, platos}) => ({
-      nombre: nombre,
-      platos: platos,
-    }));
-    console.log(dataList);
-    setPlatos(dataList);
-  }, [menus]);
-
   console.log('Ya cargue los menus: ', menus);
-
-  {
-    platos.map((categoria) => (
-   console.log(categoria)
-            ))
-  }
 
   return (
     <SafeAreaView
@@ -98,8 +82,16 @@ const VerMenuConsumidor = ({navigation}) => {
           </View>
         ) : (
           <>
-            {platos.map((categoria, index) => (
-              <Plato key={index} categoria={categoria} />
+            {menus.map(({nombre, platos}, index) => (
+              <>
+                <Text>---</Text>               
+                 <Text>{nombre}</Text>
+                {platos.map((item, i) => (
+                  <>
+                    <Text>{item.nombre}</Text>
+                  </>
+                ))}
+              </>
             ))}
           </>
         )}
