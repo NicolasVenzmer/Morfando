@@ -12,6 +12,8 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import CardCrearPlato from '../components/CardCrearPlato';
 import axios from '../api/axios';
 import {useRoute} from '@react-navigation/native';
+import ModalPoup from '../components/ModalPopUp';
+import Theme from '../assets/fonts/Theme';
 
 const CrearMenu = ({navigation}) => {
   const route = useRoute();
@@ -19,6 +21,8 @@ const CrearMenu = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [platosTemp, setPlatosTemp] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState([]);
+  const [platoCreado, setVisiblePlatoCreado] = useState(false);
+  const [hayPlatos, setHayPlatos] = useState(false)
 
   const getRestaurant = () => {
     if (!restaurant?.id) return;
@@ -29,7 +33,7 @@ const CrearMenu = ({navigation}) => {
       .get(GET_RESTAURANTS_URL)
       .then(res => {
         const categorias = res.data[0].categorias;
-        const dataList = categorias 
+        const dataList = categorias;
         setCategoryOptions(dataList);
       })
       .catch(e => {
@@ -39,9 +43,13 @@ const CrearMenu = ({navigation}) => {
   };
 
   useEffect(() => {
-    //console.log('restaurant', route.params.restaurant.categorias);
+    //console.log('restaurant', route.params.restaurant.platos);
     if (!route?.params?.restaurant) return;
     const plates = route.params.restaurant.platos;
+    if(plates.length>0){
+      setHayPlatos(true)
+      //console.log("hay platos y son: ", plates)
+    }
     const restaurant = route.params.restaurant;
     setRestaurant(restaurant);
     setPlatosTemp(plates);
@@ -50,8 +58,8 @@ const CrearMenu = ({navigation}) => {
 
   const addPlato = () => {
     const newPlatos = [...platosTemp];
-    const id = Date.now()
-    newPlatos.push({ 
+    const id = Date.now();
+    newPlatos.push({
       id: id,
       categoria_id: null,
       nombre: '',
@@ -59,44 +67,61 @@ const CrearMenu = ({navigation}) => {
       aptoVegano: false,
       aptoCeliaco: false,
       activo: true,
-      precio: 0,
-      imagenes:  []
+      precio: 1,
+      imagenes: [],
     });
     setPlatosTemp(newPlatos);
   };
 
-  const onSubmitRestaurant = () => {
-    //Enviar los datos al back
-    //Ejemplo de JSON a enviar al back.
-    //     {
-    //     "restaurante_id": 2,
-    //     "platos": [
-    //         { "categoria_id": 1, -> el id de la categoria seleccionada por ejempl o "Postre" es id=1
-    //         "nombre": "Batido de banana y kiwi",
-    //         "ingredientes": "Banana y kiwi",
-    //         "aptoVegano": true,
-    //         "aptoCeliaco": true,
-    //         "activo": true,
-    //         "precio": 3,
-    //         "imagenes": [
-    //             {"imagen": "unaimagen"},
-    //             {"imagen": "dosimagen"}
-    //             ]
-    //         },
-    //         { "categoria_id": 1,
-    //         "nombre": "Batido de frutilla, banana y kiwi",
-    //         "ingredientes": "Banana, frutilla y kiwi",
-    //         "aptoVegano": true,
-    //         "aptoCeliaco": true,
-    //         "activo": true,
-    //         "precio": 3,
-    //         "imagenes": [
-    //             {"imagen": "tresimagen"},
-    //             {"imagen": "cuatroimagen"}
-    //             ]
-    //         }
-    //     ]
-    // }
+  //Enviar los datos al back
+  const crearMenu = () => {
+    
+    console.log('estoy creando el menu');
+    const platos = platosTemp.map(
+      ({id, ...keepAttrs}) => keepAttrs,
+    );
+    const sendData = {
+      restaurant_id: restaurant.id,
+      platos,
+    };
+    console.log('Datos a enviar al back: ', sendData);
+    const CREATE_PLATE_URL = '/plate';
+    axios
+      .post(CREATE_PLATE_URL, sendData)
+      .then(res => {
+          navigation.navigate('MisRestaurantes', {sendData});
+        console.log('Plate Created Data: ', res.data);
+      })
+      .catch(e => {
+        console.log(`Plate error ${e}`);
+      });
+    setVisiblePlatoCreado(true);
+    setIsLoading(false);
+  };
+
+  const editarMenu = () => {
+    console.log('estoy editando el menu');
+    const platos = platosTemp.map(
+      ({id, category, createdAt, updatedAt, restaurante_id,imagen, ...keepAttrs}) =>
+        keepAttrs,
+    );
+    const sendData = {
+      restaurant_id: restaurant.id,
+      platos,
+    };
+    console.log('Datos a enviar al back234352: ', sendData.platos);
+    const EDIT_PLATE_URL = '/plate';
+    // axios
+    //   .put(EDIT_PLATE_URL, sendData)
+    //   .then(res => {
+    //     navigation.navigate('MisRestaurantes', {sendData});
+    //     console.log('Plate Created Data: ', res.data);
+    //   })
+    //   .catch(e => {
+    //     console.log(`Plate error ${e}`);
+    //   });
+    setVisiblePlatoCreado(true);
+    setIsLoading(false);
   };
 
   const deletePlatoFn = plato => {
@@ -111,9 +136,8 @@ const CrearMenu = ({navigation}) => {
       const newPlatos = [...platosTemp];
       newPlatos[index] = newPlate;
       setPlatosTemp(newPlatos);
-      console.log('Plato a envar: ', newPlatos);
+      //console.log('Plato a envar: ', newPlatos);
     };
-    
   };
 
   return (
@@ -143,15 +167,28 @@ const CrearMenu = ({navigation}) => {
           }}
           onPress={() => navigation.goBack()}
         />
-        <Text
-          style={{
-            color: 'black',
-            fontWeight: '500',
-            fontSize: 20,
-            fontFamily: 'Roboto',
-          }}>
-          Crear Menu
-        </Text>
+        {hayPlatos ? (
+          <Text
+            style={{
+              color: 'black',
+              fontWeight: '500',
+              fontSize: 20,
+              fontFamily: 'Roboto',
+            }}>
+            Editar Menu
+          </Text>
+        ) : (
+          <Text
+            style={{
+              color: 'black',
+              fontWeight: '500',
+              fontSize: 20,
+              fontFamily: 'Roboto',
+            }}>
+            Crear Menu
+          </Text>
+        )}
+
         <Pressable
           style={{
             width: '25%',
@@ -225,30 +262,96 @@ const CrearMenu = ({navigation}) => {
           </Text>
         </Pressable>
       </ScrollView>
-      <Pressable
-        style={{
-          marginTop: 10,
-          marginBottom: 10,
-          position: 'relative',
-          width: '80%',
-          bottom: 0,
-          height: 50,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#E14852',
-          borderRadius: 30,
-        }}
-        onPress={() => navigation.navigate('VerMenu', {platosTemp})}>
-        <Text
+
+      <ModalPoup visible={platoCreado}>
+        <View style={{alignItems: 'flex-start'}}>
+          <Text style={{fontSize: 20, color: 'black'}}>Menu guardado.</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '2%',
+              marginBottom: '2%',
+              marginHorizontal: '5%',
+            }}
+          />
+        </View>
+
+        <View
           style={{
-            color: '#fdfdfd',
-            fontWeight: '400',
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: '1%',
+            marginBottom: '1%',
+            marginHorizontal: '1%',
+          }}>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '100%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: '#E14852',
+              borderRadius: 30,
+            }}
+            onPress={() => {
+              setVisiblePlatoCreado(false);
+            }}>
+            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
+          </Pressable>
+        </View>
+      </ModalPoup>
+      {hayPlatos ? (
+        <Pressable
+          style={{
+            marginTop: 10,
+            marginBottom: 10,
+            position: 'relative',
+            width: '80%',
+            bottom: 0,
+            height: 50,
             justifyContent: 'center',
             alignItems: 'center',
-          }}>
-          Guardar
-        </Text>
-      </Pressable>
+            backgroundColor: '#E14852',
+            borderRadius: 30,
+          }}
+          onPress={() => editarMenu()}>
+          <Text
+            style={{
+              color: '#fdfdfd',
+              fontWeight: '400',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            Guardar
+          </Text>
+        </Pressable>
+      ) : (
+        <Pressable
+          style={{
+            marginTop: 10,
+            marginBottom: 10,
+            position: 'relative',
+            width: '80%',
+            bottom: 0,
+            height: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#E14852',
+            borderRadius: 30,
+          }}
+          onPress={() => crearMenu()}>
+          <Text
+            style={{
+              color: '#fdfdfd',
+              fontWeight: '400',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            Crear
+          </Text>
+        </Pressable>
+      )}
     </SafeAreaView>
   );
 };

@@ -75,7 +75,7 @@ export const AuthProvider = ({children}) => {
 
       if (userInfo) {
         // ACA ME FIJO SI EL DUEÑO O NO
-        console.log(userInfo.duenio)
+        //console.log(userInfo.duenio)
         if (userInfo.duenio) {
           setEsDueño(true);
         }

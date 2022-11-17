@@ -47,7 +47,7 @@ const RestaurantesDisponibles = ({navigation}) => {
   const onChangeSearch = query => {
     if (query) {
       const newData = restaurants.filter(restaurant => {
-        console.log('estoy en el searching', restaurant);
+        //console.log('estoy en el searching', restaurant);
         const itemData = restaurant.nombre
           ? restaurant.nombre.toUpperCase()
           : ''.toUpperCase();
@@ -88,11 +88,11 @@ const RestaurantesDisponibles = ({navigation}) => {
       usuario_id: userInfo.id,
       restaurante_id: restaurant.id,
     };
-    console.log(sendData);
+    //console.log(sendData);
     axios
       .post(ADD_FAVORITE_URL, sendData)
       .then(res => {
-        console.log(res.data);
+        //console.log(res.data);
       })
       .catch(e => {
         console.log(`Favorite GET error ${e}`);

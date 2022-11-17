@@ -75,7 +75,7 @@ const OlvideMiContraseña = ({navigation}) => {
           navigation.navigate('RestaurarContraseña');
         }
 
-        console.log('data', res.status);
+        //console.log('data', res.status);
       })
       .catch(e => {
         console.log(`Login error ${e}`);

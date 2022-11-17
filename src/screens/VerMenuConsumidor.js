@@ -81,19 +81,32 @@ const VerMenuConsumidor = ({navigation}) => {
             <Image source={require('../assets/Images/empty-restaurants.png')} />
           </View>
         ) : (
-          <>
-            {menus.map(({nombre, platos}, index) => (
-              <>
-                <Text>---</Text>               
-                 <Text>{nombre}</Text>
-                {platos.map((item, i) => (
-                  <>
-                    <Text>{item.nombre}</Text>
-                  </>
-                ))}
-              </>
-            ))}
-          </>
+            <View
+              style={{
+                width: '100%',
+              }}>
+              {/* {menus.nombre && menus.platos !== [] ():null} */}
+              {menus.map(({nombre, platos}, index) => (
+                <>
+                  <Text
+                    key={index}
+                    style={{
+                      color: 'black',
+                      fontWeight: '350',
+                      width: '80%',
+                      alignSelf: 'center',
+                      left: 5,
+                      fontSize: 20,
+                      marginBottom: 5,
+                    }}>
+                    {nombre}
+                  </Text>
+                  {platos?.map((item, i) => (
+                    <Plato key={i} plato={item} />
+                  ))}
+                </>
+              ))}
+            </View>
         )}
       </ScrollView>
     </SafeAreaView>

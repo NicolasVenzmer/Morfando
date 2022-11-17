@@ -52,24 +52,25 @@ const PlatoType = plato => {
   );
 };
 
-const Plato = ({categoria}) => {
-  console.log("estoy en plato", categoria)
+const Plato = ({plato}) => {
+  //console.log("estoy en plato", categoria)
   return (
-    <View
-      style={{
-        width: '100%',
-      }}>
-      <Text
-        style={{
-          color: 'black',
-          fontWeight: '350',
-          width: '80%',
-          alignSelf: 'center',
-          left: 5,
-          marginBottom: 5,
-        }}>
-        {categoria.nombre}
-      </Text>
+    // <View
+    //   style={{
+    //     width: '100%',
+    //   }}>
+    //   <Text
+    //     style={{
+    //       color: 'black',
+    //       fontWeight: '350',
+    //       width: '80%',
+    //       alignSelf: 'center',
+    //       left: 5,
+    //       marginBottom: 5,
+    //     }}>
+    //     {categoria.nombre}
+    //   </Text>
+    <>
       <View
         style={{
           width: '80%',
@@ -127,7 +128,8 @@ const Plato = ({categoria}) => {
           </View>
         </View>
       </View>
-    </View>
+    </>
+    // </View>
   );
 };
 

@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 
 const CardRestauranteConsumidor = ({restaurant, addFavorite, navigation}) => {
-  console.log("estoy en la card de restaurante del consumidor", restaurant.imagenes[0]?.imagen)
+  //console.log("estoy en la card de restaurante del consumidor", restaurant.imagenes[0]?.imagen)
   return (
     <>
       {restaurant.activo ? (

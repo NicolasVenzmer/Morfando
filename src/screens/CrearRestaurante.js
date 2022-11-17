@@ -56,11 +56,10 @@ const CrearRestaurante = ({navigation}) => {
       provincia: provincia,
       pais: pais,
       activo: true,
-      //Chequear porque se mandan los horarios vacios
       horas: horarios,
       imagenes: images,
     };
-    console.log('Los datos a enviar son: ', sendData);
+    //console.log('Los datos a enviar son: ', sendData);
     //console.log(userToken)
     const CREATE_RESTAURANT_URL = '/restaurant';
     axios

@@ -58,11 +58,11 @@ const DetalleRestaurante = ({navigation}) => {
       usuario_id: userInfo.id,
       restaurante_id: restaurant.id,
     };
-    console.log(sendData);
+    //console.log(sendData);
     axios
       .post(ADD_FAVORITE_URL, sendData)
       .then(res => {
-        console.log(res.data);
+        //console.log(res.data);
       })
       .catch(e => {
         console.log(`Favorite GET error ${e}`);

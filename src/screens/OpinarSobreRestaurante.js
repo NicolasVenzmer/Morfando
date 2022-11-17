@@ -31,10 +31,10 @@ const OpinarSobreRestaurante = ({navigation}) => {
   }, []);
 
   //console.log('Estoy en Opiniones, la data del restaurante es: ', restaurant);
-  console.log(
-    'Estoy en Opiniones, las opiniones del restaurante son: ',
-    opinions,
-  );
+  // console.log(
+  //   'Estoy en Opiniones, las opiniones del restaurante son: ',
+  //   opinions,
+  // );
 
   return (
     <SafeAreaView

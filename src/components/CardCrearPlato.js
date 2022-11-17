@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -16,36 +16,16 @@ import {Checkbox} from 'react-native-paper';
 
 const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
   const [showCategories, setShowCategories] = useState(false);
-  // const setPlato = () => {
-  //   //console.log('estoy', value);
-  //   //console.log('estoy', items);
-  //   items.find(item => {
-  //     if (item.value === value) {
-  //       const id = item.id;
-  //     }
-  //   });
-  //   const data = {
-  //     categoria_id: id,
-  //     nombre: nombrePlato,
-  //     ingredientes: ingrediente,
-  //     aptoVegano: checkedVeganos,
-  //     aptoCeliaco: checkedCeliacos,
-  //     activo: true,
-  //     precio: precio,
-  //     imagenes: images,
-  //   };
-  //   console.log('Datos a enviar por plato: ', data);
-  // };
   const onChangeName = name => {
     onUpdate({...plato, nombre: name});
   };
   const updateCategory = callback => {
     const id = callback()
-    console.log("id: ",id)
 
     onUpdate({...plato, categoria_id: id});
   };
   const onUpdateImages = function (images) {
+    console.log("OnUpdateImages: ", images)
     onUpdate({...plato, imagenes: images});
   };
   const onChangePrice = price => {
@@ -96,6 +76,14 @@ const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
       onUpdateImages(plato?.imagenes?.filter(el => el.imagen !== image.imagen)||[]);
     };
   };
+
+  useEffect(()=>{
+    //console.log('estas son las wqewqe', plato.imagen[0].imagen);
+    const imagenRecibida = JSON.stringify({imagen: plato.imagen[0].imagen});
+      //console.log("useEffect",imagenRecibida.imagen);
+      
+      onUpdateImages([...(plato?.imagenes || []), imagenRecibida]);
+  },[])
 
   return (
     <SafeAreaView
@@ -277,15 +265,17 @@ const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
                     alignItems: 'center',
                   }}>
                   {plato?.imagenes?.map((image, key) => {
+                    {console.log("IMAGEN", image)}
                     <View
                       style={{
                         alignItems: 'center',
                         justifyContent: 'center',
                       }}
                       key={key}>
+                      {console.log('IMAGEN', image.imagen)}
                       <Image
                         key={key}
-                        source={{uri: image.imagen.toString()}}
+                        source={{uri: image}}
                         style={{
                           height: 110,
                           width: 100,

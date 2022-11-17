@@ -52,14 +52,12 @@ const EditarRestaurante = ({navigation}) => {
         id: restaurant.id,
         nombre: nombreRestaurante,
         usuario_id: userInfo.id,
-        latitud: -34.62289,
-        longitud: -58.40821,
         cerradoTemporalmente: false,
         tipoDeComida: tipoDeComida,
         rangoPrecio: rangoPrecio,
         calificacion: 1,
         calle: calle,
-        numero: numero,
+        numero: Number(numero),
         barrio: barrio,
         localidad: localidad,
         provincia: provincia,
@@ -68,7 +66,7 @@ const EditarRestaurante = ({navigation}) => {
         horas: horarios,
         imagenes: images,
       };
-      console.log('Los datos a enviar son: ', sendData);
+      //console.log('Los datos a enviar son: ', sendData);
 
       const EDIT_RESTAURANT_URL = '/restaurant';
       if (visible)
@@ -81,7 +79,7 @@ const EditarRestaurante = ({navigation}) => {
             if (res.status === 200) {
               navigation.navigate('MisRestaurantes', sendData);
             }
-            console.log('Restaurant Edited Data: ', res.data);
+            //console.log('Restaurant Edited Data: ', res.data);
           })
           .catch(e => {
             console.log(`Edit restaurant error ${e}`);
@@ -91,10 +89,10 @@ const EditarRestaurante = ({navigation}) => {
 
     useEffect(() => {
       const restaurant = route.params.restaurant;
-      console.log('Estoy en el restaurante: ', restaurant);
+      console.log('Estoy en el restaurante: ', restaurant.address);
       onChangenombreRestaurante(restaurant.nombre);
       onChangeCalle(restaurant.calle);
-      onChangeNumero(restaurant.numero);
+      onChangeNumero(restaurant.numero.toString());
       onChangeLocalidad(restaurant.localidad);
       onChangeBarrio(restaurant.barrio);
       onChangeProvincia(restaurant.provincia);
@@ -413,7 +411,7 @@ const EditarRestaurante = ({navigation}) => {
             keyboardType="numeric"
             onChangeText={onChangeBarrio}
             placeholder="Barrio"
-            value={barrio}
+            value={barrio.toString()}
           />
           <TextInput
             style={{

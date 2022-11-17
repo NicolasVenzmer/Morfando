@@ -79,7 +79,7 @@ const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
               height: 150,
             }}
             resizeMode="contain"
-            source={{uri: restaurant?.imagenes[0]?.imagen}}
+            source={{uri: restaurant?.imagenes[0].imagen}}
           />
         </Pressable>
       ) : null}

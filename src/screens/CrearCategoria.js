@@ -80,7 +80,7 @@ const CrearCategoria = ({navigation}) => {
       .get(GET_RESTAURANTS_URL)
       .then(res => {
         const categorias = res.data[0].categorias;
-        console.log(categorias)
+        //console.log(categorias)
         setCategorias(categorias);
       })
       .catch(e => {
@@ -110,7 +110,8 @@ const CrearCategoria = ({navigation}) => {
     const restaurant = route.params.restaurant;
     setRestaurant(restaurant);
     getRestaurant();
-  }, []);
+  }, [route.params]);
+  //useEffect(getRestaurant, [categorias]);
 
   return (
     <SafeAreaView

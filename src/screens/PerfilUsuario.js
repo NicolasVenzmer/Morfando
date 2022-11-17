@@ -98,11 +98,11 @@ const PerfilUsuario = ({navigation}) => {
       duenio: duenio,
       activo: activo,
     };
-    console.log('IMAGEN', image?.imagen);
+    //console.log('IMAGEN', image?.imagen);
     await axios
       .put(USER_URL, sendData)
       .then(res => {
-        console.log('Edited User: ', res.data);
+        //console.log('Edited User: ', res.data);
       })
       .catch(e => {
         console.log(`Create mi cuenta error ${e}`);
@@ -125,7 +125,7 @@ const PerfilUsuario = ({navigation}) => {
         .delete(USER_URL, {sendData: sendData})
         .then(res => {
           logout();
-          console.log('Deleted User: ', res.data);
+          //console.log('Deleted User: ', res.data);
         })
         .catch(e => {
           console.log(`Delete User error ${e}`);
@@ -136,7 +136,7 @@ const PerfilUsuario = ({navigation}) => {
 
   useEffect(() => {
     getUserInfo();
-    console.log("useEffect", image)
+    //console.log("useEffect", image)
   }, [image, nombreUsuario]);
 
   return (

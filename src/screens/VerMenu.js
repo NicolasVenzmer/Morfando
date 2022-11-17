@@ -10,77 +10,14 @@ const VerMenu = ({navigation}) => {
   const [emptyMenus, setEmptyMenus] = useState(true);
 
   useEffect(() => {
-    const plates = route.params.restaurant.platos;
-    //console.log("plates:", plates)
+    const plates = route.params.restaurant.categorias;
     setMenus(plates);
-    //setMenus(platos)
     if (!!menus) {
       setEmptyMenus(false);
     }
-  }, []);
+  }, [route.params]);
 
   //console.log('Ya cargue los menus: ', menus);
-
-  const platos = [
-    {
-      id: 1,
-      title: 'Entradas',
-      nombre: 'Patitas de pollo Rosa Negras',
-      descripcion: 'Patitas de pollo , arroz, huevo',
-      precio: '$2500',
-      image: require('../assets/Images/plato-prueba.jpg'),
-      celiaco: true,
-    },
-    {
-      id: 2,
-      title: 'Postre',
-      nombre: 'Patitas de pollo Rosa Negras',
-      descripcion: 'Patitas de pollo , arroz, huevo',
-      precio: '$2500',
-      image: require('../assets/Images/plato-prueba.jpg'),
-      vegano: true,
-    },
-    {
-      id: 3,
-      title: 'Plato Principal',
-      nombre: 'Patitas de pollo Rosa Negras',
-      descripcion: 'Patitas de pollo , arroz, huevo',
-      precio: '$2500',
-      image: require('../assets/Images/plato-prueba.jpg'),
-      celiaco: true,
-      vegano: true,
-    },
-    {
-      id: 4,
-      title: 'Plato Principal',
-      nombre: 'Patitas de pollo Rosa Negras',
-      descripcion: 'Patitas de pollo , arroz, huevo',
-      precio: '$2500',
-      image: require('../assets/Images/plato-prueba.jpg'),
-      celiaco: true,
-      vegano: true,
-    },
-    {
-      id: 5,
-      title: 'Plato Principal',
-      nombre: 'Patitas de pollo Rosa Negras',
-      descripcion: 'Patitas de pollo , arroz, huevo',
-      precio: '$2500',
-      image: require('../assets/Images/plato-prueba.jpg'),
-      celiaco: true,
-      vegano: true,
-    },
-    {
-      id: 6,
-      title: 'Plato Principal',
-      nombre: 'Patitas de pollo Rosa Negras',
-      descripcion: 'Patitas de pollo , arroz, huevo',
-      precio: '$2500',
-      image: require('../assets/Images/plato-prueba.jpg'),
-      celiaco: true,
-      vegano: true,
-    },
-  ];
 
   return (
     <SafeAreaView
@@ -144,18 +81,32 @@ const VerMenu = ({navigation}) => {
             <Image source={require('../assets/Images/empty-restaurants.png')} />
           </View>
         ) : (
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            {menus?.map((plato, index) => (
-              <Plato key={index} plato={plato} />
-            ))}
-          </View>
+          <>
+            <View
+              style={{
+                width: '100%',
+              }}>
+              {menus.map(({nombre, platos}, index) => (
+                <>
+                  <Text
+                    key={index}
+                    style={{
+                      color: 'black',
+                      fontWeight: '350',
+                      width: '80%',
+                      alignSelf: 'center',
+                      left: 5,
+                      marginBottom: 5,
+                    }}>
+                    {nombre}
+                  </Text>
+                  {platos.map((item, i) => (
+                      <Plato key={i} plato={item} />
+                  ))}
+                </>
+              ))}
+            </View>
+          </>
         )}
       </ScrollView>
     </SafeAreaView>

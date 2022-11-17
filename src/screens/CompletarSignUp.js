@@ -89,12 +89,12 @@ const CompletarSignUp = ({navigation}) => {
       duenio: true,
       activo: false,
     };
-    console.log(sendData)
+    //console.log(sendData)
 
     axios
       .post(REGISTER_URL, sendData)
       .then(res => {
-        console.log(res.data)
+        //console.log(res.data)
         if (res.status === 200) {
           navigation.navigate('AltaUsuarioConExito');
         }

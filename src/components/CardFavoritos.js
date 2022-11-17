@@ -6,7 +6,7 @@ import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.pn
 
 const CardFavoritos = ({restaurant, navigation, deleteFavorite}) => {
   //NO ME TRAE LA IMAGEN EN FAVORITOS
-  console.log("Card de Favoritos: ",restaurant.restaurante.imagenes[0].imagen)
+  //console.log("Card de Favoritos: ",restaurant.restaurante.imagenes[0].imagen)
   return (
     <>
       {restaurant.activo ? (

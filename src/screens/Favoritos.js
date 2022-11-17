@@ -63,7 +63,7 @@ const Favoritos = ({navigation}) => {
       restaurante_id: restaurant.restaurante.id,
       activo: false,
     };
-    console.log('El favorito a eliminar es: ', sendData);
+    //console.log('El favorito a eliminar es: ', sendData);
     const DELETE_FAVORITE_URL = '/user-favorites';
     axios
       .delete(DELETE_FAVORITE_URL, {data: sendData})
