@@ -17,7 +17,7 @@ const VerMenuConsumidor = ({navigation}) => {
     }
   }, [route.params]);
 
-  console.log('Ya cargue los menus: ', menus);
+  //console.log('Ya cargue los menus: ', menus);
 
   return (
     <SafeAreaView
@@ -85,7 +85,6 @@ const VerMenuConsumidor = ({navigation}) => {
               style={{
                 width: '100%',
               }}>
-              {/* {menus.nombre && menus.platos !== [] ():null} */}
               {menus.map(({nombre, platos}, index) => (
                 <>
                   <Text

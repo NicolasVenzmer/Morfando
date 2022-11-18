@@ -18,6 +18,7 @@ import axios from '../api/axios';
 import ModalPoup from '../components/ModalPopUp';
 import Theme from '../assets/fonts/Theme';
 import Helper from '../helper/helper';
+import { set } from 'react-native-reanimated';
 
 const PerfilUsuario = ({navigation}) => {
   const {userInfo, logout} = useContext(AuthContext);
@@ -191,7 +192,7 @@ const PerfilUsuario = ({navigation}) => {
           }}>
           <View>
             <Avatar.Image
-              source={{uri:image}}
+              source={image ?{uri:image} : DefaultImageUser}
               style={{
                 marginBottom: 20,
                 objectFit: 'fit',

@@ -45,7 +45,7 @@ const CrearMenu = ({navigation}) => {
   useEffect(() => {
     //console.log('restaurant', route.params.restaurant.platos);
     if (!route?.params?.restaurant) return;
-    const plates = route.params.restaurant.platos;
+    const plates = route.params.restaurant.platos?.map((el)=>({...el, imagenes: el.imagen, imagen :undefined}));
     if(plates.length>0){
       setHayPlatos(true)
       //console.log("hay platos y son: ", plates)
@@ -53,6 +53,7 @@ const CrearMenu = ({navigation}) => {
     const restaurant = route.params.restaurant;
     setRestaurant(restaurant);
     setPlatosTemp(plates);
+    console.log("useEffect", plates[0].imagen)
   }, [route.params]);
   useEffect(getRestaurant, [restaurant]);
 
@@ -100,7 +101,7 @@ const CrearMenu = ({navigation}) => {
   };
 
   const editarMenu = () => {
-    console.log('estoy editando el menu');
+    //console.log('estoy editando el menu', JSON.stringify(platosTemp));
     const platos = platosTemp.map(
       ({id, category, createdAt, updatedAt, restaurante_id,imagen, ...keepAttrs}) =>
         keepAttrs,
@@ -109,17 +110,17 @@ const CrearMenu = ({navigation}) => {
       restaurant_id: restaurant.id,
       platos,
     };
-    console.log('Datos a enviar al back234352: ', sendData.platos);
+    console.log('Datos a enviar al back: ', sendData.platos);
     const EDIT_PLATE_URL = '/plate';
-    // axios
-    //   .put(EDIT_PLATE_URL, sendData)
-    //   .then(res => {
-    //     navigation.navigate('MisRestaurantes', {sendData});
-    //     console.log('Plate Created Data: ', res.data);
-    //   })
-    //   .catch(e => {
-    //     console.log(`Plate error ${e}`);
-    //   });
+    axios
+      .put(EDIT_PLATE_URL, sendData)
+      .then(res => {
+        navigation.navigate('MisRestaurantes', {sendData});
+        console.log('Plate Created Data: ', res.data);
+      })
+      .catch(e => {
+        console.log(`Plate error ${e}`);
+      });
     setVisiblePlatoCreado(true);
     setIsLoading(false);
   };

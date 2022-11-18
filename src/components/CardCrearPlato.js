@@ -25,7 +25,7 @@ const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
     onUpdate({...plato, categoria_id: id});
   };
   const onUpdateImages = function (images) {
-    console.log("OnUpdateImages: ", images)
+    //console.log("OnUpdateImages: ", images)
     onUpdate({...plato, imagenes: images});
   };
   const onChangePrice = price => {
@@ -77,13 +77,13 @@ const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
     };
   };
 
-  useEffect(()=>{
-    //console.log('estas son las wqewqe', plato.imagen[0].imagen);
-    const imagenRecibida = JSON.stringify({imagen: plato.imagen[0].imagen});
-      //console.log("useEffect",imagenRecibida.imagen);
+  // useEffect(()=>{
+  //   console.log('estas son las wqewqe', plato.imagen[0]);
+  //   const imagenRecibida = JSON.stringify({imagen: plato.imagen[0].imagen});
+  //     //console.log("useEffect",imagenRecibida.imagen);
       
-      onUpdateImages([...(plato?.imagenes || []), imagenRecibida]);
-  },[])
+  //     onUpdateImages([...(plato?.imagenes || []), imagenRecibida]);
+  // },[])
 
   return (
     <SafeAreaView
@@ -264,35 +264,33 @@ const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  {plato?.imagenes?.map((image, key) => {
-                    {console.log("IMAGEN", image)}
-                    <View
-                      style={{
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                      key={key}>
-                      {console.log('IMAGEN', image.imagen)}
-                      <Image
-                        key={key}
-                        source={{uri: image}}
+                  {plato?.imagenes?.map((image, key) => (
+                      <View
                         style={{
-                          height: 110,
-                          width: 100,
-                          resizeMode: 'contain',
+                          alignItems: 'center',
+                          justifyContent: 'center',
                         }}
-                      />
-                      <Feather
-                        name="trash-2"
-                        style={{
-                          color: '#E14852',
-                          top: 3,
-                          fontSize: 20,
-                        }}
-                        onPress={onDeleteImageFn(image)}
-                      />
-                    </View>;
-                  })}
+                        key={key}>
+                        <Image
+                          key={key}
+                          source={{uri: image.imagen}}
+                          style={{
+                            height: 110,
+                            width: 100,
+                            resizeMode: 'contain',
+                          }}
+                        />
+                        <Feather
+                          name="trash-2"
+                          style={{
+                            color: '#E14852',
+                            top: 3,
+                            fontSize: 20,
+                          }}
+                          onPress={onDeleteImageFn(image)}
+                        />
+                      </View>
+          ))}
                   <Ionicons
                     name="add-circle"
                     style={{
