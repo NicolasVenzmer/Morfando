@@ -53,7 +53,7 @@ const CrearMenu = ({navigation}) => {
     const restaurant = route.params.restaurant;
     setRestaurant(restaurant);
     setPlatosTemp(plates);
-    console.log("useEffect", plates[0].imagen)
+    //console.log("useEffect", plates[0].imagen)
   }, [route.params]);
   useEffect(getRestaurant, [restaurant]);
 
@@ -222,7 +222,7 @@ const CrearMenu = ({navigation}) => {
       <ScrollView
         style={{
           width: '100%',
-          height: '100%',
+          height: '80%',
         }}>
         {platosTemp?.map((plato, index) => (
           <CardCrearPlato

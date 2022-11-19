@@ -343,7 +343,7 @@ const EditarRestaurante = ({navigation}) => {
         vertical
         style={{
           width: '100%',
-          height: '100%',
+          height: '80%',
         }}>
         <View
           style={{
@@ -357,6 +357,7 @@ const EditarRestaurante = ({navigation}) => {
           }}>
           <TextInput
             style={{
+              color: 'black',
               height: 40,
               margin: 12,
               padding: 10,
@@ -367,10 +368,12 @@ const EditarRestaurante = ({navigation}) => {
             }}
             onChangeText={onChangenombreRestaurante}
             placeholder="Nombre Restaurante"
+            placeholderTextColor="black"
             value={nombreRestaurante}
           />
           <TextInput
             style={{
+              color: 'black',
               height: 40,
               margin: 12,
               padding: 10,
@@ -381,10 +384,12 @@ const EditarRestaurante = ({navigation}) => {
             }}
             onChangeText={onChangeCalle}
             placeholder="Calle"
+            placeholderTextColor="black"
             value={calle}
           />
           <TextInput
             style={{
+              color: 'black',
               height: 40,
               margin: 12,
               padding: 10,
@@ -396,10 +401,12 @@ const EditarRestaurante = ({navigation}) => {
             keyboardType="numeric"
             onChangeText={onChangeNumero}
             placeholder="Numero"
+            placeholderTextColor="black"
             value={numero}
           />
           <TextInput
             style={{
+              color: 'black',
               height: 40,
               margin: 12,
               padding: 10,
@@ -411,10 +418,12 @@ const EditarRestaurante = ({navigation}) => {
             keyboardType="numeric"
             onChangeText={onChangeBarrio}
             placeholder="Barrio"
+            placeholderTextColor="black"
             value={barrio.toString()}
           />
           <TextInput
             style={{
+              color: 'black',
               height: 40,
               margin: 12,
               padding: 10,
@@ -425,10 +434,12 @@ const EditarRestaurante = ({navigation}) => {
             }}
             onChangeText={onChangeLocalidad}
             placeholder="Localidad"
+            placeholderTextColor="black"
             value={localidad}
           />
           <TextInput
             style={{
+              color: 'black',
               height: 40,
               margin: 12,
               padding: 10,
@@ -439,10 +450,12 @@ const EditarRestaurante = ({navigation}) => {
             }}
             onChangeText={onChangeProvincia}
             placeholder="Provincia"
+            placeholderTextColor="black"
             value={provincia}
           />
           <TextInput
             style={{
+              color: 'black',
               height: 40,
               margin: 12,
               padding: 10,
@@ -453,6 +466,7 @@ const EditarRestaurante = ({navigation}) => {
             }}
             onChangeText={onChangePais}
             placeholder="Pais"
+            placeholderTextColor="black"
             value={pais}
           />
         </View>

@@ -1,4 +1,5 @@
 import React, {useState, useContext} from 'react';
+import { useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,6 +11,7 @@ import {
   Modal,
 } from 'react-native';
 import axios from '../api/axios';
+import DefaultImageUser from '../assets/Images/default-user-image.png';
 const REGISTER_URL = '/user';
 
 const validateEmail = email => {
@@ -57,6 +59,7 @@ const CompletarSignUp = ({navigation}) => {
   const [visible, setVisible] = useState(false);
   const [visiblePasswordModal, setVisiblePasswordModal] = useState(false);
   const [loading, setIsLoading] = useState(false);
+  const [defaultImage, setDefaultImage] = useState("");
 
   const validateData = () => {
     let isValid = true;
@@ -81,14 +84,22 @@ const CompletarSignUp = ({navigation}) => {
 
     //Chequear esto porque pide token
     const sendData = {
-      nombre: 'No seteado',
+      nombre: 'Ingresar Nombre',
       correo: mail,
       contrasenia: password,
-      preguntaSeguridad: 'Como se llamo tu primer mascota?',
-      respuestaSeguridad: 'kiki',
+      imagen: DefaultImageUser,
       duenio: true,
       activo: false,
     };
+    // const sendData = {
+    //   nombre: 'Ingresar Nombre',
+    //   correo: mail,
+    //   contrasenia: password,
+    //   preguntaSeguridad: 'Como se llamo tu primer mascota?',
+    //   respuestaSeguridad: 'kiki',
+    //   duenio: true,
+    //   activo: false,
+    // };
     //console.log(sendData)
 
     axios
@@ -104,6 +115,12 @@ const CompletarSignUp = ({navigation}) => {
       });
     setIsLoading(false);
   };
+
+  // useEffect(()=>{
+    
+  // const DefaultImage = require('https://i.ibb.co/vmq0TGv/default-user-image.png');
+  //   setDefaultImage(DefaultImage);
+  // },[])
 
   return (
     <SafeAreaView
@@ -187,6 +204,7 @@ const CompletarSignUp = ({navigation}) => {
         }}>
         <View
           style={{
+            color: 'black',
             alignItems: 'flex-start',
             justifyContent: 'center',
             top: 40,
@@ -196,6 +214,7 @@ const CompletarSignUp = ({navigation}) => {
           }}>
           <TextInput
             style={{
+              color: 'black',
               width: '90%',
               height: 40,
               margin: 12,
@@ -206,9 +225,11 @@ const CompletarSignUp = ({navigation}) => {
             onChangeText={setUsuario}
             value={mail}
             placeholder="Email"
+            placeholderTextColor="black"
           />
           <TextInput
             style={{
+              color: 'black',
               width: '90%',
               height: 40,
               margin: 12,
@@ -220,6 +241,7 @@ const CompletarSignUp = ({navigation}) => {
             value={password}
             secureTextEntry={true}
             placeholder="Contraseña"
+            placeholderTextColor="black"
           />
           <TextInput
             style={{
@@ -234,6 +256,7 @@ const CompletarSignUp = ({navigation}) => {
             value={password2}
             secureTextEntry={true}
             placeholder="Repita la Contraseña"
+            placeholderTextColor="black"
           />
         </View>
       </View>

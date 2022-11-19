@@ -66,12 +66,13 @@ const CustomDrawer = props => {
           }}
           style={{paddingVertical: 15}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Ionicons name="exit-outline" size={22} />
+            <Ionicons name="exit-outline" size={22} color={'black'} />
             <Text
               style={{
                 fontSize: 15,
                 fontFamily: 'Roboto-Medium',
                 marginLeft: 5,
+                color: 'black',
               }}>
               Cerrar Sesion
             </Text>

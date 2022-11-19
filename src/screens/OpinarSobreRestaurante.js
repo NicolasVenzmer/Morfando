@@ -78,7 +78,7 @@ const OpinarSobreRestaurante = ({navigation}) => {
       <ScrollView
         style={{
           width: '100%',
-          height: '100%',
+          height: '80%',
         }}>
         <View
           style={{
@@ -86,9 +86,10 @@ const OpinarSobreRestaurante = ({navigation}) => {
             width: '100%',
             alignSelf: 'center',
           }}>
-          <StarRating givenWidth={40} givenHeight={40} left={0}/>
+          <StarRating givenWidth={40} givenHeight={40} left={0} />
           <TextInput
             style={{
+              color: 'black',
               top: 10,
               width: '80%',
               minHeight: 200,
@@ -102,6 +103,7 @@ const OpinarSobreRestaurante = ({navigation}) => {
             onChangeText={setOpinion}
             value={opinion}
             placeholder="Comparte detalles de tu experiencia en este lugar..."
+            placeholderTextColor="black"
           />
         </View>
       </ScrollView>

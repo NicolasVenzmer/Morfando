@@ -103,6 +103,7 @@ const IngresarNuevaContraseña = ({navigation}) => {
           }}>
           <TextInput
             style={{
+              color: 'black',
               width: '90%',
               height: 40,
               margin: 12,
@@ -114,9 +115,11 @@ const IngresarNuevaContraseña = ({navigation}) => {
             value={password}
             secureTextEntry={true}
             placeholder="Ingresar Nueva Contraseña"
+            placeholderTextColor="black"
           />
           <TextInput
             style={{
+              color: 'black',
               width: '90%',
               height: 40,
               margin: 12,
@@ -128,6 +131,7 @@ const IngresarNuevaContraseña = ({navigation}) => {
             value={password2}
             secureTextEntry={true}
             placeholder="Repetir Nueva Contraseña"
+            placeholderTextColor="black"
           />
         </View>
       </View>

@@ -153,7 +153,7 @@ const CrearCategoria = ({navigation}) => {
       <ScrollView
         style={{
           width: '100%',
-          height: '100%',
+          height: '80%',
         }}>
         <Pressable
           style={{
@@ -195,6 +195,7 @@ const CrearCategoria = ({navigation}) => {
         ))}
         <TextInput
           style={{
+            color: 'black',
             alignSelf: 'center',
             height: 40,
             margin: 12,
@@ -206,6 +207,7 @@ const CrearCategoria = ({navigation}) => {
           }}
           onChangeText={setCategoria}
           placeholder="Nombre de la categoria"
+          placeholderTextColor="black"
           value={categoria}
         />
       </ScrollView>

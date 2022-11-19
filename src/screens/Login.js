@@ -69,6 +69,7 @@ const Login = ({navigation}) => {
             onChangeText={text => setUsuario(text)}
             value={mail}
             placeholder="Email"
+            placeholderTextColor="black"
           />
           <TextInput
             style={styles.textInput}
@@ -76,6 +77,7 @@ const Login = ({navigation}) => {
             value={password}
             secureTextEntry={true}
             placeholder="Contraseña"
+            placeholderTextColor="black"
           />
         </View>
 
@@ -283,6 +285,7 @@ const styles = StyleSheet.create({
     height: 150,
   },
   textInput: {
+    color: 'black',
     width: '90%',
     height: 40,
     margin: 5,

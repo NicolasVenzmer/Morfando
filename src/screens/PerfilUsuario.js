@@ -192,7 +192,7 @@ const PerfilUsuario = ({navigation}) => {
           }}>
           <View>
             <Avatar.Image
-              source={image ?{uri:image} : DefaultImageUser}
+              source={image ? {uri: image} : DefaultImageUser}
               style={{
                 marginBottom: 20,
                 objectFit: 'fit',
@@ -215,6 +215,7 @@ const PerfilUsuario = ({navigation}) => {
           </View>
           <TextInput
             style={{
+              color: 'black',
               width: '80%',
               height: 40,
               margin: 5,
@@ -230,6 +231,7 @@ const PerfilUsuario = ({navigation}) => {
             onChangeText={text => setNombreUsuario(text)}
             value={nombreUsuario}
             placeholder="Nombre Usuario"
+            placeholderTextColor="black"
           />
         </View>
       </ScrollView>

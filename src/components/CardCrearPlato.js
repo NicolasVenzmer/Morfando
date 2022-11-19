@@ -112,6 +112,7 @@ const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
           }}>
           <TextInput
             style={{
+              color: 'black',
               alignSelf: 'center',
               height: 50,
               margin: 10,
@@ -150,6 +151,7 @@ const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
           />
           <TextInput
             style={{
+              color: 'black',
               alignSelf: 'center',
               height: 50,
               margin: 10,
@@ -166,6 +168,7 @@ const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
           />
           <TextInput
             style={{
+              color: 'black',
               alignSelf: 'center',
               height: 50,
               marginBottom: 10,
@@ -265,32 +268,32 @@ const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
                     alignItems: 'center',
                   }}>
                   {plato?.imagenes?.map((image, key) => (
-                      <View
+                    <View
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                      key={key}>
+                      <Image
+                        key={key}
+                        source={{uri: image.imagen}}
                         style={{
-                          alignItems: 'center',
-                          justifyContent: 'center',
+                          height: 110,
+                          width: 100,
+                          resizeMode: 'contain',
                         }}
-                        key={key}>
-                        <Image
-                          key={key}
-                          source={{uri: image.imagen}}
-                          style={{
-                            height: 110,
-                            width: 100,
-                            resizeMode: 'contain',
-                          }}
-                        />
-                        <Feather
-                          name="trash-2"
-                          style={{
-                            color: '#E14852',
-                            top: 3,
-                            fontSize: 20,
-                          }}
-                          onPress={onDeleteImageFn(image)}
-                        />
-                      </View>
-          ))}
+                      />
+                      <Feather
+                        name="trash-2"
+                        style={{
+                          color: '#E14852',
+                          top: 3,
+                          fontSize: 20,
+                        }}
+                        onPress={onDeleteImageFn(image)}
+                      />
+                    </View>
+                  ))}
                   <Ionicons
                     name="add-circle"
                     style={{

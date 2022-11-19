@@ -183,6 +183,7 @@ const OlvideMiContraseña = ({navigation}) => {
           }}>
           <TextInput
             style={{
+              color: 'black',
               width: '90%',
               height: 40,
               margin: 12,
@@ -193,6 +194,7 @@ const OlvideMiContraseña = ({navigation}) => {
             onChangeText={setUsuario}
             value={mail}
             placeholder="Email"
+            placeholderTextColor="black"
           />
         </View>
       </View>

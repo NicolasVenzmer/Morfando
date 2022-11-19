@@ -145,6 +145,7 @@ const RestaurantesDisponibles = ({navigation}) => {
           <Searchbar
             style={{borderRadius: 15}}
             placeholder="Buscar Restaurante"
+            placeholderTextColor="black"
             onChangeText={onChangeSearch}
             value={searchQuery}
           />

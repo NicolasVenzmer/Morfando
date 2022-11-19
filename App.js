@@ -19,3 +19,5 @@ export default App;
 // PARA LEVANTAR LA APLICACION -> npx react-native run-android
 // PARA LEVANTAR METRO -> npx react-native start
 //PARA RESETEAR EL CACHE DE METRO -> npx react-native start --reset-cache
+
+// APK -> cd android ->  ./gradlew clean -> ./gradlew assembleRelease

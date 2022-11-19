@@ -71,7 +71,7 @@ const Opiniones = ({navigation}) => {
       <ScrollView
         style={{
           width: '100%',
-          height: '100%',
+          height: '80%',
         }}>
         {/* Mapeo esto en base a todas las opiniones */}
         <CardOpinion restaurant={restaurant}/>

@@ -305,7 +305,7 @@ const CrearRestaurante = ({navigation}) => {
         vertical
         style={{
           width: '100%',
-          height: '100%',
+          height: '80%',
         }}>
         <View
           style={{
@@ -319,6 +319,7 @@ const CrearRestaurante = ({navigation}) => {
           }}>
           <TextInput
             style={{
+              color: 'black',
               height: 40,
               margin: 12,
               padding: 10,
@@ -329,10 +330,12 @@ const CrearRestaurante = ({navigation}) => {
             }}
             onChangeText={onChangenombreRestaurante}
             placeholder="Nombre Restaurante"
+            placeholderTextColor="black"
             value={nombreRestaurante}
           />
           <TextInput
             style={{
+              color: 'black',
               height: 40,
               margin: 12,
               padding: 10,
@@ -343,10 +346,12 @@ const CrearRestaurante = ({navigation}) => {
             }}
             onChangeText={onChangeCalle}
             placeholder="Calle"
+            placeholderTextColor="black"
             value={calle}
           />
           <TextInput
             style={{
+              color: 'black',
               height: 40,
               margin: 12,
               padding: 10,
@@ -358,10 +363,12 @@ const CrearRestaurante = ({navigation}) => {
             keyboardType="numeric"
             onChangeText={onChangeNumero}
             placeholder="Numero"
+            placeholderTextColor="black"
             value={numero}
           />
           <TextInput
             style={{
+              color: 'black',
               height: 40,
               margin: 12,
               padding: 10,
@@ -370,13 +377,14 @@ const CrearRestaurante = ({navigation}) => {
               borderBottomWidth: 1,
               width: '90%',
             }}
-            keyboardType="numeric"
             onChangeText={onChangeBarrio}
             placeholder="Barrio"
+            placeholderTextColor="black"
             value={barrio}
           />
           <TextInput
             style={{
+              color: 'black',
               height: 40,
               margin: 12,
               padding: 10,
@@ -387,10 +395,12 @@ const CrearRestaurante = ({navigation}) => {
             }}
             onChangeText={onChangeLocalidad}
             placeholder="Localidad"
+            placeholderTextColor="black"
             value={localidad}
           />
           <TextInput
             style={{
+              color: 'black',
               height: 40,
               margin: 12,
               padding: 10,
@@ -401,10 +411,12 @@ const CrearRestaurante = ({navigation}) => {
             }}
             onChangeText={onChangeProvincia}
             placeholder="Provincia"
+            placeholderTextColor="black"
             value={provincia}
           />
           <TextInput
             style={{
+              color: 'black',
               height: 40,
               margin: 12,
               padding: 10,
@@ -415,6 +427,7 @@ const CrearRestaurante = ({navigation}) => {
             }}
             onChangeText={onChangePais}
             placeholder="Pais"
+            placeholderTextColor="black"
             value={pais}
           />
         </View>

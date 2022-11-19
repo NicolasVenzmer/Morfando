@@ -66,6 +66,7 @@ const DiasDeAtencion = ({
       />
       <TextInput
         style={{
+          color: 'black',
           backgroundColor: 'white',
           width: 40,
           height: 32,
@@ -79,6 +80,7 @@ const DiasDeAtencion = ({
         value={input.horaDesde}
         onChangeText={horaDesde => inputHandlerHoraDesde(horaDesde, id)}
         placeholder="00:00"
+        placeholderTextColor="black"
       />
       <Text
         style={{
@@ -90,6 +92,7 @@ const DiasDeAtencion = ({
       </Text>
       <TextInput
         style={{
+          color: 'black',
           backgroundColor: 'white',
           width: 40,
           height: 32,
@@ -103,6 +106,7 @@ const DiasDeAtencion = ({
         value={input.horaHasta}
         onChangeText={horaHasta => inputHandlerHoraHasta(horaHasta, id)}
         placeholder="00:00"
+        placeholderTextColor="black"
       />
       <Ionicons
         name="add-circle"
