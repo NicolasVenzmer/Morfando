@@ -1,5 +1,12 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {View, Text, Image, SafeAreaView, ScrollView, Pressable} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Pressable,
+} from 'react-native';
 import CardRestauranteConsumidor from '../components/CardRestauranteConsumidor';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from '../api/axios';
@@ -8,6 +15,7 @@ import {AuthContext, ErrorReference} from '../context/AuthContext';
 import {useRoute} from '@react-navigation/native';
 import CardOpinion from '../components/CardOpinion';
 import StarRating from '../components/CardStarRating';
+import {set} from 'react-native-reanimated';
 
 const Opiniones = ({navigation}) => {
   const route = useRoute();
@@ -17,17 +25,31 @@ const Opiniones = ({navigation}) => {
   const [opinions, setOpinions] = useState([]);
 
   useEffect(() => {
-    const restaurant = route.params.restaurant;
-    const opinions = route.params.restaurant.opinion;
-    setOpinions(opinions);
+    if (!route?.params?.restaurant) return;
+    const restaurant = route?.params?.restaurant;
+    //console.log("restaurante", restaurant.opiniones);
+    const opiniones = restaurant.opiniones;
+    const dataList = opiniones.map(
+      ({usuario_id, usuario, calificacion, comentario}) => ({
+        usuario_id: usuario_id,
+        usuario: usuario.nombre,
+        calificacion: calificacion,
+        comentario: comentario,
+      }),
+    );
+    //console.log('estoy en datalist', dataList);
+    setOpinions(dataList);
     setRestaurant(restaurant);
-  }, []);
+    //getOpinions()
+    // if (opinions) {
+    //   setOpinions([...opinions, opinions]);
+    // }
+  }, [route.params]);
 
-  //console.log('Estoy en Opiniones, la data del restaurante es: ', restaurant);
-  console.log(
-    'Estoy en Opiniones, las opiniones del restaurante son: ',
-    opinions,
-  );
+  // console.log(
+  //   'Estoy en Opiniones, las opiniones del restaurante son: ',
+  //   opinions,
+  // );
 
   return (
     <SafeAreaView
@@ -73,8 +95,31 @@ const Opiniones = ({navigation}) => {
           width: '100%',
           height: '80%',
         }}>
-        {/* Mapeo esto en base a todas las opiniones */}
-        <CardOpinion restaurant={restaurant}/>
+        {!opinions?.length > 0 ? (
+          <View
+            style={{
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{
+                position: 'absolute',
+                fontSize: 20,
+                fontWeight: '450',
+                textAlign: 'center',
+              }}>
+              Aun no hay opiniones.
+            </Text>
+            <Image source={require('../assets/Images/empty-restaurants.png')} />
+          </View>
+        ) : (
+          <>
+            {opinions.map((opinion, index) => (
+              <CardOpinion key={index} opinion={opinion} />
+            ))}
+          </>
+        )}
       </ScrollView>
       <Pressable
         style={{

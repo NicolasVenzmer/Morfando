@@ -13,15 +13,18 @@ import axios from '../api/axios';
 import {AuthContext} from '../context/AuthContext';
 import {useRoute} from '@react-navigation/native';
 import StarRating from '../components/CardStarRating';
-
+import ModalPoup from '../components/ModalPopUp';
+import Theme from '../assets/fonts/Theme';
 
 const OpinarSobreRestaurante = ({navigation}) => {
   const route = useRoute();
   const {userInfo} = useContext(AuthContext);
   const [opinion, setOpinion] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setIsLoading] = useState(false);
   const [restaurant, setRestaurant] = useState('');
   const [opinions, setOpinions] = useState([]);
+  const [opinionCreada, setVisibleOpinionCreada] = useState(false);
+  const [calificacion, setCalificacion] = useState('');
 
   useEffect(() => {
     const restaurant = route.params.restaurant;
@@ -30,11 +33,36 @@ const OpinarSobreRestaurante = ({navigation}) => {
     setRestaurant(restaurant);
   }, []);
 
-  //console.log('Estoy en Opiniones, la data del restaurante es: ', restaurant);
-  // console.log(
-  //   'Estoy en Opiniones, las opiniones del restaurante son: ',
-  //   opinions,
-  // );
+  const onChangeCalificacion = input => {
+    setCalificacion(input);
+  };
+
+  //Enviar los datos al back
+  const crearOpinion = () => {
+    setIsLoading(true);
+    const sendData = {
+      usuario_id: userInfo.id,
+      restaurante_id: restaurant.id,
+      comentario: opinion,
+      calificacion: calificacion,
+    };
+    console.log('Datos a enviar al back: ', sendData);
+    const CREATE_OPINION_URL = '/opinion';
+    axios
+      .post(CREATE_OPINION_URL, sendData)
+      .then(res => {
+        setOpinions([...opinions, opinion]);
+        console.log("opiniones", opinions)
+          // navigation.navigate('Opiniones', {opinions});
+        
+        console.log('Opinion Created Data: ', res.data);
+      })
+      .catch(e => {
+        console.log(`Opinion error ${e}`);
+      });
+    setVisibleOpinionCreada(true);
+    setIsLoading(false);
+  };
 
   return (
     <SafeAreaView
@@ -86,7 +114,12 @@ const OpinarSobreRestaurante = ({navigation}) => {
             width: '100%',
             alignSelf: 'center',
           }}>
-          <StarRating givenWidth={40} givenHeight={40} left={0} />
+          <StarRating
+            givenWidth={40}
+            givenHeight={40}
+            left={0}
+            onChangeCalificacion={onChangeCalificacion}
+          />
           <TextInput
             style={{
               color: 'black',
@@ -107,6 +140,46 @@ const OpinarSobreRestaurante = ({navigation}) => {
           />
         </View>
       </ScrollView>
+
+      <ModalPoup visible={opinionCreada}>
+        <View style={{alignItems: 'flex-start'}}>
+          <Text style={{fontSize: 20, color: 'black'}}>Opinion guardada.</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '2%',
+              marginBottom: '2%',
+              marginHorizontal: '5%',
+            }}
+          />
+        </View>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: '1%',
+            marginBottom: '1%',
+            marginHorizontal: '1%',
+          }}>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '100%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: '#E14852',
+              borderRadius: 30,
+            }}
+            onPress={() => {
+              setVisibleOpinionCreada(false);
+            }}>
+            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
+          </Pressable>
+        </View>
+      </ModalPoup>
+
       <Pressable
         style={{
           marginTop: 10,
@@ -120,8 +193,7 @@ const OpinarSobreRestaurante = ({navigation}) => {
           backgroundColor: '#E14852',
           borderRadius: 30,
         }}
-        // onPress={() => navigation.navigate('VerMenu', {platosTemp})}
-      >
+        onPress={() => crearOpinion()}>
         <Text
           style={{
             color: '#fdfdfd',

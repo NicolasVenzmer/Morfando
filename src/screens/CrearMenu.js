@@ -22,7 +22,7 @@ const CrearMenu = ({navigation}) => {
   const [platosTemp, setPlatosTemp] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [platoCreado, setVisiblePlatoCreado] = useState(false);
-  const [hayPlatos, setHayPlatos] = useState(false)
+  const [hayPlatos, setHayPlatos] = useState(false);
 
   const getRestaurant = () => {
     if (!restaurant?.id) return;
@@ -45,9 +45,14 @@ const CrearMenu = ({navigation}) => {
   useEffect(() => {
     //console.log('restaurant', route.params.restaurant.platos);
     if (!route?.params?.restaurant) return;
-    const plates = route.params.restaurant.platos?.map((el)=>({...el, imagenes: el.imagen, imagen :undefined}));
-    if(plates.length>0){
-      setHayPlatos(true)
+    const plates = route.params.restaurant.platos?.map(el => ({
+      ...el,
+      imagenes: el.imagen,
+      imagen: undefined,
+    }));
+    console.log('plates', plates);
+    if (plates.length > 0) {
+      setHayPlatos(true);
       //console.log("hay platos y son: ", plates)
     }
     const restaurant = route.params.restaurant;
@@ -76,11 +81,8 @@ const CrearMenu = ({navigation}) => {
 
   //Enviar los datos al back
   const crearMenu = () => {
-    
     console.log('estoy creando el menu');
-    const platos = platosTemp.map(
-      ({id, ...keepAttrs}) => keepAttrs,
-    );
+    const platos = platosTemp.map(({id, ...keepAttrs}) => keepAttrs);
     const sendData = {
       restaurant_id: restaurant.id,
       platos,
@@ -90,7 +92,7 @@ const CrearMenu = ({navigation}) => {
     axios
       .post(CREATE_PLATE_URL, sendData)
       .then(res => {
-          navigation.navigate('MisRestaurantes', {sendData});
+        navigation.navigate('MisRestaurantes', {sendData});
         console.log('Plate Created Data: ', res.data);
       })
       .catch(e => {
@@ -103,14 +105,21 @@ const CrearMenu = ({navigation}) => {
   const editarMenu = () => {
     //console.log('estoy editando el menu', JSON.stringify(platosTemp));
     const platos = platosTemp.map(
-      ({id, category, createdAt, updatedAt, restaurante_id,imagen, ...keepAttrs}) =>
-        keepAttrs,
+      ({
+        id,
+        category,
+        createdAt,
+        updatedAt,
+        restaurante_id,
+        imagen,
+        ...keepAttrs
+      }) => keepAttrs,
     );
     const sendData = {
       restaurant_id: restaurant.id,
       platos,
     };
-    console.log('Datos a enviar al back: ', sendData.platos);
+    console.log('Datos a enviar al back: ', sendData);
     const EDIT_PLATE_URL = '/plate';
     axios
       .put(EDIT_PLATE_URL, sendData)
@@ -302,6 +311,7 @@ const CrearMenu = ({navigation}) => {
           </Pressable>
         </View>
       </ModalPoup>
+
       {hayPlatos ? (
         <Pressable
           style={{

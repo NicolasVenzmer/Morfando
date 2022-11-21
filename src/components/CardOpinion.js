@@ -1,8 +1,22 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
-import StarRating from '../components/CardStarRating';
+import {useEffect} from 'react';
+import {useState} from 'react';
+import {View, Text, Image} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const CardOpinion = ({restaurant}) => {
+const CardOpinion = ({opinion}) => {
+  const [defaultRating, setDefaultRating] = useState(1);
+  const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
+
+  const starImgFilled =
+    'https://github.com/tranhonghan/images/blob/main/star_filled.png?raw=true';
+  const starImgCorner =
+    'https://github.com/tranhonghan/images/blob/main/star_corner.png?raw=true';
+
+  useEffect(() => {
+    const calificacion = opinion.calificacion;
+    setDefaultRating(calificacion);
+  }, []);
   return (
     <View
       style={{
@@ -24,9 +38,34 @@ const CardOpinion = ({restaurant}) => {
             fontSize: 20,
             fontFamily: 'Roboto',
           }}>
-          Nombre 
+          {opinion.usuario}
         </Text>
-        <StarRating givenWidth={20} givenHeight={20} left={20} />
+        <View
+          style={{
+            left: 20,
+            justifyContent: 'center',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          {maxRating.map((item, key) => {
+            return (
+              <TouchableOpacity activeOpacity={0.7} key={item}>
+                <Image
+                  style={{
+                    width: 20,
+                    height: 20,
+                    resizeMode: 'cover',
+                  }}
+                  source={
+                    item <= defaultRating
+                      ? {uri: starImgFilled}
+                      : {uri: starImgCorner}
+                  }
+                />
+              </TouchableOpacity>
+            );
+          })}
+        </View>
       </View>
       <View style={{width: '100%', top: 20}}>
         <Text
@@ -36,7 +75,7 @@ const CardOpinion = ({restaurant}) => {
             fontSize: 15,
             fontFamily: 'Roboto',
           }}>
-          Comentario
+          {opinion.comentario}
         </Text>
         <View
           style={{
