@@ -15,6 +15,9 @@ import Feather from 'react-native-vector-icons/Feather';
 import {Chip} from 'react-native-paper';
 import {AuthContext} from '../context/AuthContext';
 import DropDownPicker from 'react-native-dropdown-picker';
+import Helper from '../helper/helper';
+import ModalPoup from '../components/ModalPopUp';
+import Theme from '../assets/fonts/Theme';
 
 import axios from '../api/axios';
 
@@ -33,6 +36,7 @@ const CrearRestaurante = ({navigation}) => {
   const [selectedMoney4, setSelectedMoney4] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [rangoPrecio, setRangoPrecio] = useState(1);
+  const [visibleEmpty, setVisibleEmpty] = useState(false);
 
   const createRestaurant = () => {
     //Enviar los datos al back
@@ -59,26 +63,43 @@ const CrearRestaurante = ({navigation}) => {
       horas: horarios,
       imagenes: images,
     };
-    //console.log('Los datos a enviar son: ', sendData);
-    //console.log(userToken)
-    const CREATE_RESTAURANT_URL = '/restaurant';
-    axios
-      .post(CREATE_RESTAURANT_URL, sendData, {
-        headers: {
-          Authorization: `${userToken}`,
-        },
-      })
-      .then(res => {
-        //console.log("estoy en create: ", res)
-        if (res.status === 200) {
-          navigation.navigate('MisRestaurantes', sendData);
-        }
-        //console.log('Restaurant Created Data: ', res.data);
-      })
-      .catch(e => {
-        console.log(`Create restaurant error ${e}`);
-      });
-    setIsLoading(false);
+    if (
+      Helper.isEmpty(nombreRestaurante) ||
+      Helper.isEmpty(tipoDeComida) ||
+      Helper.isEmpty(rangoPrecio) ||
+      Helper.isEmpty(calle) ||
+      Helper.isEmpty(numero) ||
+      Helper.isEmpty(barrio) ||
+      Helper.isEmpty(localidad) ||
+      Helper.isEmpty(provincia) ||
+      Helper.isEmpty(pais) ||
+      Helper.isEmpty(horarios) ||
+      Helper.isEmpty(images)
+    ) {
+      setVisibleEmpty(true);
+    }else{
+      //console.log('Los datos a enviar son: ', sendData);
+      //console.log(userToken)
+      const CREATE_RESTAURANT_URL = '/restaurant';
+      axios
+        .post(CREATE_RESTAURANT_URL, sendData, {
+          headers: {
+            Authorization: `${userToken}`,
+          },
+        })
+        .then(res => {
+          //console.log("estoy en create: ", res)
+          if (res.status === 200) {
+            navigation.navigate('MisRestaurantes', sendData);
+          }
+          //console.log('Restaurant Created Data: ', res.data);
+        })
+        .catch(e => {
+          console.log(`Create restaurant error ${e}`);
+        });
+      setIsLoading(false);
+    }
+
   };
 
   //Seteo el rango de los precios
@@ -604,6 +625,53 @@ const CrearRestaurante = ({navigation}) => {
           </View>
         )}
       </ScrollView>
+
+      <ModalPoup visible={visibleEmpty}>
+        <View style={{alignItems: 'flex-start'}}>
+          <Text
+            style={{
+              fontSize: Theme.fonts.LARGE,
+              color: Theme.colors.SECONDARY,
+            }}>
+            Hay datos sin completar, por favor verificar.
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '2%',
+              marginBottom: '2%',
+              marginHorizontal: '5%',
+            }}
+          />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: '1%',
+            marginBottom: '1%',
+            marginHorizontal: '1%',
+          }}>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '100%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: Theme.colors.PRIMARY,
+              borderRadius: 30,
+            }}
+            onPress={() => {
+              setVisibleEmpty(false);
+            }}>
+            <Text style={{color: Theme.colors.THIRD, textAlign: 'center'}}>
+              Aceptar
+            </Text>
+          </Pressable>
+        </View>
+      </ModalPoup>
+
       <Pressable
         style={{
           marginTop: 10,

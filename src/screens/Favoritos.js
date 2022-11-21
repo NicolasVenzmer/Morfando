@@ -31,7 +31,7 @@ const Favoritos = ({navigation}) => {
       .get(GET_FAVORITES_URL)
       .then(res => {
         setRestaurants(res.data[0].favorite);
-        //console.log("favoritos:", res.data[0].favorite)
+        console.log("favoritos:", res.data[0].favorite)
       })
       .catch(e => {
         console.log(`Restaurants GET error ${e}`);

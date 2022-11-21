@@ -43,7 +43,7 @@ const CrearMenu = ({navigation}) => {
   };
 
   useEffect(() => {
-    //console.log('restaurant', route.params.restaurant.platos);
+    //console.log('restaurant', route.params.restaurant);
     if (!route?.params?.restaurant) return;
     const plates = route.params.restaurant.platos?.map(el => ({
       ...el,
@@ -53,7 +53,6 @@ const CrearMenu = ({navigation}) => {
     console.log('plates', plates);
     if (plates.length > 0) {
       setHayPlatos(true);
-      //console.log("hay platos y son: ", plates)
     }
     const restaurant = route.params.restaurant;
     setRestaurant(restaurant);
