@@ -49,10 +49,7 @@ const CardRestauranteConsumidor = ({
   return (
     <>
       {restaurant.activo ? (
-        <Pressable
-          onPress={() =>
-            navigation.navigate('DetalleRestaurante', {restaurant})
-          }
+        <View
           style={{
             backgroundColor: '#F2F1F0',
             alignSelf: 'center',
@@ -94,25 +91,30 @@ const CardRestauranteConsumidor = ({
             />
           </View>
           <View style={{width: '100%', alignItems: 'center'}}>
-            <Text
-              style={{
-                top: 10,
-                color: 'black',
-                fontWeight: '500',
-                flexWrap: 'wrap',
-              }}>
-              {restaurant.nombre}
-            </Text>
-            <Text
-              style={{
-                textAlign: 'center',
-                top: 10,
-                color: '#E14852',
-                fontWeight: '500',
-                flexWrap: 'wrap',
-              }}>
-              0,5 KM
-            </Text>
+            <Pressable
+              onPress={() =>
+                navigation.navigate('DetalleRestaurante', {restaurant})
+              }>
+              <Text
+                style={{
+                  top: 10,
+                  color: 'black',
+                  fontWeight: '500',
+                  flexWrap: 'wrap',
+                }}>
+                {restaurant.nombre}
+              </Text>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  top: 10,
+                  color: '#E14852',
+                  fontWeight: '500',
+                  flexWrap: 'wrap',
+                }}>
+                0,5 KM
+              </Text>
+            </Pressable>
             <MaterialIcons
               name="menu-book"
               style={{
@@ -125,7 +127,7 @@ const CardRestauranteConsumidor = ({
               }
             />
           </View>
-        </Pressable>
+        </View>
       ) : null}
     </>
   );

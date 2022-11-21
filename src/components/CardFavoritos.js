@@ -10,10 +10,7 @@ const CardFavoritos = ({restaurant, navigation, deleteFavorite}) => {
   return (
     <>
       {restaurant.activo ? (
-        <Pressable
-          onPress={() =>
-            navigation.navigate('DetalleRestaurante', {restaurant})
-          }
+        <View
           style={{
             backgroundColor: '#F2F1F0',
             alignSelf: 'center',
@@ -40,6 +37,7 @@ const CardFavoritos = ({restaurant, navigation, deleteFavorite}) => {
               }}
               onPress={deleteFavorite}
             />
+
             <Image
               style={{
                 top: 10,
@@ -55,25 +53,30 @@ const CardFavoritos = ({restaurant, navigation, deleteFavorite}) => {
             />
           </View>
           <View style={{width: '100%', alignItems: 'center'}}>
-            <Text
-              style={{
-                top: 10,
-                color: 'black',
-                fontWeight: '500',
-                flexWrap: 'wrap',
-              }}>
-              {restaurant.restaurante.nombre}
-            </Text>
-            <Text
-              style={{
-                textAlign: 'center',
-                top: 10,
-                color: '#E14852',
-                fontWeight: '500',
-                flexWrap: 'wrap',
-              }}>
-              0,5 KM
-            </Text>
+            <Pressable
+              onPress={() =>
+                navigation.navigate('DetalleRestaurante', {restaurant})
+              }>
+              <Text
+                style={{
+                  top: 10,
+                  color: 'black',
+                  fontWeight: '500',
+                  flexWrap: 'wrap',
+                }}>
+                {restaurant.restaurante.nombre}
+              </Text>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  top: 10,
+                  color: '#E14852',
+                  fontWeight: '500',
+                  flexWrap: 'wrap',
+                }}>
+                0,5 KM
+              </Text>
+            </Pressable>
             <MaterialIcons
               name="menu-book"
               style={{
@@ -86,7 +89,7 @@ const CardFavoritos = ({restaurant, navigation, deleteFavorite}) => {
               }
             />
           </View>
-        </Pressable>
+        </View>
       ) : null}
     </>
   );
