@@ -1,19 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  Image,
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-} from 'react-native';
+import {View, Text, Pressable, SafeAreaView, ScrollView} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {launchImageLibrary} from 'react-native-image-picker';
 import CardCrearPlato from '../components/CardCrearPlato';
 import axios from '../api/axios';
 import {useRoute} from '@react-navigation/native';
 import ModalPoup from '../components/ModalPopUp';
-import Theme from '../assets/fonts/Theme';
 
 const CrearMenu = ({navigation}) => {
   const route = useRoute();
@@ -42,24 +33,60 @@ const CrearMenu = ({navigation}) => {
       .finally(() => setIsLoading(false));
   };
 
+  const getMenus = () => {
+    if (!restaurant?.id) return;
+    setIsLoading(true);
+    const id = restaurant.id;
+    const GET_MENUS_URL = `/restaurant/${id}/menu`;
+    axios
+      .get(GET_MENUS_URL)
+      .then(res => {
+        console.log('menus: ', res.data.platos);
+        const plates = res?.data?.platos?.map(el => ({
+          ...el,
+          imagenes: el.imagen,
+          imagen: undefined,
+        }));
+        //console.log('ACA', plates);
+        setPlatosTemp(plates);
+        if (plates?.length > 0) {
+          setHayPlatos(true);
+        }
+      })
+      .catch(e => {
+        console.log(`Menus GET error ${e}`);
+      })
+      .finally(() => setIsLoading(false));
+  };
+
   useEffect(() => {
-    //console.log('restaurant', route.params.restaurant);
+    // console.log(
+    //   'restaurant',
+    //   JSON.stringify(route.params.restaurant.categorias[0].platos),
+    // );
+    // console.log('id', route.params.restaurant.id);
     if (!route?.params?.restaurant) return;
-    const plates = route.params.restaurant.platos?.map(el => ({
-      ...el,
-      imagenes: el.imagen,
-      imagen: undefined,
-    }));
-    console.log('plates', plates);
-    if (plates.length > 0) {
-      setHayPlatos(true);
-    }
+    // const plates = route?.params?.restaurant?.categorias[0]?.platos?.map(
+    //   el => ({
+    //     ...el,
+    //     imagenes: el.imagen,
+    //     imagen: undefined,
+    //   }),
+    // );
+    // if (!route?.params?.restaurant) return;
+    // const plates = route.params.restaurant.platos?.map(el => ({
+    //   ...el,
+    //   imagenes: el.imagen,
+    //   imagen: undefined,
+    // }));
+    //console.log('plates', plates);
+
     const restaurant = route.params.restaurant;
     setRestaurant(restaurant);
-    setPlatosTemp(plates);
-    //console.log("useEffect", plates[0].imagen)
+    //setPlatosTemp(plates);
   }, [route.params]);
   useEffect(getRestaurant, [restaurant]);
+  useEffect(getMenus, [restaurant]);
 
   const addPlato = () => {
     const newPlatos = [...platosTemp];
@@ -72,7 +99,7 @@ const CrearMenu = ({navigation}) => {
       aptoVegano: false,
       aptoCeliaco: false,
       activo: true,
-      precio: 1,
+      precio: 0,
       imagenes: [],
     });
     setPlatosTemp(newPlatos);
@@ -102,6 +129,7 @@ const CrearMenu = ({navigation}) => {
   };
 
   const editarMenu = () => {
+    setVisiblePlatoCreado(true)
     //console.log('estoy editando el menu', JSON.stringify(platosTemp));
     const platos = platosTemp.map(
       ({
@@ -120,17 +148,18 @@ const CrearMenu = ({navigation}) => {
     };
     console.log('Datos a enviar al back: ', sendData);
     const EDIT_PLATE_URL = '/plate';
-    axios
-      .put(EDIT_PLATE_URL, sendData)
-      .then(res => {
-        navigation.navigate('MisRestaurantes', {sendData});
-        console.log('Plate Created Data: ', res.data);
-      })
-      .catch(e => {
-        console.log(`Plate error ${e}`);
-      });
-    setVisiblePlatoCreado(true);
-    setIsLoading(false);
+    if (setVisiblePlatoCreado) {
+      axios
+        .put(EDIT_PLATE_URL, sendData)
+        .then(res => {
+          navigation.navigate('MisRestaurantes', {sendData});
+          console.log('Plate Created Data: ', res.data);
+        })
+        .catch(e => {
+          console.log(`Plate error ${e}`);
+        })
+        .finally(() => setIsLoading(false));
+    }
   };
 
   const deletePlatoFn = plato => {

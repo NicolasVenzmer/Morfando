@@ -42,9 +42,9 @@ const CardRestauranteConsumidor = ({
   //   setIsLoading(false);
   // };
 
-  useEffect(() => {
-    //obtenerKM();
-  }, []);
+  // useEffect(() => {
+  //   //obtenerKM();
+  // }, []);
 
   return (
     <>

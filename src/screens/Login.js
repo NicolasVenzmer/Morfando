@@ -56,13 +56,13 @@ const Login = ({navigation}) => {
         </Pressable>
       </View>
       <View style={styles.viewContainer}>
-        <View style={styles.containerGoogle}>
+        {/* <View style={styles.containerGoogle}>
           <Image
             style={styles.imageGoogle}
             source={require('../assets/Icons/google_icon.png')}
           />
           <Text style={styles.textGoogle}>Ingresar con Google</Text>
-        </View>
+        </View> */}
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.textInput}
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
   botonIngresar: {
     marginTop: 10,
     marginBottom: 10,
-    position: 'absolute',
+    //position: 'absolute',
     width: '80%',
     bottom: 0,
     height: 50,

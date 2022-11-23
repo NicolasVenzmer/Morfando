@@ -29,6 +29,7 @@ const PerfilUsuario = ({navigation}) => {
   const [user, setUser] = useState('');
 
   const {id, correo, contrasenia, duenio, activo} = userInfo;
+  console.log("estoy en el perfil del usuairo: ", userInfo)
 
   //Images
   const [image, setImage] = useState();

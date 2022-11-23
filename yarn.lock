@@ -1881,6 +1881,11 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/netinfo/-/netinfo-9.3.2.tgz"
   "version" "9.3.2"
 
+"@react-native-google-signin/google-signin@^8.2.1":
+  "integrity" "sha512-wtSjKXKxxwntE7A98b4ry6rbTDidxF6taAZISLnJ9WYffFvgyreliKjg3e9IDuTBLCDpDYKUOqK9I/h4hMFnjg=="
+  "resolved" "https://registry.npmjs.org/@react-native-google-signin/google-signin/-/google-signin-8.2.1.tgz"
+  "version" "8.2.1"
+
 "@react-native/assets@1.0.0":
   "integrity" "sha512-KrwSpS1tKI70wuKl68DwJZYEvXktDHdZMG0k2AXD/rJVSlB23/X2CB2cutVR0HwNMJIal9HOUOBB2rVfa6UGtQ=="
   "resolved" "https://registry.npmjs.org/@react-native/assets/-/assets-1.0.0.tgz"

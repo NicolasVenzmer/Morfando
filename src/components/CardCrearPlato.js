@@ -164,7 +164,7 @@ const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
             keyboardType="numeric"
             placeholder="Precio $$"
             placeholderTextColor="black"
-            value={plato.precio.toString()}
+            value={plato.precio?.toString()}
           />
           <TextInput
             style={{

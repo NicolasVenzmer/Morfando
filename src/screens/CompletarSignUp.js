@@ -60,6 +60,7 @@ const CompletarSignUp = ({navigation}) => {
   const [visiblePasswordModal, setVisiblePasswordModal] = useState(false);
   const [loading, setIsLoading] = useState(false);
   const [defaultImage, setDefaultImage] = useState("");
+  const [users, setUsers] = useState([])
 
   const validateData = () => {
     let isValid = true;
@@ -77,6 +78,21 @@ const CompletarSignUp = ({navigation}) => {
     } else {
       registerUser(mail, password)
     }
+  };
+
+  const getUsers = async () => {
+    setIsLoading(true);
+    const GET_USERS_URL = '/users';
+    axios
+      .get(GET_USERS_URL)
+      .then(res => {
+        console.log(res.data);
+        //setUsers(res.data.misRestaurantes);
+      })
+      .catch(e => {
+        console.log(`Users GET error ${e}`);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const registerUser = async (mail, password) => {
@@ -116,11 +132,11 @@ const CompletarSignUp = ({navigation}) => {
     setIsLoading(false);
   };
 
-  // useEffect(()=>{
-    
-  // const DefaultImage = require('https://i.ibb.co/vmq0TGv/default-user-image.png');
-  //   setDefaultImage(DefaultImage);
-  // },[])
+  useEffect(()=>{
+    getUsers()
+  //const DefaultImage = require('https://i.ibb.co/vmq0TGv/default-user-image.png');
+    //setDefaultImage(DefaultImage);
+  },[])
 
   return (
     <SafeAreaView
