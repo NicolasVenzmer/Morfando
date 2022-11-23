@@ -76,8 +76,8 @@ const LoginConsumidor = ({navigation}) => {
               if (hasPlayService) {
                 GoogleSignin.signIn()
                   .then(userInfo => {
-                    SSOGoogle(userInfo)
-                    console.log(JSON.stringify(userInfo));
+                    SSOGoogle(userInfo);
+                    // console.log(JSON.stringify(userInfo));
                   })
                   .catch(e => {
                     console.log('ERROR IS: ' + JSON.stringify(e));
@@ -115,31 +115,6 @@ const LoginConsumidor = ({navigation}) => {
           Ingresar con Google
         </Text>
       </Pressable>
-      {/* <Button
-        title={'Ingresar con Google'}
-        onPress={() => {
-          GoogleSignin.configure({
-            androidClientId:
-              '763386562376-it05kregjrduu51masjd81knbhue5g7p.apps.googleusercontent.com',
-            iosClientId: 'ADD_YOUR_iOS_CLIENT_ID_HERE',
-          });
-          GoogleSignin.hasPlayServices()
-            .then(hasPlayService => {
-              if (hasPlayService) {
-                GoogleSignin.signIn()
-                  .then(userInfo => {
-                    console.log(JSON.stringify(userInfo));
-                  })
-                  .catch(e => {
-                    console.log('ERROR IS: ' + JSON.stringify(e));
-                  });
-              }
-            })
-            .catch(e => {
-              console.log('ERROR IS: ' + JSON.stringify(e));
-            });
-        }}
-      /> */}
       <Pressable
         style={{
           marginTop: 10,
