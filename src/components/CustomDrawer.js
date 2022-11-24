@@ -8,11 +8,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AuthContext} from '../context/AuthContext';
 import DefaultImageUser from '../assets/Images/default-user-image.png';
 import axios from '../api/axios';
+const MINUTE_MS = 10000;
 
 const CustomDrawer = props => {
   const {logout, userInfo} = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState('');
+  const [image, setImage] = useState();
+  const [ name, setName] = useState()
 
   // Obtengo los datos de usuario
   const getUserInfo = () => {
@@ -23,7 +26,11 @@ const CustomDrawer = props => {
       .get(USER_URL)
       .then(res => {
         setUser(res.data);
-        //console.log('User Data: ', res.data);
+        //if (image === '' || image === undefined) return;
+        setImage(res.data[0].imagen.imagen);
+        setName(res.data[0].nombre)
+
+        console.log('User Data: ', res.data);
       })
       .catch(e => {
         console.log(`User Data  error ${e}`);
@@ -33,6 +40,12 @@ const CustomDrawer = props => {
 
   useEffect(() => {
     getUserInfo();
+    const interval = setInterval(() => {
+      getUserInfo();
+      console.log('estoy en el timer');
+    }, MINUTE_MS);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -42,7 +55,7 @@ const CustomDrawer = props => {
         contentContainerStyle={{backgroundColor: '#E14852'}}>
         <View style={{padding: 20, backgroundColor: '#E14852'}}>
           <Image
-            source={{uri: user[0]?.imagen?.imagen}}
+            source={image ? {uri: image} : DefaultImageUser}
             style={{height: 80, width: 80, borderRadius: 40, marginBottom: 10}}
           />
           <Text
@@ -52,7 +65,7 @@ const CustomDrawer = props => {
               fontFamily: 'Roboto-Medium',
               marginBottom: 5,
             }}>
-            {userInfo.nombre}
+            {name}
           </Text>
         </View>
         <View style={{flex: 1, backgroundColor: '#fff', paddingTop: 10}}>
