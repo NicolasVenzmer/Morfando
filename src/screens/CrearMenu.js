@@ -83,6 +83,11 @@ const CrearMenu = ({navigation}) => {
 
     const restaurant = route.params.restaurant;
     setRestaurant(restaurant);
+    //console.log('categoria que viene', route.params.restaurant.categorias);
+    const categoriaRecienCreada = route.params.restaurant.categorias;
+    if (categoriaRecienCreada) {
+      setCategoryOptions([...categoryOptions, categoriaRecienCreada]);
+    }
     //setPlatosTemp(plates);
   }, [route.params]);
   useEffect(getRestaurant, [restaurant]);
@@ -107,29 +112,34 @@ const CrearMenu = ({navigation}) => {
 
   //Enviar los datos al back
   const crearMenu = () => {
+    setIsLoading(true);
+    setVisiblePlatoCreado(true);
     console.log('estoy creando el menu');
     const platos = platosTemp.map(({id, ...keepAttrs}) => keepAttrs);
     const sendData = {
-      restaurant_id: restaurant.id,
+      restaurante_id: restaurant.id,
       platos,
     };
     console.log('Datos a enviar al back: ', sendData);
     const CREATE_PLATE_URL = '/plate';
-    axios
-      .post(CREATE_PLATE_URL, sendData)
-      .then(res => {
-        navigation.navigate('MisRestaurantes', {sendData});
-        console.log('Plate Created Data: ', res.data);
-      })
-      .catch(e => {
-        console.log(`Plate error ${e}`);
-      });
-    setVisiblePlatoCreado(true);
+    if (setVisiblePlatoCreado) {
+      axios
+        .post(CREATE_PLATE_URL, sendData)
+        .then(res => {
+          navigation.navigate('MisRestaurantes', {sendData});
+          console.log('Plate Created Data: ', res.data);
+        })
+        .catch(e => {
+          console.log(`Plate error ${e}`);
+        });
+    }
     setIsLoading(false);
   };
 
   const editarMenu = () => {
-    setVisiblePlatoCreado(true)
+    setVisiblePlatoCreado(true);
+
+    setIsLoading(true);
     //console.log('estoy editando el menu', JSON.stringify(platosTemp));
     const platos = platosTemp.map(
       ({
@@ -143,10 +153,10 @@ const CrearMenu = ({navigation}) => {
       }) => keepAttrs,
     );
     const sendData = {
-      restaurant_id: restaurant.id,
+      restaurante_id: restaurant.id,
       platos,
     };
-    console.log('Datos a enviar al back: ', sendData);
+    console.log('Datos editados a enviar al back: ', sendData);
     const EDIT_PLATE_URL = '/plate';
     if (setVisiblePlatoCreado) {
       axios
@@ -157,8 +167,8 @@ const CrearMenu = ({navigation}) => {
         })
         .catch(e => {
           console.log(`Plate error ${e}`);
-        })
-        .finally(() => setIsLoading(false));
+        });
+      setIsLoading(false);
     }
   };
 
@@ -333,6 +343,51 @@ const CrearMenu = ({navigation}) => {
               borderRadius: 30,
             }}
             onPress={() => {
+              {
+                editarMenu();
+              }
+              setVisiblePlatoCreado(false);
+            }}>
+            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
+          </Pressable>
+        </View>
+      </ModalPoup>
+
+      <ModalPoup visible={platoCreado}>
+        <View style={{alignItems: 'flex-start'}}>
+          <Text style={{fontSize: 20, color: 'black'}}>Menu guardado.</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '2%',
+              marginBottom: '2%',
+              marginHorizontal: '5%',
+            }}
+          />
+        </View>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: '1%',
+            marginBottom: '1%',
+            marginHorizontal: '1%',
+          }}>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '100%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: '#E14852',
+              borderRadius: 30,
+            }}
+            onPress={() => {
+              {
+                crearMenu();
+              }
               setVisiblePlatoCreado(false);
             }}>
             <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>

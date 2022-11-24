@@ -89,7 +89,7 @@ const EditarRestaurante = ({navigation}) => {
 
     useEffect(() => {
       const restaurant = route.params.restaurant;
-      console.log('Estoy en el restaurante: ', restaurant.address);
+      //console.log('Estoy en el restaurante: ', restaurant.address);
       onChangenombreRestaurante(restaurant.nombre);
       onChangeCalle(restaurant.calle);
       onChangeNumero(restaurant.numero.toString());

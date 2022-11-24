@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useEffect } from 'react';
 import {View, Text, Image} from 'react-native';
 import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 
@@ -53,7 +54,11 @@ const PlatoType = plato => {
 };
 
 const Plato = ({plato}) => {
-  //console.log("estoy en plato", categoria)
+  const [image, setImage] = useState();
+  console.log("estoy en plato", plato?.imagen[0]?.imagen)
+  useEffect(()=>{
+    setImage(plato?.imagen[0]?.imagen);
+  },[])
   return (
     // <View
     //   style={{
@@ -93,7 +98,11 @@ const Plato = ({plato}) => {
           }}>
           <Image
             style={{width: 90, height: 90, margin: 5, borderRadius: 30}}
-            source={plato.plato_imagen === '' || DefaultRestaurantImage}
+            source={
+              image
+                ? {uri: plato?.imagen[0]?.imagen}
+                : DefaultRestaurantImage
+            }
           />
           <View
             style={{

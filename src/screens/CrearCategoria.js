@@ -44,6 +44,7 @@ const CrearCategoria = ({navigation}) => {
     axios
       .post(CREATE_CATEGORY_URL, sendData)
       .then(res => {
+        navigation.navigate('CrearMenu', {sendData});
         //console.log('Category Created Data: ', res.data);
       })
       .catch(e => {

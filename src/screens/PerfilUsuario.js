@@ -6,8 +6,6 @@ import {
   SafeAreaView,
   ScrollView,
   TextInput,
-  Modal,
-  StyleSheet,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Avatar} from 'react-native-paper';
@@ -17,8 +15,6 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import axios from '../api/axios';
 import ModalPoup from '../components/ModalPopUp';
 import Theme from '../assets/fonts/Theme';
-import Helper from '../helper/helper';
-import {set} from 'react-native-reanimated';
 
 const PerfilUsuario = ({navigation}) => {
   const {userInfo, logout} = useContext(AuthContext);

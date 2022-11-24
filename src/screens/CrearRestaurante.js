@@ -37,10 +37,13 @@ const CrearRestaurante = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [rangoPrecio, setRangoPrecio] = useState(1);
   const [visibleEmpty, setVisibleEmpty] = useState(false);
+  const [visibleRestaurantNotCreated, setVisibleRestaurantNotCreated] =
+    useState(false);
 
   const createRestaurant = () => {
     //Enviar los datos al back
     setIsLoading(true);
+    setVisibleRestaurantNotCreated(true);
     const listaDeTipoDeComida = [];
     value.forEach(value => {
       listaDeTipoDeComida.push(value);
@@ -77,29 +80,30 @@ const CrearRestaurante = ({navigation}) => {
       Helper.isEmpty(images)
     ) {
       setVisibleEmpty(true);
-    }else{
+    } else {
       //console.log('Los datos a enviar son: ', sendData);
       //console.log(userToken)
       const CREATE_RESTAURANT_URL = '/restaurant';
-      axios
-        .post(CREATE_RESTAURANT_URL, sendData, {
-          headers: {
-            Authorization: `${userToken}`,
-          },
-        })
-        .then(res => {
-          //console.log("estoy en create: ", res)
-          if (res.status === 200) {
-            navigation.navigate('MisRestaurantes', sendData);
-          }
-          //console.log('Restaurant Created Data: ', res.data);
-        })
-        .catch(e => {
-          console.log(`Create restaurant error ${e}`);
-        });
+      if (visibleRestaurantNotCreated) {
+        axios
+          .post(CREATE_RESTAURANT_URL, sendData, {
+            headers: {
+              Authorization: `${userToken}`,
+            },
+          })
+          .then(res => {
+            //console.log("estoy en create: ", res)
+            if (res.status === 200) {
+              navigation.navigate('MisRestaurantes', sendData);
+            }
+            console.log('Restaurant Created Data: ', res.data);
+          })
+          .catch(e => {
+            console.log(`Create restaurant error ${e}`);
+          });
+      }
       setIsLoading(false);
     }
-
   };
 
   //Seteo el rango de los precios
@@ -664,6 +668,57 @@ const CrearRestaurante = ({navigation}) => {
             }}
             onPress={() => {
               setVisibleEmpty(false);
+            }}>
+            <Text style={{color: Theme.colors.THIRD, textAlign: 'center'}}>
+              Aceptar
+            </Text>
+          </Pressable>
+        </View>
+      </ModalPoup>
+
+      <ModalPoup visible={visibleRestaurantNotCreated}>
+        <View style={{alignItems: 'flex-start'}}>
+          <Text
+            style={{
+              fontSize: Theme.fonts.LARGE,
+              color: Theme.colors.SECONDARY,
+            }}>
+            En caso de que no se haya creado el restaurante, la direccion fue
+            mal ingresada.
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '2%',
+              marginBottom: '2%',
+              marginHorizontal: '5%',
+            }}
+          />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: '1%',
+            marginBottom: '1%',
+            marginHorizontal: '1%',
+          }}>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '100%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: Theme.colors.PRIMARY,
+              borderRadius: 30,
+            }}
+            onPress={() => {
+              {
+                createRestaurant();
+              }
+
+              setVisibleRestaurantNotCreated(false);
             }}>
             <Text style={{color: Theme.colors.THIRD, textAlign: 'center'}}>
               Aceptar
