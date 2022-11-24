@@ -16,6 +16,8 @@ import {Chip} from 'react-native-paper';
 import {useRoute} from '@react-navigation/native';
 import axios from '../api/axios';
 import {AuthContext} from '../context/AuthContext';
+import CardOpinion from '../components/CardOpinion';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);
@@ -44,11 +46,33 @@ const DetalleRestaurante = ({navigation}) => {
   const {userInfo} = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
-  const restaurant = route.params.restaurant;
+  const [restaurant, setRestaurant] = useState("");
   const [selectedMoney1, setSelectedMoney1] = useState(false);
   const [selectedMoney2, setSelectedMoney2] = useState(false);
-  const [selectedMoney3, setSelectedMoney3] = useState(true);
+  const [selectedMoney3, setSelectedMoney3] = useState(false);
   const [selectedMoney4, setSelectedMoney4] = useState(false);
+  const [value, setValue] = useState("");
+    const [defaultRating, setDefaultRating] = useState(1);
+    const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
+
+    const starImgFilled =
+      'https://github.com/tranhonghan/images/blob/main/star_filled.png?raw=true';
+    const starImgCorner =
+      'https://github.com/tranhonghan/images/blob/main/star_corner.png?raw=true';
+
+  const [imgActive, setImgActive] = useState(0);
+  const [images, setImages] = useState([]);
+
+  const onChange = () => {
+    if (nativeEvent) {
+      const slide = Math.ceil(
+        nativeEvent.contentOffset.x / nativeEvent.layoutMeasurment.width,
+      );
+      if (slide != imgActive) {
+        setImgActive(slide);
+      }
+    }
+  };
 
   const addFavorite = async restaurant => {
     setLoading(true);
@@ -70,6 +94,30 @@ const DetalleRestaurante = ({navigation}) => {
     setVisible(true);
     setLoading(false);
   };
+
+  useEffect(() => {
+    const restaurant = route.params.restaurant;
+    setRestaurant(restaurant);
+    const imagesList = route.params.restaurant.imagenes;
+    const dataList = imagesList.map(({imagen}) => ({
+      imagen: imagen,
+    }));
+    setImages(dataList);
+    if (restaurant.rangoPrecio === 1) {
+      setSelectedMoney1(true);
+    } else if (restaurant.rangoPrecio === 2) {
+      setSelectedMoney2(true);
+    } else if (restaurant.rangoPrecio === 3) {
+      setSelectedMoney3(true);
+    } else {
+      setSelectedMoney4(true);
+    }
+    const comidas = restaurant.tipoDeComida.split(',');
+    //const myArray = comidas.split("|");
+    setValue(comidas);
+    setDefaultRating(restaurant.calificacion);
+    console.log(restaurant.calificacion);
+  }, []);
 
   return (
     <SafeAreaView
@@ -172,8 +220,34 @@ const DetalleRestaurante = ({navigation}) => {
           width: '100%',
           height: '100%',
         }}>
-        <View style={{width: '70%', alignSelf: 'center'}}>
-          <Image
+        <View style={{width: '70%', alignSelf: 'center', alignItems: 'center'}}>
+          <View style={styles.wrap}>
+            <ScrollView
+              onScroll={({nativeEvent}) => onChange(nativeEvent)}
+              showsHorizontalScrollIndicator={false}
+              pagingEnabled
+              horizontal
+              style={styles.wrap}>
+              {images.map((e, index) => (
+                <Image
+                  key={index}
+                  resizeMode="stretch"
+                  style={styles.wrap}
+                  source={{uri: e.imagen}}
+                />
+              ))}
+            </ScrollView>
+            <View style={styles.wrapDot}>
+              {images.map((e, index) => (
+                <Text
+                  key={index}
+                  style={imgActive == index ? styles.dotActive : styles.dot}>
+                  ●
+                </Text>
+              ))}
+            </View>
+          </View>
+          {/* <Image
             style={{
               top: 10,
               borderTopRightRadius: 80,
@@ -186,7 +260,7 @@ const DetalleRestaurante = ({navigation}) => {
             }}
             resizeMode="contain"
             source={DefaultRestaurantImage}
-          />
+          /> */}
         </View>
         <View
           style={{
@@ -215,14 +289,32 @@ const DetalleRestaurante = ({navigation}) => {
             }}>
             {restaurant.nombre}
           </Text>
-          <Text
+          <View
             style={{
-              color: 'black',
-              fontWeight: '1000',
-              fontSize: 15,
+              top: 10,
+              justifyContent: 'center',
+              flexDirection: 'row',
+              alignItems: 'center',
             }}>
-            Estrellas
-          </Text>
+            {maxRating.map((item, key) => {
+              return (
+                <TouchableOpacity activeOpacity={0.7} key={item}>
+                  <Image
+                    style={{
+                      width: 20,
+                      height: 20,
+                      resizeMode: 'cover',
+                    }}
+                    source={
+                      item <= defaultRating
+                        ? {uri: starImgFilled}
+                        : {uri: starImgCorner}
+                    }
+                  />
+                </TouchableOpacity>
+              );
+            })}
+          </View>
           <Text
             style={{
               color: '#E14852',
@@ -254,7 +346,7 @@ const DetalleRestaurante = ({navigation}) => {
               fontWeight: '500',
               fontSize: 15,
             }}>
-            Cocina general | Cocina de autor
+            {value}
           </Text>
         </View>
         <View
@@ -296,6 +388,31 @@ const DetalleRestaurante = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  wrap: {
+    top: 10,
+    borderTopRightRadius: 80,
+    borderTopLeftRadius: 80,
+    borderBottomLeftRadius: 80,
+    borderBottomRightRadius: 80,
+    alignSelf: 'center',
+    width: '100%',
+    height: 250,
+  },
+  wrapDot: {
+    alignSelf: "center",
+    position: 'absolute',
+    bottom: 0,
+    flexDirection: 'row',
+    alignSelf: 'center',
+  },
+  dotActive: {
+    margin: 3,
+    color: 'black',
+  },
+  dot: {
+    margin: 3,
+    color: 'grey',
+  },
   container: {
     flex: 1,
     backgroundColor: '#D6B1B1',

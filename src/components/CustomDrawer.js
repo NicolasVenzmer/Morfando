@@ -8,14 +8,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AuthContext} from '../context/AuthContext';
 import DefaultImageUser from '../assets/Images/default-user-image.png';
 import axios from '../api/axios';
-const MINUTE_MS = 10000;
+const MINUTE_MS = 100000000000;
 
 const CustomDrawer = props => {
   const {logout, userInfo} = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState('');
   const [image, setImage] = useState();
-  const [ name, setName] = useState()
+  const [name, setName] = useState();
 
   // Obtengo los datos de usuario
   const getUserInfo = () => {
@@ -28,7 +28,7 @@ const CustomDrawer = props => {
         setUser(res.data);
         //if (image === '' || image === undefined) return;
         setImage(res.data[0].imagen.imagen);
-        setName(res.data[0].nombre)
+        setName(res.data[0].nombre);
 
         console.log('User Data: ', res.data);
       })

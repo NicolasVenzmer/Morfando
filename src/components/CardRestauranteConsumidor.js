@@ -1,5 +1,10 @@
 import React, {useState} from 'react';
-import {View, Text, Image, Pressable} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  Pressable,
+} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
@@ -12,9 +17,13 @@ const CardRestauranteConsumidor = ({
   navigation,
   location,
 }) => {
-  //console.log("estoy en la card de restaurante del consumidor", restaurant.longitud)
+  // console.log(
+  //   'estoy en la card de restaurante del consumidor',
+  //   restaurant.imagenes[0].imagen,
+  // );
 
   const [loading, setIsLoading] = useState(false);
+  
   const [km, setKm] = useState();
 
   // //Enviar los datos al back
@@ -87,7 +96,7 @@ const CardRestauranteConsumidor = ({
                 width: '100%',
                 height: 140,
               }}
-              source={{uri: restaurant.imagenes[0]?.imagen}}
+              source={{uri: restaurant.imagenes[0].imagen}}
             />
           </View>
           <View style={{width: '100%', alignItems: 'center'}}>
