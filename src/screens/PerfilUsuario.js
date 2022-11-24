@@ -18,7 +18,7 @@ import axios from '../api/axios';
 import ModalPoup from '../components/ModalPopUp';
 import Theme from '../assets/fonts/Theme';
 import Helper from '../helper/helper';
-import { set } from 'react-native-reanimated';
+import {set} from 'react-native-reanimated';
 
 const PerfilUsuario = ({navigation}) => {
   const {userInfo, logout} = useContext(AuthContext);
@@ -29,7 +29,7 @@ const PerfilUsuario = ({navigation}) => {
   const [user, setUser] = useState('');
 
   const {id, correo, contrasenia, duenio, activo} = userInfo;
-  console.log("estoy en el perfil del usuairo: ", userInfo)
+  //console.log('estoy en el perfil del usuairo: ', userInfo);
 
   //Images
   const [image, setImage] = useState();
@@ -88,7 +88,7 @@ const PerfilUsuario = ({navigation}) => {
   // Cambio los datos del usuario
   const onChangeUserData = async () => {
     //Enviar los datos al back
-   //if (!Helper.isEmpty(nombreUsuario) || Helper.isEmpty(image)) return;
+    //if (!Helper.isEmpty(nombreUsuario) || Helper.isEmpty(image)) return;
     const USER_URL = '/user';
     setIsLoading(true);
     const sendData = {
@@ -104,30 +104,32 @@ const PerfilUsuario = ({navigation}) => {
     await axios
       .put(USER_URL, sendData)
       .then(res => {
-        //console.log('Edited User: ', res.data);
+        console.log('Edited User: ', res.data);
       })
       .catch(e => {
-        console.log(`Create mi cuenta error ${e}`);
+        console.log(`Edited error ${e}`);
       });
     setVisibleUserEdited(true);
     setIsLoading(false);
   };
 
   // Elimino el usuario
-  const onDeleteUser = () => {
+  const onDeleteUser = async () => {
     //Enviar los datos al back
+    const DELETE_USER_URL = '/user';
     setVisibleDeleteUser(true);
     setIsLoading(true);
     const sendData = {
-      id: id,
+      id: userInfo.id,
       activo: false,
     };
+    console.log(sendData);
     if (visibleDeleteUser) {
       axios
-        .delete(USER_URL, {sendData: sendData})
+        .delete(DELETE_USER_URL, {data: sendData})
         .then(res => {
           logout();
-          //console.log('Deleted User: ', res.data);
+          console.log('Deleted User: ', res.data);
         })
         .catch(e => {
           console.log(`Delete User error ${e}`);

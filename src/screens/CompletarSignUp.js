@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 import {
   View,
   Text,
@@ -59,16 +59,9 @@ const CompletarSignUp = ({navigation}) => {
   const [visible, setVisible] = useState(false);
   const [visiblePasswordModal, setVisiblePasswordModal] = useState(false);
   const [loading, setIsLoading] = useState(false);
-  const [defaultImage, setDefaultImage] = useState("");
-  const [users, setUsers] = useState([])
+  const [visibleUserExists, setVisibleUserExists] = useState(false);
 
-  const validateData = () => {
-    let isValid = true;
-    if (password != password2) {
-      setVisiblePasswordModal(true)
-    }
-    return isValid;
-  };
+  const [usersFromBack, setUsersFromBackEnd] = useState([]);
 
   const handleisEmpty = (mail, password) => {
     if (!validateEmail(mail) || isEmpty(password) || isEmpty(password2)) {
@@ -76,7 +69,7 @@ const CompletarSignUp = ({navigation}) => {
     } else if (password != password2) {
       setVisiblePasswordModal(true);
     } else {
-      registerUser(mail, password)
+      registerUser(mail, password);
     }
   };
 
@@ -87,7 +80,7 @@ const CompletarSignUp = ({navigation}) => {
       .get(GET_USERS_URL)
       .then(res => {
         console.log(res.data);
-        //setUsers(res.data.misRestaurantes);
+        setUsersFromBackEnd(res.data);
       })
       .catch(e => {
         console.log(`Users GET error ${e}`);
@@ -96,47 +89,41 @@ const CompletarSignUp = ({navigation}) => {
   };
 
   const registerUser = async (mail, password) => {
-    setIsLoading(true);
+    const users = usersFromBack.map(user => user.correo);
+    const userExists = users.includes(mail);
+    console.log('userExsiste', userExists);
+    if (userExists) {
+      setVisibleUserExists(true);
+    } else {
+      setIsLoading(true);
+      const REGISTER_USER_URL = '/user';
+      //Chequear esto porque pide token
+      const sendData = {
+        nombre: 'Ingresar Nombre',
+        correo: mail,
+        contrasenia: password,
+        imagen: 'https://i.stack.imgur.com/l60Hf.png',
+        duenio: true,
+        activo: false,
+      };
+      console.log(sendData);
 
-    //Chequear esto porque pide token
-    const sendData = {
-      nombre: 'Ingresar Nombre',
-      correo: mail,
-      contrasenia: password,
-      imagen: DefaultImageUser,
-      duenio: true,
-      activo: false,
-    };
-    // const sendData = {
-    //   nombre: 'Ingresar Nombre',
-    //   correo: mail,
-    //   contrasenia: password,
-    //   preguntaSeguridad: 'Como se llamo tu primer mascota?',
-    //   respuestaSeguridad: 'kiki',
-    //   duenio: true,
-    //   activo: false,
-    // };
-    //console.log(sendData)
-
-    axios
-      .post(REGISTER_URL, sendData)
-      .then(res => {
-        //console.log(res.data)
-        if (res.status === 200) {
+      axios
+        .post(REGISTER_USER_URL,  sendData)
+        .then(res => {
+          console.log(res.data);
           navigation.navigate('AltaUsuarioConExito');
-        }
-      })
-      .catch(e => {
-        console.log(`Login error ${e}`);
-      });
-    setIsLoading(false);
+        })
+        .catch(e => {
+          console.log(`Login error ${e}`);
+        });
+      setIsLoading(false);
+    }
   };
 
-  useEffect(()=>{
-    getUsers()
-  //const DefaultImage = require('https://i.ibb.co/vmq0TGv/default-user-image.png');
-    //setDefaultImage(DefaultImage);
-  },[])
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   return (
     <SafeAreaView
@@ -349,6 +336,45 @@ const CompletarSignUp = ({navigation}) => {
             }}
             onPress={() => {
               setVisiblePasswordModal(false);
+            }}>
+            <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
+          </Pressable>
+        </View>
+      </ModalPoup>
+
+      <ModalPoup visible={visibleUserExists}>
+        <View style={{alignItems: 'flex-start'}}>
+          <Text style={{fontSize: 20, color: 'black'}}>
+            Ya hay un usuario registrado con ese email.
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '2%',
+              marginBottom: '2%',
+              marginHorizontal: '5%',
+            }}></View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: '1%',
+            marginBottom: '1%',
+            marginHorizontal: '1%',
+          }}>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '100%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: '#E14852',
+              borderRadius: 30,
+            }}
+            onPress={() => {
+              setVisibleUserExists(false);
             }}>
             <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
           </Pressable>

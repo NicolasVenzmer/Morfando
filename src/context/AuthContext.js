@@ -27,84 +27,89 @@ export const AuthProvider = ({children}) => {
   const [visible, setVisible] = useState(false);
 
   const SSOGoogle = async googleUser => {
-    setIsLoading(true);
+    getUsers();
+    const users = usersFromBack.map(user => user.correo);
+    const userExists = users.includes(googleUser.user.email);
+    console.log("userExsiste", userExists)
+    if (userExists) {
+      const mail = googleUser.user.email;
+      const password = '123';
+      setIsLoading(true);
+      const LOGIN_URL = '/user/:mail/:password';
+      axios
+        .post(LOGIN_URL, {
+          mail,
+          password,
+        })
+        .then(res => {
+          //console.log(res.data);
+          let userData = res.data;
+          //Resultado de aceptacion
+          if (res.status > 299) {
+            setError(ErrorReference[res.status]);
+            return;
+          }
+          //console.log("token", userData.token)
+          setUserInfo(userData.usuario);
+          setUserToken(userData.token);
 
-    //Verifico si existe el email en la base de datos
-    //console.log(googleUser.user.name);
-    // const data = {
-    //   usuario: {
-    //     id: 1,
-    //     correo: googleUser.user.email,
-    //     contrasenia: '123',
-    //     nombre: googleUser.user.name,
-    //     duenio: false,
-    //     activo: true,
-    //     createdAt: '2022-11-15T20:00:15.000Z',
-    //     updatedAt: '2022-11-21T19:25:04.000Z',
-    //   },
-    //   token:
-    //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiJuaWNvdmVuekBob3RtYWlsLmNvbSIsImlhdCI6MTY2OTIyMDQ0OCwiZXhwIjoxNjY5MjI0MDQ4fQ.hcSsiBWw5GEDAFEq81pxqVsNq1WsGV-Onpu1UxkTZ1A',
-    // };
-    // setUserInfo(data.usuario);
-    // setUserToken(data.token);
-    const id = googleUser.user.id;
-    //const exists = await checkUserExists(id);
-    checkUserExists()
-
-    // if (exists) {
-    //   login(username, password);
-    // } else {
-    //   //una vez creado el usuario tengo que llamar al login para que se loggee
-    //   //createUser(googleUser);
-    // }
-
-    //Ejemplo de data para hacer el login a enviar
-    // const userData = {
-    //   mail: googleUser.user.email,
-    //   password: '123',
-    // };
-    //Ejemplo de lo que hay que setear en el setUserInfo
-    // {
-    // "usuario": {
-    //     "id": 2,
-    //     "correo": "nicovenz@hotmail.com",
-    //     "contrasenia": "123",
-    //     "nombre": "Nicolas Venzmer",
-    //     "duenio": true,
-    //     "activo": true,
-    //     "createdAt": "2022-11-15T20:00:15.000Z",
-    //     "updatedAt": "2022-11-21T19:25:04.000Z"
-    // },
-    // "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiJuaWNvdmVuekBob3RtYWlsLmNvbSIsImlhdCI6MTY2OTIyMDQ0OCwiZXhwIjoxNjY5MjI0MDQ4fQ.hcSsiBWw5GEDAFEq81pxqVsNq1WsGV-Onpu1UxkTZ1A"
-
-    //}
-    setIsLoading(false);
+          setEsDueño(false);
+          //console.log('DATA: ', JSON.stringify(userData.usuario.activo));
+          AsyncStorage.setItem('userInfo', JSON.stringify(userData.usuario));
+          AsyncStorage.setItem('userToken', userData.token);
+        })
+        .catch(e => {
+          setError(ErrorReference[404]);
+          setError(ErrorReference[400]);
+          console.log(`Login error ${e}`);
+        });
+      setIsLoading(false);
+      //console.log('estoy en el login porque existe');
+      return;
+    } else {
+      createUser(googleUser);
+      const mail = googleUser.user.email;
+      const password = '123';
+      setIsLoading(true);
+      const LOGIN_URL = '/user/:mail/:password';
+      axios
+        .post(LOGIN_URL, {
+          mail,
+          password,
+        })
+        .then(res => {
+          //console.log(res.data);
+          let userData = res.data;
+          //Resultado de aceptacion
+          if (res.status > 299) {
+            setError(ErrorReference[res.status]);
+            return;
+          }
+          //console.log("token", userData.token)
+          setUserInfo(userData.usuario);
+          setUserToken(userData.token);
+          setEsDueño(false);
+          //console.log('DATA: ', JSON.stringify(userData.usuario.activo));
+          AsyncStorage.setItem('userInfo', JSON.stringify(userData.usuario));
+          AsyncStorage.setItem('userToken', userData.token);
+        })
+        .catch(e => {
+          setError(ErrorReference[404]);
+          setError(ErrorReference[400]);
+          console.log(`Login error ${e}`);
+        });
+      setIsLoading(false);
+      //console.log('estoy en el create porque no existe');
+    }
   };
 
-  const checkUserExists = async () => {
-    // const GET_USER_URL = `/user${id}`;
-    // axios
-    //   .get(GET_USER_URL)
-    //   .then(res => {
-    //     console.log("estoy aca", res.data);
-    //     //si existe seteo el usuario en setUserInfo
-    //     //setUserInfo(res.data)
-    //     //si no existe hago un return que no existe
-    //     //return res.data;
-    //   })
-    //   .catch(e => {
-    //     console.log(`Users GET error ${e}`);
-    //   });
+  const getUsers = async () => {
     const GET_USERS_URL = `/users`;
-    console.log("entre al exists")
     axios
       .get(GET_USERS_URL)
       .then(res => {
-        console.log('estoy aca', res.data);
-        //si existe seteo el usuario en setUserInfo
-        //setUserInfo(res.data)
-        //si no existe hago un return que no existe
-        //return res.data;
+        setUsersFromBackEnd(res.data);
+        return;
       })
       .catch(e => {
         console.log(`Users GET error ${e}`);
@@ -124,10 +129,7 @@ export const AuthProvider = ({children}) => {
     axios
       .post(CREATE_USER_URL, sendData)
       .then(res => {
-        console.log(res.data);
-        //si existe seteo el usuario en setUserInfo
-        //si no existe hago un return que no existe
-        //setUsersFromBackEnd(res.data);
+        return;
       })
       .catch(e => {
         console.log(`Create POST error ${e}`);
@@ -144,7 +146,7 @@ export const AuthProvider = ({children}) => {
         password,
       })
       .then(res => {
-        console.log(res.data);
+        //console.log(res.data);
         let userData = res.data;
         //Resultado de aceptacion
         if (res.status > 299) {
@@ -173,7 +175,12 @@ export const AuthProvider = ({children}) => {
     setIsLoading(false);
   };
 
-  const logout = () => {
+  const logout = async() => {
+    GoogleSignin.configure({
+      androidClientId:
+        '763386562376-it05kregjrduu51masjd81knbhue5g7p.apps.googleusercontent.com',
+      iosClientId: 'ADD_YOUR_iOS_CLIENT_ID_HERE',
+    });
     setIsLoading(true);
     setUserToken(null);
     setEsDueño(null);
@@ -183,7 +190,6 @@ export const AuthProvider = ({children}) => {
     const signOut = async () => {
       try {
         await GoogleSignin.signOut();
-        //this.setState({user: null}); // Remember to remove the user from your app's state as well
         setUserToken(null);
         setEsDueño(null);
         AsyncStorage.removeItem('userInfo');
@@ -205,13 +211,12 @@ export const AuthProvider = ({children}) => {
 
       if (userInfo) {
         // ACA ME FIJO SI EL DUEÑO O NO
-        //console.log(userInfo.duenio)
-        if (!userInfo.duenio) {
-          setVisible(true);
-        }
-        //console.log('isLoggedIn: ', userInfo);
         setUserToken(userToken);
         setUserInfo(userInfo);
+        //console.log("isloggedin", userInfo)
+        if(userInfo.duenio){
+          setEsDueño(true)
+        }
       } else {
         setIsLoading(false);
         return;
