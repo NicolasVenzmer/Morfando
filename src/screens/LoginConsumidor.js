@@ -1,13 +1,31 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, Text, Image, Pressable, SafeAreaView, Button} from 'react-native';
 import {
   GoogleSignin,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import {AuthContext, ErrorReference} from '../context/AuthContext';
+import axios from '../api/axios';
 
 const LoginConsumidor = ({navigation}) => {
   const {SSOGoogle} = useContext(AuthContext);
+  const [usersFromBack, setUsersFromBackEnd] = useState([]);
+
+  const getUsers = async () => {
+    const GET_USERS_URL = `/users`;
+    axios
+      .get(GET_USERS_URL)
+      .then(res => {
+        setUsersFromBackEnd(res.data);
+        return;
+      })
+      .catch(e => {
+        console.log(`Users GET error ${e}`);
+      });
+  };
+  useEffect(() => {
+    getUsers();
+  }, []);
   return (
     <SafeAreaView
       style={{
@@ -76,7 +94,7 @@ const LoginConsumidor = ({navigation}) => {
               if (hasPlayService) {
                 GoogleSignin.signIn()
                   .then(userInfo => {
-                    SSOGoogle(userInfo);
+                    SSOGoogle(userInfo, usersFromBack);
                     // console.log(JSON.stringify(userInfo));
                   })
                   .catch(e => {

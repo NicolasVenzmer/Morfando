@@ -23,14 +23,14 @@ export const AuthProvider = ({children}) => {
   const [userToken, setUserToken] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [error, setError] = useState('');
-  const [usersFromBack, setUsersFromBackEnd] = useState([]);
   const [visible, setVisible] = useState(false);
 
-  const SSOGoogle = async googleUser => {
-    getUsers();
+  const SSOGoogle = async (googleUser,usersFromBack) => {
     const users = usersFromBack.map(user => user.correo);
     const userExists = users.includes(googleUser.user.email);
-    console.log("userExsiste", userExists)
+    //console.log("userExsiste", userExists)
+    
+    //console.log(usersFromBack);
     if (userExists) {
       const mail = googleUser.user.email;
       const password = '123';
@@ -101,19 +101,6 @@ export const AuthProvider = ({children}) => {
       setIsLoading(false);
       //console.log('estoy en el create porque no existe');
     }
-  };
-
-  const getUsers = async () => {
-    const GET_USERS_URL = `/users`;
-    axios
-      .get(GET_USERS_URL)
-      .then(res => {
-        setUsersFromBackEnd(res.data);
-        return;
-      })
-      .catch(e => {
-        console.log(`Users GET error ${e}`);
-      });
   };
 
   const createUser = async googleUser => {
