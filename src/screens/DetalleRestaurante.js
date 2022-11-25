@@ -16,8 +16,8 @@ import {Chip} from 'react-native-paper';
 import {useRoute} from '@react-navigation/native';
 import axios from '../api/axios';
 import {AuthContext} from '../context/AuthContext';
-import CardOpinion from '../components/CardOpinion';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import GetLocation from 'react-native-get-location';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);
@@ -46,19 +46,22 @@ const DetalleRestaurante = ({navigation}) => {
   const {userInfo} = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
-  const [restaurant, setRestaurant] = useState("");
+  const [restaurant, setRestaurant] = useState('');
   const [selectedMoney1, setSelectedMoney1] = useState(false);
   const [selectedMoney2, setSelectedMoney2] = useState(false);
   const [selectedMoney3, setSelectedMoney3] = useState(false);
   const [selectedMoney4, setSelectedMoney4] = useState(false);
-  const [value, setValue] = useState("");
-    const [defaultRating, setDefaultRating] = useState(1);
-    const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
+  const [value, setValue] = useState('');
+  const [defaultRating, setDefaultRating] = useState(1);
+  const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
+  const [location, setLocation] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [kilometers, setKilometers] = useState('');
 
-    const starImgFilled =
-      'https://github.com/tranhonghan/images/blob/main/star_filled.png?raw=true';
-    const starImgCorner =
-      'https://github.com/tranhonghan/images/blob/main/star_corner.png?raw=true';
+  const starImgFilled =
+    'https://github.com/tranhonghan/images/blob/main/star_filled.png?raw=true';
+  const starImgCorner =
+    'https://github.com/tranhonghan/images/blob/main/star_corner.png?raw=true';
 
   const [imgActive, setImgActive] = useState(0);
   const [images, setImages] = useState([]);
@@ -72,6 +75,36 @@ const DetalleRestaurante = ({navigation}) => {
         setImgActive(slide);
       }
     }
+  };
+
+  const getCurrentLocation = () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then(location => {
+        const sendData = {
+          latitudUsuario: location.latitude,
+          longitudUsuario: location.longitude,
+          latitudRestaurant: restaurant.latitud,
+          longitudRestaurant: restaurant.longitud,
+        };
+        //console.log('Datos a enviar al back: ', sendData);
+        const GEOLOCATION_URL = '/geolocation';
+        axios
+          .post(GEOLOCATION_URL, sendData)
+          .then(res => {
+            //console.log('KM GET Data: ', res.data.rows[0].elements[0].distance.text);
+            setKilometers(res.data.rows[0].elements[0].distance.text);
+          })
+          .catch(e => {
+            console.log(`KM error ${e}`);
+          });
+      })
+      .catch(error => {
+        const {code, message} = error;
+        console.warn(code, message);
+      });
   };
 
   const addFavorite = async restaurant => {
@@ -116,8 +149,8 @@ const DetalleRestaurante = ({navigation}) => {
     //const myArray = comidas.split("|");
     setValue(comidas);
     setDefaultRating(restaurant.calificacion);
-    console.log(restaurant.calificacion);
   }, []);
+  useEffect(getCurrentLocation, [restaurant]);
 
   return (
     <SafeAreaView
@@ -329,7 +362,7 @@ const DetalleRestaurante = ({navigation}) => {
               fontWeight: '500',
               fontSize: 20,
             }}>
-            0,5 km
+            {kilometers}
           </Text>
         </View>
         <View
@@ -399,7 +432,7 @@ const styles = StyleSheet.create({
     height: 250,
   },
   wrapDot: {
-    alignSelf: "center",
+    alignSelf: 'center',
     position: 'absolute',
     bottom: 0,
     flexDirection: 'row',

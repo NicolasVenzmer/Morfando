@@ -100,7 +100,7 @@ const PerfilUsuario = ({navigation}) => {
     await axios
       .put(USER_URL, sendData)
       .then(res => {
-        console.log('Edited User: ', res.data);
+        //console.log('Edited User: ', res.data);
       })
       .catch(e => {
         console.log(`Edited error ${e}`);

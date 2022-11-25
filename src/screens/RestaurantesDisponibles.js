@@ -14,7 +14,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from '../api/axios';
 import {Searchbar} from 'react-native-paper';
 import {AuthContext} from '../context/AuthContext';
-import Geolocation from '@react-native-community/geolocation';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);
@@ -45,7 +44,7 @@ const RestaurantesDisponibles = ({navigation}) => {
   const [restaurants, setRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState([]);
   const {userInfo} = useContext(AuthContext);
-  const [location, setLocation] = useState();
+
   const onChangeSearch = query => {
     if (query) {
       const newData = restaurants.filter(restaurant => {
@@ -80,13 +79,6 @@ const RestaurantesDisponibles = ({navigation}) => {
 
   useEffect(() => {
     getRestaurants();
-    // Geolocation.getCurrentPosition(info => {
-    //   const location = {
-    //     latitude: info.coords.latitude,
-    //     longitude: info.coords.longitude,
-    //   };
-    //   setLocation(location)
-    // });
   }, []);
 
   const addFavorite = async restaurant => {
@@ -268,7 +260,6 @@ const RestaurantesDisponibles = ({navigation}) => {
                   addFavorite={() => addFavorite(restaurant)}
                   restaurant={restaurant}
                   navigation={navigation}
-                  location={location}
                 />
               ))}
             </View>
