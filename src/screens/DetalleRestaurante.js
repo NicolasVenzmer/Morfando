@@ -57,6 +57,7 @@ const DetalleRestaurante = ({navigation}) => {
   const [location, setLocation] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [kilometers, setKilometers] = useState('');
+  const [address, setAddress] = useState('');
 
   const starImgFilled =
     'https://github.com/tranhonghan/images/blob/main/star_filled.png?raw=true';
@@ -94,8 +95,9 @@ const DetalleRestaurante = ({navigation}) => {
         axios
           .post(GEOLOCATION_URL, sendData)
           .then(res => {
-            //console.log('KM GET Data: ', res.data.rows[0].elements[0].distance.text);
+            //console.log('KM GET Data: ', res.data.destination_addresses);
             setKilometers(res.data.rows[0].elements[0].distance.text);
+            setAddress(res.data.destination_addresses);
           })
           .catch(e => {
             console.log(`KM error ${e}`);
@@ -148,7 +150,21 @@ const DetalleRestaurante = ({navigation}) => {
     const comidas = restaurant.tipoDeComida.split(',');
     //const myArray = comidas.split("|");
     setValue(comidas);
-    setDefaultRating(restaurant.calificacion);
+    const calificacionesDeOpiniones = restaurant.opiniones;
+    const dataListCalificaciones = calificacionesDeOpiniones.map(
+      ({calificacion}) => ({
+        calificacion: calificacion,
+      }),
+    );
+    var cantidad = 0;
+    var suma = 0;
+    dataListCalificaciones.map(calificacion => {
+      suma = suma + calificacion.calificacion;
+      cantidad = cantidad + 1;
+    });
+
+    const resultado = suma / cantidad;
+    setDefaultRating(resultado);
   }, []);
   useEffect(getCurrentLocation, [restaurant]);
 
@@ -334,8 +350,8 @@ const DetalleRestaurante = ({navigation}) => {
                 <TouchableOpacity activeOpacity={0.7} key={item}>
                   <Image
                     style={{
-                      width: 20,
-                      height: 20,
+                      width: 25,
+                      height: 25,
                       resizeMode: 'cover',
                     }}
                     source={
@@ -348,22 +364,27 @@ const DetalleRestaurante = ({navigation}) => {
               );
             })}
           </View>
-          <Text
-            style={{
-              color: '#E14852',
-              fontWeight: '500',
-              fontSize: 15,
-            }}>
-            {restaurant.address}
-          </Text>
-          <Text
-            style={{
-              color: '#E14852',
-              fontWeight: '500',
-              fontSize: 20,
-            }}>
-            {kilometers}
-          </Text>
+          <View style={{marginTop: 20, alignItems: 'center'}}>
+            <Text
+              style={{
+                color: '#E14852',
+                fontWeight: '500',
+                fontSize: 15,
+                alignSelf: 'center',
+                textAlign: 'center',
+              }}>
+              {address}
+            </Text>
+            <Text
+              style={{
+                marginTop: 10,
+                color: '#E14852',
+                fontWeight: '500',
+                fontSize: 20,
+              }}>
+              {kilometers}
+            </Text>
+          </View>
         </View>
         <View
           style={{
@@ -378,6 +399,7 @@ const DetalleRestaurante = ({navigation}) => {
               color: 'black',
               fontWeight: '500',
               fontSize: 15,
+              textAlign: 'center',
             }}>
             {value}
           </Text>
