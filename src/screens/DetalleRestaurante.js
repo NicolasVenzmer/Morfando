@@ -8,6 +8,7 @@ import {
   Modal,
   StyleSheet,
   Pressable,
+  Share,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -18,6 +19,7 @@ import axios from '../api/axios';
 import {AuthContext} from '../context/AuthContext';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import GetLocation from 'react-native-get-location';
+import {Linking, Platform} from 'react-native';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);
@@ -54,10 +56,9 @@ const DetalleRestaurante = ({navigation}) => {
   const [value, setValue] = useState('');
   const [defaultRating, setDefaultRating] = useState(1);
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
-  const [location, setLocation] = useState();
-  const [isLoading, setIsLoading] = useState(false);
   const [kilometers, setKilometers] = useState('');
   const [address, setAddress] = useState('');
+  const [restaurantLocation, setRestaurantLocation] = useState('');
 
   const starImgFilled =
     'https://github.com/tranhonghan/images/blob/main/star_filled.png?raw=true';
@@ -66,6 +67,37 @@ const DetalleRestaurante = ({navigation}) => {
 
   const [imgActive, setImgActive] = useState(0);
   const [images, setImages] = useState([]);
+
+  const openMap = async (latitude, longitude) => {
+    const scheme = Platform.select({ios: 'maps:0,0?q=', android: 'geo:0,0?q='});
+    const latLng = `${latitude},${longitude}`;
+    const label = 'Morfando';
+    const url = Platform.select({
+      ios: `${scheme}${label}@${latLng}`,
+      android: `${scheme}${latLng}(${label})`,
+    });
+
+    Linking.openURL(url);
+  };
+
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `EL restaurante ${restaurant.nombre} se encuentra en ${address}, actualmente a una distancia de ${kilometers}.`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   const onChange = () => {
     if (nativeEvent) {
@@ -90,6 +122,11 @@ const DetalleRestaurante = ({navigation}) => {
           latitudRestaurant: restaurant.latitud,
           longitudRestaurant: restaurant.longitud,
         };
+        const restaurantLocation = {
+          latitude: restaurant.latitud,
+          longitude: restaurant.longitud,
+        };
+        setRestaurantLocation(restaurantLocation);
         //console.log('Datos a enviar al back: ', sendData);
         const GEOLOCATION_URL = '/geolocation';
         axios
@@ -162,7 +199,6 @@ const DetalleRestaurante = ({navigation}) => {
       suma = suma + calificacion.calificacion;
       cantidad = cantidad + 1;
     });
-
     const resultado = suma / cantidad;
     setDefaultRating(resultado);
   }, []);
@@ -197,12 +233,23 @@ const DetalleRestaurante = ({navigation}) => {
           }}
           onPress={() => navigation.goBack()}
         />
-        <FontAwesome
-          name="commenting-o"
+        <Ionicons
+          name="navigate"
           style={{
             color: 'black',
             marginLeft: 'auto',
             right: 40,
+            fontSize: 30,
+          }}
+          onPress={() =>
+            openMap(restaurantLocation.latitude, restaurantLocation.longitude)
+          }
+        />
+        <FontAwesome
+          name="commenting-o"
+          style={{
+            color: 'black',
+            right: 35,
             fontSize: 30,
           }}
           onPress={() => navigation.navigate('Opiniones', {restaurant})}
@@ -214,7 +261,7 @@ const DetalleRestaurante = ({navigation}) => {
             right: 30,
             fontSize: 30,
           }}
-          //onPress={() => navigation.goBack()}
+          onPress={() => onShare()}
         />
         <Ionicons
           name="heart-outline"
@@ -452,6 +499,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     height: 250,
+    backgroundColor: 'red',
   },
   wrapDot: {
     alignSelf: 'center',

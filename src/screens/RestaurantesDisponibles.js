@@ -14,6 +14,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from '../api/axios';
 import {Searchbar} from 'react-native-paper';
 import {AuthContext} from '../context/AuthContext';
+import GetLocation from 'react-native-get-location';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);
@@ -44,6 +45,8 @@ const RestaurantesDisponibles = ({navigation}) => {
   const [restaurants, setRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState([]);
   const {userInfo} = useContext(AuthContext);
+  // const [kilometers, setKilometers] = useState('');
+  // const [location, setLocation] = useState('');
 
   const onChangeSearch = query => {
     if (query) {
@@ -77,9 +80,52 @@ const RestaurantesDisponibles = ({navigation}) => {
     setLoading(false);
   };
 
+  // const getCurrentLocation = () => {
+  //   GetLocation.getCurrentPosition({
+  //     enableHighAccuracy: true,
+  //     timeout: 15000,
+  //   })
+  //     .then(location => {
+  //       const data = {
+  //         latitude: location.latitude,
+  //         longitude: location.longitude,
+  //       };
+  //       setLocation(data);
+  //       //console.log(data);
+  //     })
+  //     .catch(error => {
+  //       const {code, message} = error;
+  //       console.warn(code, message);
+  //     });
+  // };
+
+  // const getKilometers = async () => {
+  //   const GEOLOCATION_URL = '/geolocation';
+  //   restaurants.map(restaurant => {
+  //     const sendData = {
+  //       latitudUsuario: location.latitude,
+  //       longitudUsuario: location.longitude,
+  //       latitudRestaurant: restaurant.latitud,
+  //       longitudRestaurant: restaurant.longitud,
+  //     };
+  //     //console.log('Datos a enviar al back: ', sendData);
+  //     axios
+  //       .post(GEOLOCATION_URL, sendData)
+  //       .then(res => {
+  //         //console.log('KM GET Data: ', res.data.rows[0].elements[0].distance.text);
+  //         setKilometers(res.data.rows[0].elements[0].distance.text);
+  //       })
+  //       .catch(e => {
+  //         console.log(`KM error ${e}`);
+  //       });
+  //   });
+  // };
+
   useEffect(() => {
     getRestaurants();
-  }, []);
+   }, []);
+  // useEffect(getCurrentLocation, [restaurants]);
+  // useEffect(getKilometers, [location]);
 
   const addFavorite = async restaurant => {
     setLoading(true);
