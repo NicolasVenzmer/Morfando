@@ -9,10 +9,10 @@ import {
   StyleSheet,
   Pressable,
   Share,
+  Dimensions,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 import {Chip} from 'react-native-paper';
 import {useRoute} from '@react-navigation/native';
 import axios from '../api/axios';
@@ -20,6 +20,7 @@ import {AuthContext} from '../context/AuthContext';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import GetLocation from 'react-native-get-location';
 import {Linking, Platform} from 'react-native';
+import CarouselImages from '../components/CarouselImages';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);
@@ -43,6 +44,8 @@ const ModalPoup = ({visible, children}) => {
   );
 };
 
+const widthScreen = Dimensions.get('window').width;
+
 const DetalleRestaurante = ({navigation}) => {
   const route = useRoute();
   const {userInfo} = useContext(AuthContext);
@@ -59,6 +62,7 @@ const DetalleRestaurante = ({navigation}) => {
   const [kilometers, setKilometers] = useState('');
   const [address, setAddress] = useState('');
   const [restaurantLocation, setRestaurantLocation] = useState('');
+  const [activeSlide, setActiveSlide] = useState(0);
 
   const starImgFilled =
     'https://github.com/tranhonghan/images/blob/main/star_filled.png?raw=true';
@@ -167,6 +171,14 @@ const DetalleRestaurante = ({navigation}) => {
     setLoading(false);
   };
 
+  function replaceAll(str, find, replace) {
+    return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+  }
+
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
   useEffect(() => {
     const restaurant = route.params.restaurant;
     setRestaurant(restaurant);
@@ -184,7 +196,9 @@ const DetalleRestaurante = ({navigation}) => {
     } else {
       setSelectedMoney4(true);
     }
-    const comidas = restaurant.tipoDeComida.split(',');
+    const comidas = replaceAll(restaurant.tipoDeComida, ',', ' | ');
+    //console.log(new_name);
+    //    const comidas = restaurant.tipoDeComida.split(',');
     //const myArray = comidas.split("|");
     setValue(comidas);
     const calificacionesDeOpiniones = restaurant.opiniones;
@@ -199,7 +213,10 @@ const DetalleRestaurante = ({navigation}) => {
       suma = suma + calificacion.calificacion;
       cantidad = cantidad + 1;
     });
-    const resultado = suma / cantidad;
+    var resultado = suma / cantidad;
+    if (isNaN(resultado)) {
+      resultado = 1;
+    }
     setDefaultRating(resultado);
   }, []);
   useEffect(getCurrentLocation, [restaurant]);
@@ -316,48 +333,14 @@ const DetalleRestaurante = ({navigation}) => {
           width: '100%',
           height: '100%',
         }}>
-        <View style={{width: '70%', alignSelf: 'center', alignItems: 'center'}}>
-          <View style={styles.wrap}>
-            <ScrollView
-              onScroll={({nativeEvent}) => onChange(nativeEvent)}
-              showsHorizontalScrollIndicator={false}
-              pagingEnabled
-              horizontal
-              style={styles.wrap}>
-              {images.map((e, index) => (
-                <Image
-                  key={index}
-                  resizeMode="stretch"
-                  style={styles.wrap}
-                  source={{uri: e.imagen}}
-                />
-              ))}
-            </ScrollView>
-            <View style={styles.wrapDot}>
-              {images.map((e, index) => (
-                <Text
-                  key={index}
-                  style={imgActive == index ? styles.dotActive : styles.dot}>
-                  ●
-                </Text>
-              ))}
-            </View>
-          </View>
-          {/* <Image
-            style={{
-              top: 10,
-              borderTopRightRadius: 80,
-              borderTopLeftRadius: 80,
-              borderBottomLeftRadius: 80,
-              borderBottomRightRadius: 80,
-              alignSelf: 'center',
-              width: '100%',
-              height: 250,
-            }}
-            resizeMode="contain"
-            source={DefaultRestaurantImage}
-          /> */}
-        </View>
+        <CarouselImages
+          style={{alignSelf: 'center'}}
+          images={images}
+          height={250}
+          width={widthScreen}
+          // activeSlide={activeSlide}
+          // setActiveSlide={activeSlide}
+        />
         <View
           style={{
             width: '70%',
@@ -490,32 +473,6 @@ const DetalleRestaurante = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  wrap: {
-    top: 10,
-    borderTopRightRadius: 80,
-    borderTopLeftRadius: 80,
-    borderBottomLeftRadius: 80,
-    borderBottomRightRadius: 80,
-    alignSelf: 'center',
-    width: '100%',
-    height: 250,
-    backgroundColor: 'red',
-  },
-  wrapDot: {
-    alignSelf: 'center',
-    position: 'absolute',
-    bottom: 0,
-    flexDirection: 'row',
-    alignSelf: 'center',
-  },
-  dotActive: {
-    margin: 3,
-    color: 'black',
-  },
-  dot: {
-    margin: 3,
-    color: 'grey',
-  },
   container: {
     flex: 1,
     backgroundColor: '#D6B1B1',
