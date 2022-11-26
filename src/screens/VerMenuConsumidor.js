@@ -45,7 +45,7 @@ const VerMenuConsumidor = ({navigation}) => {
             marginRight: 25,
             fontSize: 30,
           }}
-          onPress={() => navigation.replace('RestaurantesDisponibles')}
+          onPress={() => navigation.goBack()}
         />
         <Text
           style={{

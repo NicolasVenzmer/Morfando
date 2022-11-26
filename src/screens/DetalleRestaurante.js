@@ -69,7 +69,6 @@ const DetalleRestaurante = ({navigation}) => {
   const starImgCorner =
     'https://github.com/tranhonghan/images/blob/main/star_corner.png?raw=true';
 
-  const [imgActive, setImgActive] = useState(0);
   const [images, setImages] = useState([]);
 
   const openMap = async (latitude, longitude) => {
@@ -100,17 +99,6 @@ const DetalleRestaurante = ({navigation}) => {
       }
     } catch (error) {
       alert(error.message);
-    }
-  };
-
-  const onChange = () => {
-    if (nativeEvent) {
-      const slide = Math.ceil(
-        nativeEvent.contentOffset.x / nativeEvent.layoutMeasurment.width,
-      );
-      if (slide != imgActive) {
-        setImgActive(slide);
-      }
     }
   };
 
@@ -180,9 +168,10 @@ const DetalleRestaurante = ({navigation}) => {
   }
 
   useEffect(() => {
+    console.log('ESTOY ACA', route.params.restaurant);
     const restaurant = route.params.restaurant;
     setRestaurant(restaurant);
-    const imagesList = route.params.restaurant.imagenes;
+    const imagesList = route.params.restaurant?.imagenes;
     const dataList = imagesList.map(({imagen}) => ({
       imagen: imagen,
     }));
@@ -197,9 +186,6 @@ const DetalleRestaurante = ({navigation}) => {
       setSelectedMoney4(true);
     }
     const comidas = replaceAll(restaurant.tipoDeComida, ',', ' | ');
-    //console.log(new_name);
-    //    const comidas = restaurant.tipoDeComida.split(',');
-    //const myArray = comidas.split("|");
     setValue(comidas);
     const calificacionesDeOpiniones = restaurant.opiniones;
     const dataListCalificaciones = calificacionesDeOpiniones.map(

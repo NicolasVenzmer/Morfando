@@ -18,7 +18,7 @@ import Theme from '../assets/fonts/Theme';
 const Favoritos = ({navigation}) => {
   const {userInfo} = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
-  const [restaurants, setRestaurants] = useState([]);
+  const [favoritos, setFavoritos] = useState([]);
   const [visible, setVisible] = useState(false);
   const [confirm, setConfirm] = useState({ok: () => {}, cancel: () => {}});
 
@@ -30,8 +30,8 @@ const Favoritos = ({navigation}) => {
     axios
       .get(GET_FAVORITES_URL)
       .then(res => {
-        setRestaurants(res.data[0].favorite);
-        console.log("favoritos:", res.data[0].favorite)
+        setFavoritos(res.data[0].favorite);
+        //console.log("favoritos:", res.data[0].favorite)
       })
       .catch(e => {
         console.log(`Restaurants GET error ${e}`);
@@ -57,10 +57,10 @@ const Favoritos = ({navigation}) => {
   };
 
   // Elimino un favorito en especifico
-  const deleteFavorite = async restaurant => {
+  const deleteFavorite = async favorito => {
     const sendData = {
       usuario_id: userInfo.id,
-      restaurante_id: restaurant.restaurante.id,
+      restaurante_id: favorito.restaurante.id,
       activo: false,
     };
     //console.log('El favorito a eliminar es: ', sendData);
@@ -68,9 +68,9 @@ const Favoritos = ({navigation}) => {
     axios
       .delete(DELETE_FAVORITE_URL, {data: sendData})
       .then(res => {
-        const dataDelete = [...restaurants];
-        const filteredData = dataDelete.filter(el => el.id != restaurant.id);
-        setRestaurants(filteredData);
+        const dataDelete = [...favoritos];
+        const filteredData = dataDelete.filter(el => el.id != favorito.id);
+        setFavoritos(filteredData);
       })
       .catch(e => {
         console.log(`Restaurants DELETE error ${e}`);
@@ -124,7 +124,7 @@ const Favoritos = ({navigation}) => {
           width: '100%',
           height: '100%',
         }}>
-        {!restaurants?.length > 0 ? (
+        {!favoritos?.length > 0 ? (
           <>
             <Pressable
               style={{
@@ -216,13 +216,13 @@ const Favoritos = ({navigation}) => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              {restaurants?.map(restaurant => (
+              {favoritos?.map(favorito => (
                 <CardFavoritos
-                  key={restaurant.id}
-                  restaurant={restaurant}
+                  key={favorito.id}
+                  favorito={favorito}
                   navigation={navigation}
                   deleteFavorite={withConfirmationDialog(() =>
-                    deleteFavorite(restaurant),
+                    deleteFavorite(favorito),
                   )}
                 />
               ))}

@@ -1,15 +1,33 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {View, Text, Image, Pressable} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
+import axios from '../api/axios';
 import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 
-const CardFavoritos = ({restaurant, navigation, deleteFavorite}) => {
-  //NO ME TRAE LA IMAGEN EN FAVORITOS
-  //console.log("Card de Favoritos: ",restaurant.restaurante.imagenes[0].imagen)
+const CardFavoritos = ({favorito, navigation, deleteFavorite}) => {
+  //console.log("Card de Favoritos: ",favorito.restaurante.imagenes[0].imagen)
+  const [restaurant, setRestaurant] = useState('');
+  const [loading, setLoading] = useState(true);
+  const getRestaurants = async () => {
+    const GET_RESTAURANT_URL = `/restaurant${favorito.restaurante.id}`;
+    axios
+      .get(GET_RESTAURANT_URL)
+      .then(res => {
+        //console.log(res.data[0]);
+        setRestaurant(res.data[0]);
+      })
+      .catch(e => {
+        console.log(`Restaurants GET error ${e}`);
+      });
+    setLoading(false);
+  };
+  useEffect(() => {
+    getRestaurants();
+  }, []);
   return (
     <>
-      {restaurant.activo ? (
+      {favorito.activo ? (
         <View
           style={{
             backgroundColor: '#F2F1F0',
@@ -49,7 +67,7 @@ const CardFavoritos = ({restaurant, navigation, deleteFavorite}) => {
                 width: '100%',
                 height: 140,
               }}
-              source={{uri: restaurant.restaurante.imagenes[0].imagen}}
+              source={{uri: favorito.restaurante.imagenes[0].imagen}}
             />
           </View>
           <View style={{width: '100%', alignItems: 'center'}}>
@@ -64,7 +82,7 @@ const CardFavoritos = ({restaurant, navigation, deleteFavorite}) => {
                   fontWeight: '500',
                   flexWrap: 'wrap',
                 }}>
-                {restaurant.restaurante.nombre}
+                {favorito.restaurante.nombre}
               </Text>
               <Text
                 style={{

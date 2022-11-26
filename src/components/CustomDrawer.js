@@ -30,7 +30,7 @@ const CustomDrawer = props => {
         setImage(res.data[0].imagen.imagen);
         setName(res.data[0].nombre);
 
-        console.log('User Data: ', res.data);
+        //console.log('User Data: ', res.data);
       })
       .catch(e => {
         console.log(`User Data  error ${e}`);

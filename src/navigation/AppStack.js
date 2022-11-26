@@ -89,6 +89,7 @@ const FlowDeConsumer = ({navigation}) => {
         component={RestaurantesDisponibles}
       />
       <Stack.Screen name="VerMenuConsumidor" component={VerMenuConsumidor} />
+      <Stack.Screen name="Favoritos" component={Favoritos} />
       <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
       <Stack.Screen name="DetalleRestaurante" component={DetalleRestaurante} />
       <Stack.Screen name="Opiniones" component={Opiniones} />
