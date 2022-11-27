@@ -1,12 +1,9 @@
 import React, {useContext} from 'react';
 import {View, ActivityIndicator} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AuthStack from './AuthStack';
 import AppStack from './AppStack';
 import {AuthContext} from '../context/AuthContext';
-
-const Stack = createNativeStackNavigator();
 
 const AppNav = () => {
   const {isLoading, userToken} = useContext(AuthContext);
@@ -18,8 +15,23 @@ const AppNav = () => {
       </View>
     );
   }
+
+  const linking = {
+    prefixes: ['morfando-inc2022.up.railway.app://'],
+    config: {
+      initialRouteName: 'IngresarNuevaContraseña',
+      screens: {
+        IngresarNuevaContraseña: {
+          path: 'IngresarNuevaContraseña/:userId',
+        },
+      },
+    },
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      linking={linking}
+      fallback={<ActivityIndicator color="blue" size="large" />}>
       {userToken !== null ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );

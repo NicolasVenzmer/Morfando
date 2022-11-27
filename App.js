@@ -9,7 +9,7 @@ const App = () => {
   }, []);
   return (
     <AuthProvider>
-      <AppNav />
+      <AppNav/>
     </AuthProvider>
   );
 };
@@ -21,3 +21,5 @@ export default App;
 //PARA RESETEAR EL CACHE DE METRO -> npx react-native start --reset-cache
 
 // APK -> cd android ->  ./gradlew clean -> ./gradlew assembleRelease
+
+// Open url -> npx uri-scheme open https://morfando-inc2022.up.railway.app://IngresarNuevaContraseña/:6 --android

@@ -19,8 +19,8 @@ import axios from '../api/axios';
 import {AuthContext} from '../context/AuthContext';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import GetLocation from 'react-native-get-location';
-import {Linking, Platform} from 'react-native';
 import CarouselImages from '../components/CarouselImages';
+import {Linking, Platform} from 'react-native';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);
@@ -62,7 +62,7 @@ const DetalleRestaurante = ({navigation}) => {
   const [kilometers, setKilometers] = useState('');
   const [address, setAddress] = useState('');
   const [restaurantLocation, setRestaurantLocation] = useState('');
-  const [activeSlide, setActiveSlide] = useState(0);
+  const [nombre,setNombre] = useState('')
 
   const starImgFilled =
     'https://github.com/tranhonghan/images/blob/main/star_filled.png?raw=true';
@@ -72,6 +72,7 @@ const DetalleRestaurante = ({navigation}) => {
   const [images, setImages] = useState([]);
 
   const openMap = async (latitude, longitude) => {
+    console.log("estoy en openMap")
     const scheme = Platform.select({ios: 'maps:0,0?q=', android: 'geo:0,0?q='});
     const latLng = `${latitude},${longitude}`;
     const label = 'Morfando';
@@ -114,17 +115,12 @@ const DetalleRestaurante = ({navigation}) => {
           latitudRestaurant: restaurant.latitud,
           longitudRestaurant: restaurant.longitud,
         };
-        const restaurantLocation = {
-          latitude: restaurant.latitud,
-          longitude: restaurant.longitud,
-        };
-        setRestaurantLocation(restaurantLocation);
-        //console.log('Datos a enviar al back: ', sendData);
         const GEOLOCATION_URL = '/geolocation';
+        console.log("Data to send of location:", sendData);
         axios
           .post(GEOLOCATION_URL, sendData)
           .then(res => {
-            //console.log('KM GET Data: ', res.data.destination_addresses);
+            //console.log('KM GET Data: ', res.data);
             setKilometers(res.data.rows[0].elements[0].distance.text);
             setAddress(res.data.destination_addresses);
           })
@@ -168,10 +164,15 @@ const DetalleRestaurante = ({navigation}) => {
   }
 
   useEffect(() => {
-    console.log('ESTOY ACA', route.params.restaurant);
     const restaurant = route.params.restaurant;
-    setRestaurant(restaurant);
-    const imagesList = route.params.restaurant?.imagenes;
+    setNombre(restaurant.nombre);
+    setRestaurant(restaurant)
+    const restaurantLocation = {
+      latitude: restaurant.latitud,
+      longitude: restaurant.longitud,
+    };
+    setRestaurantLocation(restaurantLocation);
+    const imagesList = route.params.restaurant.imagenes;
     const dataList = imagesList.map(({imagen}) => ({
       imagen: imagen,
     }));
@@ -324,8 +325,6 @@ const DetalleRestaurante = ({navigation}) => {
           images={images}
           height={250}
           width={widthScreen}
-          // activeSlide={activeSlide}
-          // setActiveSlide={activeSlide}
         />
         <View
           style={{
@@ -352,7 +351,7 @@ const DetalleRestaurante = ({navigation}) => {
               fontWeight: '1000',
               fontSize: 25,
             }}>
-            {restaurant.nombre}
+            {nombre}
           </Text>
           <View
             style={{

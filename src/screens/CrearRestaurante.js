@@ -544,6 +544,7 @@ const CrearRestaurante = ({navigation}) => {
             multiple={true}
             min={1}
             max={3}
+            dropDownDirection="TOP"
           />
         </View>
         {showImage ? (

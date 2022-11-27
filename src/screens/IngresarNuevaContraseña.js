@@ -48,7 +48,10 @@ const isEmpty = stringToValidate => {
   return true;
 };
 
-const IngresarNuevaContraseña = ({navigation}) => {
+const IngresarNuevaContraseña = ({navigation, route}) => {
+  const params = route.params || {};
+  const {userId} = params;
+  console.log(userId);
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [visible, setVisible] = useState(false);

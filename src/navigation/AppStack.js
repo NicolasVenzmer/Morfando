@@ -18,6 +18,7 @@ import VerMenuConsumidor from '../screens/VerMenuConsumidor';
 import Opiniones from '../screens/Opiniones';
 import OpinarSobreRestaurante from '../screens/OpinarSobreRestaurante';
 import CrearCategoria from '../screens/CrearCategoria';
+import IngresarNuevaContraseña from '../screens/IngresarNuevaContraseña';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -96,6 +97,10 @@ const FlowDeConsumer = ({navigation}) => {
       <Stack.Screen
         name="OpinarSobreRestaurante"
         component={OpinarSobreRestaurante}
+      />
+      <Stack.Screen
+        name="IngresarNuevaContraseña"
+        component={IngresarNuevaContraseña}
       />
     </Stack.Navigator>
   );

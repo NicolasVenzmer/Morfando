@@ -6,7 +6,7 @@ import axios from '../api/axios';
 import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 
 const CardFavoritos = ({favorito, navigation, deleteFavorite}) => {
-  //console.log("Card de Favoritos: ",favorito.restaurante.imagenes[0].imagen)
+  console.log("Card de Favoritos: ",favorito.restaurante.imagenes[0].imagen)
   const [restaurant, setRestaurant] = useState('');
   const [loading, setLoading] = useState(true);
   const getRestaurants = async () => {
@@ -67,7 +67,7 @@ const CardFavoritos = ({favorito, navigation, deleteFavorite}) => {
                 width: '100%',
                 height: 140,
               }}
-              source={{uri: favorito.restaurante.imagenes[0].imagen}}
+              source={{uri: favorito?.restaurante?.imagenes[0]?.imagen}}
             />
           </View>
           <View style={{width: '100%', alignItems: 'center'}}>
@@ -82,7 +82,7 @@ const CardFavoritos = ({favorito, navigation, deleteFavorite}) => {
                   fontWeight: '500',
                   flexWrap: 'wrap',
                 }}>
-                {favorito.restaurante.nombre}
+                {favorito?.restaurante?.nombre}
               </Text>
               <Text
                 style={{

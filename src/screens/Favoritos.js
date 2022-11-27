@@ -7,13 +7,11 @@ import {
   ScrollView,
   Pressable,
 } from 'react-native';
-import CardRestauranteConsumidor from '../components/CardRestauranteConsumidor';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from '../api/axios';
 import CardFavoritos from '../components/CardFavoritos';
-import {AuthContext, ErrorReference} from '../context/AuthContext';
+import {AuthContext} from '../context/AuthContext';
 import ModalPoup from '../components/ModalPopUp';
-import Theme from '../assets/fonts/Theme';
 
 const Favoritos = ({navigation}) => {
   const {userInfo} = useContext(AuthContext);
