@@ -130,7 +130,7 @@ const Favoritos = ({navigation}) => {
                 alignSelf: 'center',
                 justifyContent: 'center',
                 alignItems: 'center',
-                width: '45%',
+                width: '50%',
                 flexDirection: 'row',
                 borderColor: 'grey',
                 borderWidth: 1,
@@ -151,7 +151,7 @@ const Favoritos = ({navigation}) => {
                   fontSize: 15,
                   fontFamily: 'Roboto',
                 }}>
-                Buscar Restaurantes
+                Actualizar Restaurantes
               </Text>
             </Pressable>
             <View
@@ -182,7 +182,7 @@ const Favoritos = ({navigation}) => {
                 alignSelf: 'center',
                 justifyContent: 'center',
                 alignItems: 'center',
-                width: '45%',
+                width: '50%',
                 flexDirection: 'row',
                 borderColor: 'grey',
                 borderWidth: 1,
@@ -203,7 +203,7 @@ const Favoritos = ({navigation}) => {
                   fontSize: 15,
                   fontFamily: 'Roboto',
                 }}>
-                Buscar Restaurantes
+                Actualizar Restaurantes
               </Text>
             </Pressable>
             <View

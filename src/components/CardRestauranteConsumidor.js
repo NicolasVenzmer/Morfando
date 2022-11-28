@@ -20,7 +20,7 @@ const CardRestauranteConsumidor = ({restaurant, addFavorite, navigation}) => {
   const getCurrentLocation = () => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
-      timeout: 15000,
+      timeout: 5000,
     })
       .then(location => {
         const data = {
