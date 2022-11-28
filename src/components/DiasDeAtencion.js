@@ -13,9 +13,6 @@ const DiasDeAtencion = ({
   id,
 }) => {
   const key = id
-  //  "horas": [{"dia": "lunes", "horaDesde": "12:00", "horaHasta": "22:00"},
-  //               {"dia": "martes", "horaDesde": "12:00", "horaHasta": "22:00"},
-  //               {"dia": "martes", "horaDesde": "10:00", "horaHasta": "11:00"}
 
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);

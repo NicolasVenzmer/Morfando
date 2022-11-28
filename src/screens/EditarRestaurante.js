@@ -110,8 +110,8 @@ const EditarRestaurante = ({navigation}) => {
     sethorarios(
       restaurant?.horas.map(horario => ({
         dia: horario.dia.toUpperCase(),
-        horaDesde: horario.horaDesde,
-        horaHasta: horario.horaHasta,
+        horaDesde: horario.horaDesde.slice(0, -3),
+        horaHasta: horario.horaHasta.slice(0, -3),
       })),
     );
     const comidas = restaurant.tipoDeComida.split(',');
