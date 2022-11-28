@@ -39,86 +39,87 @@ const EditarRestaurante = ({navigation}) => {
   const [restaurant, setRestaurant] = useState('');
   const [visible, setVisible] = useState(false);
 
-    const editRestaurant = () => {
-      //Enviar los datos al back
-      setIsLoading(true);
-      setVisible(true);
-      const listaDeTipoDeComida = [];
-      value?.forEach(value => {
-        listaDeTipoDeComida.push(value);
-      });
-      const tipoDeComida = listaDeTipoDeComida.toString();
-      const sendData = {
-        id: restaurant.id,
-        nombre: nombreRestaurante,
-        usuario_id: userInfo.id,
-        cerradoTemporalmente: false,
-        tipoDeComida: tipoDeComida,
-        rangoPrecio: rangoPrecio,
-        calificacion: 1,
-        calle: calle,
-        numero: Number(numero),
-        barrio: barrio,
-        localidad: localidad,
-        provincia: provincia,
-        pais: pais,
-        activo: true,
-        horas: horarios,
-        imagenes: images,
-      };
-      //console.log('Los datos a enviar son: ', sendData);
-
-      const EDIT_RESTAURANT_URL = '/restaurant';
-      if (visible)
-        axios
-          .put(
-            EDIT_RESTAURANT_URL,
-            sendData,
-          )
-          .then(res => {
-            if (res.status === 200) {
-              navigation.navigate('MisRestaurantes', sendData);
-            }
-            //console.log('Restaurant Edited Data: ', res.data);
-          })
-          .catch(e => {
-            console.log(`Edit restaurant error ${e}`);
-          });
-      setIsLoading(false);
+  const editRestaurant = () => {
+    //Enviar los datos al back
+    setIsLoading(true);
+    setVisible(true);
+    const listaDeTipoDeComida = [];
+    value?.forEach(value => {
+      listaDeTipoDeComida.push(value);
+    });
+    const tipoDeComida = listaDeTipoDeComida.toString();
+    const sendData = {
+      id: restaurant.id,
+      nombre: nombreRestaurante,
+      usuario_id: userInfo.id,
+      cerradoTemporalmente: false,
+      tipoDeComida: tipoDeComida,
+      rangoPrecio: rangoPrecio,
+      calificacion: 1,
+      calle: calle,
+      numero: Number(numero),
+      barrio: barrio,
+      localidad: localidad,
+      provincia: provincia,
+      pais: pais,
+      activo: true,
+      horas: horarios,
+      imagenes: images,
     };
+    console.log('Los datos a enviar son: ', sendData);
 
-    useEffect(() => {
-      const restaurant = route.params.restaurant;
-      //console.log('Estoy en el restaurante: ', restaurant.address);
-      onChangenombreRestaurante(restaurant.nombre);
-      onChangeCalle(restaurant.calle);
-      onChangeNumero(restaurant.numero.toString());
-      onChangeLocalidad(restaurant.localidad);
-      onChangeBarrio(restaurant.barrio);
-      onChangeProvincia(restaurant.provincia);
-      onChangePais(restaurant.pais);
-      if (restaurant.rangoPrecio === 1) {
-        setSelectedMoney1(true);
-      } else if (restaurant.rangoPrecio === 2) {
-        setSelectedMoney2(true);
-      } else if (restaurant.rangoPrecio === 3) {
-        setSelectedMoney3(true);
-      } else {
-        setSelectedMoney4(true);
-      }
-      sethorarios(
-        restaurant?.horas.map(horario => ({
-          dia: horario.dia.toUpperCase(),
-          horaDesde: horario.horaDesde,
-          horaHasta: horario.horaHasta,
-        })),
-      );
-      const comidas = restaurant.tipoDeComida.split(',');
-      setValue(comidas);
-      //console.log("horarios: ", horarios);
-      setImages(restaurant.imagenes);
-      setRestaurant(restaurant);
-    }, []);
+    const EDIT_RESTAURANT_URL = '/restaurant';
+    if (visible)
+      axios
+        .put(EDIT_RESTAURANT_URL, sendData)
+        .then(res => {
+          if (res.status === 200) {
+            navigation.navigate('MisRestaurantes', sendData);
+          }
+          //console.log('Restaurant Edited Data: ', res.data);
+        })
+        .catch(e => {
+          console.log(`Edit restaurant error ${e}`);
+        });
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    const restaurant = route.params.restaurant;
+    //console.log('Estoy en el restaurante: ', restaurant.address);
+    onChangenombreRestaurante(restaurant.nombre);
+    onChangeCalle(restaurant.calle);
+    onChangeNumero(restaurant.numero.toString());
+    onChangeLocalidad(restaurant.localidad);
+    onChangeBarrio(restaurant.barrio);
+    onChangeProvincia(restaurant.provincia);
+    onChangePais(restaurant.pais);
+    if (restaurant.rangoPrecio === 1) {
+      setSelectedMoney1(true);
+      setRangoPrecio(1);
+    } else if (restaurant.rangoPrecio === 2) {
+      setSelectedMoney2(true);
+      setRangoPrecio(2);
+    } else if (restaurant.rangoPrecio === 3) {
+      setSelectedMoney3(true);
+      setRangoPrecio(3);
+    } else {
+      setSelectedMoney4(true);
+      setRangoPrecio(4);
+    }
+    sethorarios(
+      restaurant?.horas.map(horario => ({
+        dia: horario.dia.toUpperCase(),
+        horaDesde: horario.horaDesde,
+        horaHasta: horario.horaHasta,
+      })),
+    );
+    const comidas = restaurant.tipoDeComida.split(',');
+    setValue(comidas);
+    //console.log("horarios: ", horarios);
+    setImages(restaurant.imagenes);
+    setRestaurant(restaurant);
+  }, []);
 
   //Seteo el rango de los precios
   const changeSelectedChip = num => {
@@ -249,7 +250,45 @@ const EditarRestaurante = ({navigation}) => {
     sethorarios(_horarios);
   };
   const deleteHandler = key => {
-    if (horarios.length > 1) {
+    const copiaDeHorario = horarios;
+    console.log(copiaDeHorario);
+    const _copiaDeHorario = copiaDeHorario.filter(
+      (input, index) => index != key,
+    );
+
+    const foundLunes = _copiaDeHorario.filter(
+      obj => obj.dia === 'LUNES',
+    ).length;
+    const foundMartes = _copiaDeHorario.filter(
+      obj => obj.dia === 'MARTES',
+    ).length;
+    const foundMiercoles = _copiaDeHorario.filter(
+      obj => obj.dia === 'MIERCOLES',
+    ).length;
+    const foundJueves = _copiaDeHorario.filter(
+      obj => obj.dia === 'JUEVES',
+    ).length;
+    const foundViernes = _copiaDeHorario.filter(
+      obj => obj.dia === 'VIERNES',
+    ).length;
+    const foundSabado = _copiaDeHorario.filter(
+      obj => obj.dia === 'SABADO',
+    ).length;
+    const foundDomingo = _copiaDeHorario.filter(
+      obj => obj.dia === 'DOMINGO',
+    ).length;
+
+    console.log(foundDomingo);
+
+    if (
+      (foundLunes === 1 || foundLunes > 1) &&
+      (foundMartes === 1 || foundMartes > 1) &&
+      (foundMiercoles === 1 || foundMiercoles > 1) &&
+      (foundJueves === 1 || foundJueves > 1) &&
+      (foundViernes === 1 || foundViernes > 1) &&
+      (foundSabado === 1 || foundSabado > 1) &&
+      (foundDomingo === 1 || foundDomingo > 1)
+    ) {
       const _horarios = horarios.filter((input, index) => index != key);
       sethorarios(_horarios);
     }
@@ -271,6 +310,17 @@ const EditarRestaurante = ({navigation}) => {
 
   //DropDown
   DropDownPicker.setLanguage('ES');
+  DropDownPicker.addTranslation('ES', {
+    SELECTED_ITEMS_COUNT_TEXT: {
+      0: 'Ningun tipo de comida seleccionado',
+      1: '(1) tipo de comida seleccionado',
+      2: '(2) tipos de comida seleccionads',
+      3: '(3) tipos de comida seleccionados',
+      // Feel free to add more
+      n: '{count} tipo de comida seleccionado',
+    },
+  });
+
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState();
   const [items, setItems] = useState([
@@ -340,7 +390,6 @@ const EditarRestaurante = ({navigation}) => {
         </Text>
       </View>
       <ScrollView
-        vertical
         style={{
           width: '100%',
           height: '80%',
@@ -540,27 +589,6 @@ const EditarRestaurante = ({navigation}) => {
             <Text>$$$$</Text>
           </Chip>
         </View>
-        <View
-          style={{
-            alignSelf: 'center',
-            justifyContent: 'center',
-            width: '85%',
-            marginTop: 10,
-          }}>
-          <DropDownPicker
-            style={{alignSelf: 'center', width: '95%'}}
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            multiple={true}
-            min={1}
-            max={3}
-            dropDownDirection="TOP"
-          />
-        </View>
         {!images?.length > 0 ? (
           <Pressable
             style={{
@@ -643,7 +671,27 @@ const EditarRestaurante = ({navigation}) => {
           </View>
         )}
       </ScrollView>
-
+      <View
+        style={{
+          alignSelf: 'center',
+          justifyContent: 'center',
+          width: '85%',
+          marginTop: 10,
+        }}>
+        <DropDownPicker
+          style={{alignSelf: 'center', width: '95%'}}
+          open={open}
+          value={value}
+          items={items}
+          setOpen={setOpen}
+          setValue={setValue}
+          setItems={setItems}
+          multiple={true}
+          min={1}
+          max={3}
+          dropDownDirection="TOP"
+        />
+      </View>
       <ModalPoup visible={visible}>
         <View style={{alignItems: 'flex-start'}}>
           <Text

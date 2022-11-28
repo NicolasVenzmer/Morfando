@@ -85,6 +85,18 @@ const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
   //     onUpdateImages([...(plato?.imagenes || []), imagenRecibida]);
   // },[])
 
+  DropDownPicker.setLanguage('ES');
+  DropDownPicker.addTranslation('ES', {
+    SELECTED_ITEMS_COUNT_TEXT: {
+      0: 'Ningun tipo de comida seleccionado',
+      1: '(1) tipo de comida seleccionado',
+      2: '(2) tipos de comida seleccionads',
+      3: '(3) tipos de comida seleccionados',
+      // Feel free to add more
+      n: '{count} tipo de comida seleccionado',
+    },
+  });
+
   return (
     <SafeAreaView
       style={{

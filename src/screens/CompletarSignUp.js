@@ -383,9 +383,9 @@ const CompletarSignUp = ({navigation}) => {
 
       <Pressable
         style={{
-          marginTop: 10,
-          marginBottom: 10,
-          position: 'absolute',
+          marginTop: 20,
+          //marginBottom: 10,
+          //position: 'absolute',
           width: '80%',
           bottom: 0,
           height: 50,

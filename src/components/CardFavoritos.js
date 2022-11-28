@@ -4,11 +4,15 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import axios from '../api/axios';
 import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
+import GetLocation from 'react-native-get-location';
 
 const CardFavoritos = ({favorito, navigation, deleteFavorite}) => {
-  console.log("Card de Favoritos: ",favorito.restaurante.imagenes[0].imagen)
+  //console.log("Card de Favoritos: ",favorito.restaurante.imagenes[0].imagen)
   const [restaurant, setRestaurant] = useState('');
   const [loading, setLoading] = useState(true);
+  const [kilometers, setKilometers] = useState('');
+  const [location, setLocation] = useState('');
+
   const getRestaurants = async () => {
     const GET_RESTAURANT_URL = `/restaurant${favorito.restaurante.id}`;
     axios
@@ -22,9 +26,54 @@ const CardFavoritos = ({favorito, navigation, deleteFavorite}) => {
       });
     setLoading(false);
   };
+
+
+  const getCurrentLocation = () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then(location => {
+        const data = {
+          latitude: location.latitude,
+          longitude: location.longitude,
+        };
+        setLocation(data);
+        //console.log(data);
+      })
+      .catch(error => {
+        const {code, message} = error;
+        console.warn(code, message);
+      });
+  };
+
+  const getKilometers = () => {
+    const sendData = {
+      latitudUsuario: location.latitude,
+      longitudUsuario: location.longitude,
+      latitudRestaurant: restaurant.latitud,
+      longitudRestaurant: restaurant.longitud,
+    };
+    //console.log('Datos a enviar al back: ', sendData);
+    const GEOLOCATION_URL = '/geolocation';
+    axios
+      .post(GEOLOCATION_URL, sendData)
+      .then(res => {
+        //console.log('KM GET Data: ', res.data.rows[0].elements[0].distance.text);
+        setKilometers(res.data.rows[0].elements[0].distance.text);
+      })
+      .catch(e => {
+        console.log(`KM error ${e}`);
+      });
+  };
+
   useEffect(() => {
     getRestaurants();
+    getCurrentLocation();
   }, []);
+
+  useEffect(getKilometers, [location]);
+
   return (
     <>
       {favorito.activo ? (
@@ -32,16 +81,16 @@ const CardFavoritos = ({favorito, navigation, deleteFavorite}) => {
           style={{
             backgroundColor: '#F2F1F0',
             alignSelf: 'center',
-            top: 10,
+            marginTop: 10,
             width: '40%',
-            height: 250,
+            height: 260,
             borderRadius: 30,
             margin: 10,
           }}>
           <View
             style={{
-              width: '100%',
-              padding: 10,
+              flexDirection: 'row',
+              height: 35,
               position: 'relative',
             }}>
             <Feather
@@ -50,15 +99,27 @@ const CardFavoritos = ({favorito, navigation, deleteFavorite}) => {
                 position: 'absolute',
                 color: 'black',
                 fontSize: 25,
-                top: 5,
+                marginTop: 5,
                 right: 10,
               }}
               onPress={deleteFavorite}
             />
-
+          </View>
+          <Pressable
+            style={{
+              borderTopRightRadius: 80,
+              borderTopLeftRadius: 80,
+              borderBottomLeftRadius: 80,
+              borderBottomRightRadius: 80,
+              alignSelf: 'center',
+              width: '100%',
+              height: 140,
+            }}
+            onPress={() =>
+              navigation.navigate('DetalleRestaurante', {restaurant})
+            }>
             <Image
               style={{
-                top: 10,
                 borderTopRightRadius: 80,
                 borderTopLeftRadius: 80,
                 borderBottomLeftRadius: 80,
@@ -69,32 +130,27 @@ const CardFavoritos = ({favorito, navigation, deleteFavorite}) => {
               }}
               source={{uri: favorito?.restaurante?.imagenes[0]?.imagen}}
             />
-          </View>
+          </Pressable>
           <View style={{width: '100%', alignItems: 'center'}}>
-            <Pressable
-              onPress={() =>
-                navigation.navigate('DetalleRestaurante', {restaurant})
-              }>
-              <Text
-                style={{
-                  top: 10,
-                  color: 'black',
-                  fontWeight: '500',
-                  flexWrap: 'wrap',
-                }}>
-                {favorito?.restaurante?.nombre}
-              </Text>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  top: 10,
-                  color: '#E14852',
-                  fontWeight: '500',
-                  flexWrap: 'wrap',
-                }}>
-                0,5 KM
-              </Text>
-            </Pressable>
+            <Text
+              style={{
+                top: 10,
+                color: 'black',
+                fontWeight: '500',
+                flexWrap: 'wrap',
+              }}>
+              {favorito?.restaurante?.nombre}
+            </Text>
+            <Text
+              style={{
+                textAlign: 'center',
+                top: 10,
+                color: '#E14852',
+                fontWeight: '500',
+                flexWrap: 'wrap',
+              }}>
+              {kilometers}
+            </Text>
             <MaterialIcons
               name="menu-book"
               style={{

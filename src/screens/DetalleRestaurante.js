@@ -21,6 +21,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import GetLocation from 'react-native-get-location';
 import CarouselImages from '../components/CarouselImages';
 import {Linking, Platform} from 'react-native';
+import CardDiaDetalleConsumidor from '../components/CardDiaDetalleConsumidor';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);
@@ -62,7 +63,8 @@ const DetalleRestaurante = ({navigation}) => {
   const [kilometers, setKilometers] = useState('');
   const [address, setAddress] = useState('');
   const [restaurantLocation, setRestaurantLocation] = useState('');
-  const [nombre,setNombre] = useState('')
+  const [nombre, setNombre] = useState('');
+  const [horarios, setHorarios] = useState([]);
 
   const starImgFilled =
     'https://github.com/tranhonghan/images/blob/main/star_filled.png?raw=true';
@@ -72,7 +74,7 @@ const DetalleRestaurante = ({navigation}) => {
   const [images, setImages] = useState([]);
 
   const openMap = async (latitude, longitude) => {
-    console.log("estoy en openMap")
+    console.log('estoy en openMap');
     const scheme = Platform.select({ios: 'maps:0,0?q=', android: 'geo:0,0?q='});
     const latLng = `${latitude},${longitude}`;
     const label = 'Morfando';
@@ -116,7 +118,7 @@ const DetalleRestaurante = ({navigation}) => {
           longitudRestaurant: restaurant.longitud,
         };
         const GEOLOCATION_URL = '/geolocation';
-        console.log("Data to send of location:", sendData);
+        //console.log("Data to send of location:", sendData);
         axios
           .post(GEOLOCATION_URL, sendData)
           .then(res => {
@@ -165,8 +167,15 @@ const DetalleRestaurante = ({navigation}) => {
 
   useEffect(() => {
     const restaurant = route.params.restaurant;
+    setHorarios(
+      restaurant?.horas.map(horario => ({
+        dia: horario.dia.toUpperCase(),
+        horaDesde: horario.horaDesde,
+        horaHasta: horario.horaHasta,
+      })),
+    );
     setNombre(restaurant.nombre);
-    setRestaurant(restaurant)
+    setRestaurant(restaurant);
     const restaurantLocation = {
       latitude: restaurant.latitud,
       longitude: restaurant.longitud,
@@ -207,6 +216,8 @@ const DetalleRestaurante = ({navigation}) => {
     setDefaultRating(resultado);
   }, []);
   useEffect(getCurrentLocation, [restaurant]);
+
+  console.log("ESTOY EN LOS HORARIOS", horarios)
 
   return (
     <SafeAreaView
@@ -426,6 +437,7 @@ const DetalleRestaurante = ({navigation}) => {
             flexDirection: 'row',
             width: '80%',
             marginTop: 10,
+            marginBottom: 10,
           }}>
           <Chip
             style={{marginRight: 5, marginLeft: 5, backgroundColor: '#E2CACC'}}
@@ -452,6 +464,9 @@ const DetalleRestaurante = ({navigation}) => {
             <Text>$$$$</Text>
           </Chip>
         </View>
+        {horarios.map((dia, index) => (
+          <CardDiaDetalleConsumidor key={index} dia={dia} />
+        ))}
       </ScrollView>
     </SafeAreaView>
   );

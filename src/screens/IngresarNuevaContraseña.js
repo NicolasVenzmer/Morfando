@@ -183,7 +183,7 @@ const IngresarNuevaContraseña = ({navigation, route}) => {
         style={{
           marginTop: 10,
           marginBottom: 10,
-          position: 'absolute',
+          //position: 'absolute',
           width: '80%',
           bottom: 0,
           height: 50,

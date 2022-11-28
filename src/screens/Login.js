@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: '50%',
+    height: '40%',
     borderRadius: 30,
   },
   containerGoogle: {
@@ -302,11 +302,11 @@ const styles = StyleSheet.create({
     fontStyle: Theme.fonts.ITALIC,
   },
   botonIngresar: {
-    marginTop: 10,
-    marginBottom: 10,
+    //marginTop: 10,
+    //marginBottom: 30,
     //position: 'absolute',
     width: '80%',
-    bottom: 0,
+    //bottom: 0,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',

@@ -106,6 +106,42 @@ const CrearRestaurante = ({navigation}) => {
     }
   };
 
+  const gerImagesUrl = () => {
+    setIsLoading(true);
+
+    // Push all the axios request promise into a single array
+    const uploaders = images.map(image => {
+      const CLOUDNAME = drzh7bbzz;
+      const APIKEY = 591491439955368;
+      //const APISECRET = shkfZmsQcB2DN4L4D9BhZIAizno;
+      const CLOUDINARY_UPLOAD_PRESET = 'm9tmprkv';
+      const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDNAME}/image/upload`;
+      // Initial FormData
+      const formData = new FormData();
+      formData.append('file', image);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET); // Replace the preset name with your own
+      formData.append('api_key', APIKEY); // Replace API key with your own Cloudinary key
+      formData.append('timestamp', (Date.now() / 1000) | 0);
+
+      // Make an AJAX upload request using Axios (replace Cloudinary URL below with your own)
+      return axios
+        .post(CLOUDINARY_URL, formData, {
+          headers: {'X-Requested-With': 'XMLHttpRequest'},
+        })
+        .then(response => {
+          const data = response.data;
+          //const fileURL = data.secure_url; // You should store this URL for future references in your app
+          console.log(data);
+        });
+    });
+
+    // Once all the files are uploaded
+    axios.all(uploaders).then(() => {
+      // ... perform after upload is successful operation
+      //createRestaurant()
+    });
+  };
+
   //Seteo el rango de los precios
   const changeSelectedChip = num => {
     if (num === 1) {
@@ -235,7 +271,45 @@ const CrearRestaurante = ({navigation}) => {
     sethorarios(_horarios);
   };
   const deleteHandler = key => {
-    if (horarios.length > 1) {
+    const copiaDeHorario = horarios;
+    console.log(copiaDeHorario);
+    const _copiaDeHorario = copiaDeHorario.filter(
+      (input, index) => index != key,
+    );
+
+    const foundLunes = _copiaDeHorario.filter(
+      obj => obj.dia === 'LUNES',
+    ).length;
+    const foundMartes = _copiaDeHorario.filter(
+      obj => obj.dia === 'MARTES',
+    ).length;
+    const foundMiercoles = _copiaDeHorario.filter(
+      obj => obj.dia === 'MIERCOLES',
+    ).length;
+    const foundJueves = _copiaDeHorario.filter(
+      obj => obj.dia === 'JUEVES',
+    ).length;
+    const foundViernes = _copiaDeHorario.filter(
+      obj => obj.dia === 'VIERNES',
+    ).length;
+    const foundSabado = _copiaDeHorario.filter(
+      obj => obj.dia === 'SABADO',
+    ).length;
+    const foundDomingo = _copiaDeHorario.filter(
+      obj => obj.dia === 'DOMINGO',
+    ).length;
+
+    console.log(foundDomingo);
+
+    if (
+      (foundLunes === 1 || foundLunes > 1) &&
+      (foundMartes === 1 || foundMartes > 1) &&
+      (foundMiercoles === 1 || foundMiercoles > 1) &&
+      (foundJueves === 1 || foundJueves > 1) &&
+      (foundViernes === 1 || foundViernes > 1) &&
+      (foundSabado === 1 || foundSabado > 1) &&
+      (foundDomingo === 1 || foundDomingo) > 1
+    ) {
       const _horarios = horarios.filter((input, index) => index != key);
       sethorarios(_horarios);
     }
@@ -257,6 +331,16 @@ const CrearRestaurante = ({navigation}) => {
   //console.log('Lista: ', horarios);
 
   //DropDown
+  DropDownPicker.addTranslation('ES', {
+    SELECTED_ITEMS_COUNT_TEXT: {
+      0: 'Ningun tipo de comida seleccionado',
+      1: '(1) tipo de comida seleccionado',
+      2: '(2) tipos de comida seleccionads',
+      3: '(3) tipos de comida seleccionados',
+      // Feel free to add more
+      n: '{count} tipo de comida seleccionado',
+    },
+  });
   DropDownPicker.setLanguage('ES');
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);
@@ -526,27 +610,6 @@ const CrearRestaurante = ({navigation}) => {
             <Text>$$$$</Text>
           </Chip>
         </View>
-        <View
-          style={{
-            alignSelf: 'center',
-            justifyContent: 'center',
-            width: '85%',
-            marginTop: 10,
-          }}>
-          <DropDownPicker
-            style={{alignSelf: 'center', width: '95%'}}
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            multiple={true}
-            min={1}
-            max={3}
-            dropDownDirection="TOP"
-          />
-        </View>
         {showImage ? (
           <Pressable
             style={{
@@ -630,6 +693,27 @@ const CrearRestaurante = ({navigation}) => {
           </View>
         )}
       </ScrollView>
+      <View
+        style={{
+          alignSelf: 'center',
+          justifyContent: 'center',
+          width: '85%',
+          marginTop: 10,
+        }}>
+        <DropDownPicker
+          style={{alignSelf: 'center', width: '95%'}}
+          open={open}
+          value={value}
+          items={items}
+          setOpen={setOpen}
+          setValue={setValue}
+          setItems={setItems}
+          multiple={true}
+          min={1}
+          max={3}
+          dropDownDirection="TOP"
+        />
+      </View>
 
       <ModalPoup visible={visibleEmpty}>
         <View style={{alignItems: 'flex-start'}}>

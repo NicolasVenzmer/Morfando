@@ -10,7 +10,7 @@ import GetLocation from 'react-native-get-location';
 const CardRestauranteConsumidor = ({restaurant, addFavorite, navigation}) => {
   // console.log(
   //   'estoy en la card de restaurante del consumidor',
-  //   restaurant.imagenes[0].imagen,
+  //   restaurant,
   // );
 
   const [loading, setIsLoading] = useState(false);
@@ -18,7 +18,7 @@ const CardRestauranteConsumidor = ({restaurant, addFavorite, navigation}) => {
   const [location, setLocation] = useState('');
 
   const getCurrentLocation = () => {
-     GetLocation.getCurrentPosition({
+    GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 15000,
     })
@@ -70,14 +70,14 @@ const CardRestauranteConsumidor = ({restaurant, addFavorite, navigation}) => {
             alignSelf: 'center',
             top: 10,
             width: '40%',
-            height: 250,
+            height: 260,
             borderRadius: 30,
             margin: 10,
           }}>
           <View
             style={{
-              width: '100%',
-              padding: 10,
+              flexDirection: 'row',
+              height: 35,
               position: 'relative',
             }}>
             <Ionicons
@@ -86,14 +86,27 @@ const CardRestauranteConsumidor = ({restaurant, addFavorite, navigation}) => {
                 position: 'absolute',
                 color: 'black',
                 fontSize: 25,
-                top: 5,
+                marginTop: 5,
                 right: 10,
               }}
               onPress={addFavorite}
             />
+          </View>
+          <Pressable
+            style={{
+              borderTopRightRadius: 80,
+              borderTopLeftRadius: 80,
+              borderBottomLeftRadius: 80,
+              borderBottomRightRadius: 80,
+              alignSelf: 'center',
+              width: '100%',
+              height: 140,
+            }}
+            onPress={() =>
+              navigation.navigate('DetalleRestaurante', {restaurant})
+            }>
             <Image
               style={{
-                top: 10,
                 borderTopRightRadius: 80,
                 borderTopLeftRadius: 80,
                 borderBottomLeftRadius: 80,
@@ -104,32 +117,27 @@ const CardRestauranteConsumidor = ({restaurant, addFavorite, navigation}) => {
               }}
               source={{uri: restaurant?.imagenes[0]?.imagen}}
             />
-          </View>
+          </Pressable>
           <View style={{width: '100%', alignItems: 'center'}}>
-            <Pressable
-              onPress={() =>
-                navigation.navigate('DetalleRestaurante', {restaurant})
-              }>
-              <Text
-                style={{
-                  top: 10,
-                  color: 'black',
-                  fontWeight: '500',
-                  flexWrap: 'wrap',
-                }}>
-                {restaurant.nombre}
-              </Text>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  top: 10,
-                  color: '#E14852',
-                  fontWeight: '500',
-                  flexWrap: 'wrap',
-                }}>
-                {kilometers}
-              </Text>
-            </Pressable>
+            <Text
+              style={{
+                top: 10,
+                color: 'black',
+                fontWeight: '500',
+                flexWrap: 'wrap',
+              }}>
+              {restaurant.nombre}
+            </Text>
+            <Text
+              style={{
+                textAlign: 'center',
+                top: 10,
+                color: '#E14852',
+                fontWeight: '500',
+                flexWrap: 'wrap',
+              }}>
+              {kilometers}
+            </Text>
             <MaterialIcons
               name="menu-book"
               style={{

@@ -242,8 +242,8 @@ const OlvideMiContraseña = ({navigation}) => {
       <Pressable
         style={{
           marginTop: 10,
-          marginBottom: 10,
-          position: 'absolute',
+          //marginBottom: 10,
+          //position: 'absolute',
           width: '80%',
           bottom: 0,
           height: 50,

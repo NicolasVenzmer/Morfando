@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 import {View, Text, Image} from 'react-native';
 import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 
@@ -8,12 +8,21 @@ const PlatoType = plato => {
 
   if (plato.aptoVegano && plato.aptoCeliaco)
     return (
-      <View style={{flexDirection: 'row', alignSelf: 'flex-end'}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          bottom: 0,
+          alignSelf: 'flex-end',
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          width: '50%',
+          marginRight:10
+        }}>
         <Image
           style={{
             width: 30,
             height: 30,
-            marginTop: 2,
+            top: 2,
           }}
           source={require('../assets/Icons/icono-vegano.png')}
         />
@@ -27,54 +36,63 @@ const PlatoType = plato => {
       </View>
     );
 
-  if (plato.aptoVegano === "")
+  if (plato.aptoVegano === false)
     return (
+      <View
+        style={{
+          flexDirection: 'row',
+          bottom: 0,
+          justifyContent: 'flex-end',
+          width: '50%',
+          heigh: '100%',
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          marginRight: 10,
+        }}>
+        <Image
+          style={{
+            width: 30,
+            height: 30,
+            marginTop: 5,
+            alignSelf: 'flex-end',
+          }}
+          source={require('../assets/Icons/icono-celiaco.png')}
+        />
+      </View>
+    );
+
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        bottom: 0,
+        justifyContent: 'flex-end',
+        width: '50%',
+        heigh: '100%',
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        marginRight: 10,
+      }}>
       <Image
         style={{
           width: 30,
           height: 30,
-          marginTop: 5,
-          alignSelf: 'flex-end',
         }}
         source={require('../assets/Icons/icono-vegano.png')}
       />
-    );
-
-  return (
-    <Image
-      style={{
-        width: 30,
-        height: 30,
-        marginTop: 5,
-        alignSelf: 'flex-end',
-      }}
-      source={require('../assets/Icons/icono-celiaco.png')}
-    />
+    </View>
   );
 };
 
 const Plato = ({plato}) => {
   const [image, setImage] = useState();
-  console.log("estoy en plato", plato?.imagen[0]?.imagen)
-  useEffect(()=>{
+  //console.log("estoy en plato", plato?.imagen[0]?.imagen)
+  useEffect(() => {
     setImage(plato?.imagen[0]?.imagen);
-  },[])
+  }, []);
   return (
-    // <View
-    //   style={{
-    //     width: '100%',
-    //   }}>
-    //   <Text
-    //     style={{
-    //       color: 'black',
-    //       fontWeight: '350',
-    //       width: '80%',
-    //       alignSelf: 'center',
-    //       left: 5,
-    //       marginBottom: 5,
-    //     }}>
-    //     {categoria.nombre}
-    //   </Text>
     <>
       <View
         style={{
@@ -88,20 +106,30 @@ const Plato = ({plato}) => {
           elevation: 2,
           backgroundColor: 'white',
           marginBottom: 10,
-          minHeight: 100,
+          minHeight: 150,
+          position: 'relative',
+          alignSelf: 'center',
+          justifyContent: 'center',
         }}>
         <View
           style={{
             width: '100%',
             height: 100,
             flexDirection: 'row',
+            alignSelf: 'center',
+            justifyContent: 'center',
           }}>
           <Image
-            style={{width: 90, height: 90, margin: 5, borderRadius: 30}}
+            style={{
+              width: 100,
+              height: 100,
+              margin: 5,
+              borderRadius: 30,
+              alignSelf: 'center',
+              justifyContent: 'center',
+            }}
             source={
-              image
-                ? {uri: plato?.imagen[0]?.imagen}
-                : DefaultRestaurantImage
+              image ? {uri: plato?.imagen[0]?.imagen} : DefaultRestaurantImage
             }
           />
           <View
@@ -120,8 +148,10 @@ const Plato = ({plato}) => {
               style={{
                 color: 'grey',
                 fontWeight: '250',
-                marginTop: 5,
+                bottom: 0,
                 fontSize: 12,
+                mrginLeft: 5,
+                marginRight: 5,
               }}>
               {plato?.ingredientes}
             </Text>
@@ -129,7 +159,10 @@ const Plato = ({plato}) => {
               style={{
                 color: 'red',
                 fontWeight: '250',
-                bottom: -20,
+                position: 'absolute',
+                bottom: 0,
+                mrginLeft: 5,
+                marginRight: 5,
               }}>
               {`$${plato.precio}` || 'No disponible'}
             </Text>

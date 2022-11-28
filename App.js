@@ -2,10 +2,15 @@ import React, {useEffect} from 'react';
 import {AuthProvider} from './src/context/AuthContext';
 import AppNav from './src/navigation/AppNav';
 import SplashScreen from 'react-native-splash-screen';
+import GetLocation from 'react-native-get-location';
 
 const App = () => {
   useEffect(() => {
     SplashScreen.hide();
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    });
   }, []);
   return (
     <AuthProvider>
