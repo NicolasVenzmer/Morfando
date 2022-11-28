@@ -106,40 +106,60 @@ const CrearRestaurante = ({navigation}) => {
     }
   };
 
-  const gerImagesUrl = () => {
+  const gerImagesUrl = async () => {
     setIsLoading(true);
 
-    // Push all the axios request promise into a single array
-    const uploaders = images.map(image => {
-      const CLOUDNAME = drzh7bbzz;
-      const APIKEY = 591491439955368;
-      //const APISECRET = shkfZmsQcB2DN4L4D9BhZIAizno;
-      const CLOUDINARY_UPLOAD_PRESET = 'm9tmprkv';
-      const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDNAME}/image/upload`;
-      // Initial FormData
-      const formData = new FormData();
-      formData.append('file', image);
-      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET); // Replace the preset name with your own
-      formData.append('api_key', APIKEY); // Replace API key with your own Cloudinary key
-      formData.append('timestamp', (Date.now() / 1000) | 0);
-
-      // Make an AJAX upload request using Axios (replace Cloudinary URL below with your own)
-      return axios
-        .post(CLOUDINARY_URL, formData, {
-          headers: {'X-Requested-With': 'XMLHttpRequest'},
-        })
-        .then(response => {
-          const data = response.data;
-          //const fileURL = data.secure_url; // You should store this URL for future references in your app
-          console.log(data);
-        });
+    const formData = new FormData();
+    formData.append('file', {
+      uri: images[0].imagen,
+      type: images[0].type,
+      name: images[0].name,
     });
+    formData.append('upload_preset', 'morfando_upload_images');
 
-    // Once all the files are uploaded
-    axios.all(uploaders).then(() => {
-      // ... perform after upload is successful operation
-      //createRestaurant()
-    });
+    const options = {
+      method: 'POST',
+      body: formData,
+      'X-Requested-With': 'XMLHttpRequest',
+      'Allow-Control-Allow-Origin': '*',
+    };
+    fetch(
+      'https://api.cloudinary.com/v1_1/drzh7bbzz/image/upload',
+      options,
+    )
+      //.then(res => res.json())
+      .then(res => console.log("estoy en el res este", res.url))
+      .catch(err => console.log(err));
+    setIsLoading(false);
+
+    // // Push all the axios request promise into a single array
+    // const uploaders = images.map(image => {
+    //   console.log('image', image.imagen);
+    //   const CLOUDINARY_UPLOAD_PRESET = 'm9tmprkv';
+    //   // Initial FormData
+    //   const formData = new FormData();
+    //   formData.append('file', image.imagen);
+    //   formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET); // Replace the preset name with your own
+
+    //   // Make an AJAX upload request using Axios (replace Cloudinary URL below with your own)
+    //   return axios
+    //     .post(
+    //       'https://api.cloudinary.com/v1_1/drzh7bbzz/image/upload',
+    //       formData,
+    //     )
+    //     .then(response => {
+    //       const data = response.data;
+    //       //const fileURL = data.secure_url; // You should store this URL for future references in your app
+    //       console.log('after uplado image', data);
+    //     });
+    // });
+
+    // // Once all the files are uploaded
+    // axios.all(uploaders).then(() => {
+    //   console.log('all done', uploaders);
+    //   // ... perform after upload is successful operation
+    //   //createRestaurant()
+    // });
   };
 
   //Seteo el rango de los precios
@@ -194,15 +214,18 @@ const CrearRestaurante = ({navigation}) => {
           return;
         }
         const _response = response.assets;
+
         let _resultUri = _response.map(a => a.uri);
         let _resultType = _response.map(a => a.type);
         let _resultfileName = _response.map(a => a.fileName);
+        let _resultfileSize = _response.map(a => a.fileSize);
         const img = {
           imagen: _resultUri.toString(),
-          //type: _resultType,
-          //name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
+          type: _resultType.toString(),
+          name: _resultfileName.toString(), // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
+          size: Number(_resultfileSize.toString()),
         };
-
+        //console.log('photo', img);
         setImages(prevImages => prevImages.concat(img));
       },
     );
@@ -825,7 +848,7 @@ const CrearRestaurante = ({navigation}) => {
           backgroundColor: '#E14852',
           borderRadius: 30,
         }}
-        onPress={() => createRestaurant()}>
+        onPress={() => gerImagesUrl()}>
         <Text
           style={{
             color: '#fdfdfd',
