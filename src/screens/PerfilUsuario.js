@@ -171,7 +171,7 @@ const PerfilUsuario = ({navigation}) => {
       id: userInfo.id,
       activo: false,
     };
-    console.log(sendData);
+    //console.log(sendData);
     if (visibleDeleteUser) {
       axios
         .delete(DELETE_USER_URL, {data: sendData})

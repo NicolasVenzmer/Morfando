@@ -38,11 +38,22 @@ const EditarRestaurante = ({navigation}) => {
   const [rangoPrecio, setRangoPrecio] = useState(null);
   const [restaurant, setRestaurant] = useState('');
   const [visible, setVisible] = useState(false);
+  const [imageToUpload, setImageToUpload] = useState([]);
 
-  const editRestaurant = () => {
+  const editRestaurant = async () => {
     //Enviar los datos al back
     setIsLoading(true);
     setVisible(true);
+    const imagesWithUrl = await Promise.all(
+      imageToUpload.map(async image => {
+        const imagesUrl = await getImageUrl(
+          image.imagen,
+          image.type,
+          image.name,
+        );
+        return {imagen: imagesUrl};
+      }),
+    );
     const listaDeTipoDeComida = [];
     value?.forEach(value => {
       listaDeTipoDeComida.push(value);
@@ -64,7 +75,7 @@ const EditarRestaurante = ({navigation}) => {
       pais: pais,
       activo: true,
       horas: horarios,
-      imagenes: images,
+      imagenes: imagesWithUrl,
     };
     console.log('Los datos a enviar son: ', sendData);
 
@@ -82,6 +93,33 @@ const EditarRestaurante = ({navigation}) => {
           console.log(`Edit restaurant error ${e}`);
         });
     setIsLoading(false);
+  };
+
+  const getImageUrl = async (image, type, name) => {
+    setIsLoading(true);
+
+    const formData = new FormData();
+    formData.append('file', {
+      uri: image,
+      type: type,
+      name: name,
+    });
+    formData.append('upload_preset', 'morfando_upload_images');
+
+    const options = {
+      method: 'POST',
+      body: formData,
+      'X-Requested-With': 'XMLHttpRequest',
+      'Allow-Control-Allow-Origin': '*',
+    };
+    const res = await fetch(
+      'https://api.cloudinary.com/v1_1/drzh7bbzz/image/upload',
+      options,
+    );
+    const payload = await res.json();
+    //console.log('payload', payload);
+    setIsLoading(false);
+    return payload.url;
   };
 
   useEffect(() => {
@@ -176,12 +214,14 @@ const EditarRestaurante = ({navigation}) => {
         let _resultUri = _response.map(a => a.uri);
         let _resultType = _response.map(a => a.type);
         let _resultfileName = _response.map(a => a.fileName);
+        let _resultfileSize = _response.map(a => a.fileSize);
         const img = {
           imagen: _resultUri.toString(),
-          //type: _resultType,
-          //name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
+          type: _resultType.toString(),
+          name: _resultfileName.toString(), // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
+          size: Number(_resultfileSize.toString()),
         };
-
+        setImageToUpload(prevImages => prevImages.concat(img));
         setImages(prevImages => prevImages.concat(img));
       },
     );
@@ -194,6 +234,7 @@ const EditarRestaurante = ({navigation}) => {
     if (images.length) {
       const _images = images.filter((image, index) => index != key);
       setImages(_images);
+      setImageToUpload(_images);
     }
     if (images.length === 1) {
       setShowImage(true);

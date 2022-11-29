@@ -39,11 +39,21 @@ const CrearRestaurante = ({navigation}) => {
   const [visibleEmpty, setVisibleEmpty] = useState(false);
   const [visibleRestaurantNotCreated, setVisibleRestaurantNotCreated] =
     useState(false);
+  const [imageToUpload, setImageToUpload] = useState([]);
 
-  const createRestaurant = () => {
-    //Enviar los datos al back
+  const createRestaurant = async () => {
     setIsLoading(true);
     setVisibleRestaurantNotCreated(true);
+    const imagesWithUrl = await Promise.all(
+      imageToUpload.map(async image => {
+        const imagesUrl = await getImageUrl(
+          image.imagen,
+          image.type,
+          image.name,
+        );
+        return {imagen: imagesUrl};
+      }),
+    );
     const listaDeTipoDeComida = [];
     value.forEach(value => {
       listaDeTipoDeComida.push(value);
@@ -64,8 +74,10 @@ const CrearRestaurante = ({navigation}) => {
       pais: pais,
       activo: true,
       horas: horarios,
-      imagenes: images,
+      imagenes: imagesWithUrl,
     };
+    //console.log('Datos a enviar al back: ', sendData);
+
     if (
       Helper.isEmpty(nombreRestaurante) ||
       Helper.isEmpty(tipoDeComida) ||
@@ -81,41 +93,34 @@ const CrearRestaurante = ({navigation}) => {
     ) {
       setVisibleEmpty(true);
     } else {
-      //console.log('Los datos a enviar son: ', sendData);
-      //console.log(userToken)
       const CREATE_RESTAURANT_URL = '/restaurant';
-      if (visibleRestaurantNotCreated) {
-        axios
-          .post(CREATE_RESTAURANT_URL, sendData, {
-            headers: {
-              Authorization: `${userToken}`,
-            },
-          })
-          .then(res => {
-            //console.log("estoy en create: ", res)
-            if (res.status === 200) {
-              navigation.navigate('MisRestaurantes', sendData);
-            }
-            console.log('Restaurant Created Data: ', res.data);
-          })
-          .catch(e => {
-            console.log(`Create restaurant error ${e}`);
-          });
-      }
+      axios
+        .post(CREATE_RESTAURANT_URL, sendData, {
+          headers: {
+            Authorization: `${userToken}`,
+          },
+        })
+        .then(res => {
+          if (res.status === 200) {
+            //console.log('Restaurant Created Data: ', res.data);
+            navigation.navigate('MisRestaurantes', sendData);
+          }
+        })
+        .catch(e => {
+          console.log(`Create restaurant error ${e}`);
+        });
       setIsLoading(false);
     }
   };
 
-  const gerImagesUrl = async () => {
-
-    //mapear todas las imagenes con un foreach
+  const getImageUrl = async (image, type, name) => {
     setIsLoading(true);
 
     const formData = new FormData();
     formData.append('file', {
-      uri: images[0].imagen,
-      type: images[0].type,
-      name: images[0].name,
+      uri: image,
+      type: type,
+      name: name,
     });
     formData.append('upload_preset', 'morfando_upload_images');
 
@@ -125,43 +130,14 @@ const CrearRestaurante = ({navigation}) => {
       'X-Requested-With': 'XMLHttpRequest',
       'Allow-Control-Allow-Origin': '*',
     };
-    fetch(
+    const res = await fetch(
       'https://api.cloudinary.com/v1_1/drzh7bbzz/image/upload',
       options,
-    )
-      .then(res => res.json())
-      .then(res => console.log("estoy en el res este", res.url))
-      .catch(err => console.log(err));
+    );
+    const payload = await res.json();
+    //console.log('payload', payload);
     setIsLoading(false);
-
-    // // Push all the axios request promise into a single array
-    // const uploaders = images.map(image => {
-    //   console.log('image', image.imagen);
-    //   const CLOUDINARY_UPLOAD_PRESET = 'm9tmprkv';
-    //   // Initial FormData
-    //   const formData = new FormData();
-    //   formData.append('file', image.imagen);
-    //   formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET); // Replace the preset name with your own
-
-    //   // Make an AJAX upload request using Axios (replace Cloudinary URL below with your own)
-    //   return axios
-    //     .post(
-    //       'https://api.cloudinary.com/v1_1/drzh7bbzz/image/upload',
-    //       formData,
-    //     )
-    //     .then(response => {
-    //       const data = response.data;
-    //       //const fileURL = data.secure_url; // You should store this URL for future references in your app
-    //       console.log('after uplado image', data);
-    //     });
-    // });
-
-    // // Once all the files are uploaded
-    // axios.all(uploaders).then(() => {
-    //   console.log('all done', uploaders);
-    //   // ... perform after upload is successful operation
-    //   //createRestaurant()
-    // });
+    return payload.url;
   };
 
   //Seteo el rango de los precios
@@ -228,6 +204,8 @@ const CrearRestaurante = ({navigation}) => {
           size: Number(_resultfileSize.toString()),
         };
         //console.log('photo', img);
+
+        setImageToUpload(prevImages => prevImages.concat(img));
         setImages(prevImages => prevImages.concat(img));
       },
     );
@@ -240,6 +218,7 @@ const CrearRestaurante = ({navigation}) => {
     if (images.length) {
       const _images = images.filter((image, index) => index != key);
       setImages(_images);
+      setImageToUpload(_images);
     }
     if (images.length === 1) {
       setShowImage(true);
@@ -824,10 +803,6 @@ const CrearRestaurante = ({navigation}) => {
               borderRadius: 30,
             }}
             onPress={() => {
-              {
-                createRestaurant();
-              }
-
               setVisibleRestaurantNotCreated(false);
             }}>
             <Text style={{color: Theme.colors.THIRD, textAlign: 'center'}}>
