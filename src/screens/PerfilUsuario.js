@@ -15,6 +15,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import axios from '../api/axios';
 import ModalPoup from '../components/ModalPopUp';
 import Theme from '../assets/fonts/Theme';
+import Helper from '../helper/helper';
 
 const PerfilUsuario = ({navigation}) => {
   const {userInfo, logout} = useContext(AuthContext);
@@ -24,6 +25,8 @@ const PerfilUsuario = ({navigation}) => {
   const [visibleDeleteUser, setVisibleDeleteUser] = useState(false);
   const [user, setUser] = useState('');
   const [imageToUpload, setImageToUpload] = useState('');
+
+  const [userNameCopy, setUserNameCopy] = useState('');
 
   const {id, correo, contrasenia, duenio, activo} = userInfo;
 
@@ -66,10 +69,12 @@ const PerfilUsuario = ({navigation}) => {
       .get(USER_URL)
       .then(res => {
         setUser(res.data);
+        setUserNameCopy(res.data[0].nombre);
+        setNombreUsuario(res.data[0].nombre);
         if (image === '' || image === undefined) {
           setImage(res.data[0].imagen.imagen);
         }
-        //console.log('User Data: ', res.data);
+        //console.log('User Data: ', res.data[0].nombre);
       })
       .catch(e => {
         console.log(`User Data  error ${e}`);
@@ -79,62 +84,64 @@ const PerfilUsuario = ({navigation}) => {
 
   // Cambio los datos del usuario
   const onChangeUserData = async () => {
-    //if (!Helper.isEmpty(nombreUsuario) || Helper.isEmpty(image)) return;
-    //console.log('resultado', result);
-    const imageURL =  await getImageUrl(imageToUpload.imagen,imageToUpload.type,imageToUpload.name);
-    const USER_URL = '/user';
-    setIsLoading(true);
-    const sendData = {
-      id: id,
-      nombre: nombreUsuario,
-      correo: correo,
-      contrasenia: contrasenia,
-      imagen: imageURL,
-      duenio: duenio,
-      activo: activo,
-    };
-    console.log('IMAGEN', sendData);
-    await axios
-      .put(USER_URL, sendData)
-      .then(res => {
-        //console.log('Edited User: ', res.data);
-      })
-      .catch(e => {
-        console.log(`Edited error ${e}`);
-      });
-    setVisibleUserEdited(true);
-    setIsLoading(false);
+    if (Helper.isEmpty(imageToUpload) && nombreUsuario === userNameCopy) {
+      console.log('no hay foto');
+    } else if (!Helper.isEmpty(imageToUpload)) {
+      //console.log('resultado', result);
+      const imageURL = await getImageUrl(
+        imageToUpload.imagen,
+        imageToUpload.type,
+        imageToUpload.name,
+      );
+      const USER_URL = '/user';
+      setIsLoading(true);
+      const sendData = {
+        id: id,
+        nombre: nombreUsuario,
+        correo: correo,
+        contrasenia: contrasenia,
+        imagen: imageURL,
+        duenio: duenio,
+        activo: activo,
+      };
+      console.log('IMAGEN', sendData);
+      await axios
+        .put(USER_URL, sendData)
+        .then(res => {
+          //console.log('Edited User: ', res.data);
+        })
+        .catch(e => {
+          console.log(`Edited error ${e}`);
+        });
+      setVisibleUserEdited(true);
+      setIsLoading(false);
+    } else {
+      const USER_URL = '/user';
+      setIsLoading(true);
+      const sendData = {
+        id: id,
+        nombre: nombreUsuario,
+        correo: correo,
+        contrasenia: contrasenia,
+        imagen: image,
+        duenio: duenio,
+        activo: activo,
+      };
+      console.log('IMAGEN', sendData);
+      await axios
+        .put(USER_URL, sendData)
+        .then(res => {
+          //console.log('Edited User: ', res.data);
+        })
+        .catch(e => {
+          console.log(`Edited error ${e}`);
+        });
+      setVisibleUserEdited(true);
+      setIsLoading(false);
+    }
   };
 
-  const getImageUrl_old =  () => {
-    setIsLoading(true);
-
-    const formData = new FormData();
-    formData.append('file', {
-      uri: imageToUpload.imagen,
-      type: imageToUpload.type,
-      name: imageToUpload.name,
-    });
-    formData.append('upload_preset', 'morfando_upload_images');
-
-    const options = {
-      method: 'POST',
-      body: formData,
-      'X-Requested-With': 'XMLHttpRequest',
-      'Allow-Control-Allow-Origin': '*',
-    };
-    
-    fetch('https://api.cloudinary.com/v1_1/drzh7bbzz/image/upload', options)
-      .then(res => res.json())
-      .then(res => {
-        console.log(res.url);
-        setImageToUpload(res.url);
-      })
-      .catch(err => console.log(err));
-    setIsLoading(false);
-  };
-
-  const getImageUrl = async (image,type,name) => {
+  const getImageUrl = async (image, type, name) => {
     setIsLoading(true);
 
     const formData = new FormData();
@@ -156,7 +163,7 @@ const PerfilUsuario = ({navigation}) => {
       options,
     );
     const payload = await res.json();
-    console.log("payload",payload)
+    console.log('payload', payload);
     setIsLoading(false);
     return payload.url;
   };
@@ -188,7 +195,7 @@ const PerfilUsuario = ({navigation}) => {
 
   useEffect(() => {
     getUserInfo();
-  }, [image, nombreUsuario]);
+  }, []);
 
   return (
     <SafeAreaView

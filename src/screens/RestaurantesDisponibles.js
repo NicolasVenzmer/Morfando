@@ -153,7 +153,7 @@ const RestaurantesDisponibles = ({navigation}) => {
           longitude: location.longitude,
         };
         setLocation(data);
-        //console.log(data);
+        console.log(location);
       })
       .catch(error => {
         const {code, message} = error;
@@ -162,16 +162,16 @@ const RestaurantesDisponibles = ({navigation}) => {
   };
 
   const getKilometers = async () => {
-    const updatedRestaurants = await Promise.all(restaurants?.map(restaurant => {
+    const updatedRestaurants = await Promise.all(restaurants?.map(async restaurant => {
       const sendData = {
         latitudUsuario: location.latitude,
         longitudUsuario: location.longitude,
         latitudRestaurant: restaurant.latitud,
         longitudRestaurant: restaurant.longitud,
       };
-      console.log('Datos a enviar al back: ', sendData);
+      //console.log('Datos a enviar al back: ', sendData);
       const GEOLOCATION_URL = '/geolocation';
-      const res = axios.post(GEOLOCATION_URL, sendData).catch(e => {
+      const res = await axios.post(GEOLOCATION_URL, sendData).catch(e => {
         console.log(`KM error ${e}`);
       });
       return {
@@ -183,7 +183,7 @@ const RestaurantesDisponibles = ({navigation}) => {
       setNewRestaurants(updatedRestaurants); 
   };
 
-  console.log('estoy en el console', newRestaurants);
+  //console.log('estoy en el console', newRestaurants);
 
   useEffect(() => {
     getRestaurants();
