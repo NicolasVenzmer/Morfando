@@ -7,7 +7,8 @@ import {
   ScrollView,
   Modal,
   Pressable,
-  StyleSheet, TextInput
+  StyleSheet,
+  TextInput,
 } from 'react-native';
 import CardRestauranteConsumidor from '../components/CardRestauranteConsumidor';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -55,6 +56,8 @@ const RestaurantesDisponibles = ({navigation}) => {
   const [selectedMoney4, setSelectedMoney4] = useState(false);
   const [rangoPrecio, setRangoPrecio] = useState(1);
   const [filtroDeDistancia, setFiltroDeDistancia] = useState('');
+  const [location, setLocation] = useState('');
+  const [newRestaurants, setNewRestaurants] = useState([]);
 
   const onChangeSearch = query => {
     if (query) {
@@ -139,9 +142,83 @@ const RestaurantesDisponibles = ({navigation}) => {
     setLoading(false);
   };
 
+  const getCurrentLocation = () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then(location => {
+        const data = {
+          latitude: location.latitude,
+          longitude: location.longitude,
+        };
+        setLocation(data);
+        //console.log(data);
+      })
+      .catch(error => {
+        const {code, message} = error;
+        console.warn(code, message);
+      });
+  };
+
+  const getKilometers = () => {
+    restaurants?.forEach((restaurant, index) => {
+      const sendData = {
+        latitudUsuario: location.latitude,
+        longitudUsuario: location.longitude,
+        latitudRestaurant: restaurant.latitud,
+        longitudRestaurant: restaurant.longitud,
+      };
+      //console.log('Datos a enviar al back: ', sendData);
+      const GEOLOCATION_URL = '/geolocation';
+      axios
+        .post(GEOLOCATION_URL, sendData)
+        .then(res => {
+          // setRestaurants(
+          //   ...restaurants.slice(0, index),
+          //   {
+          //     restaurant,
+          //     distance: res.data.rows[0].elements[0].distance.text,
+          //   },
+          //   ...restaurants.slice(index + 1),
+          // );
+          if (!newRestaurants) {
+            console.log('entre al 1234');
+            setNewRestaurants({
+              restaurant,
+              distance: res.data.rows[0].elements[0].distance.text,
+            });
+          } else {
+            setNewRestaurants(...newRestaurants, {
+              restaurant,
+              distance: res.data.rows[0].elements[0].distance.text,
+            });
+          }
+
+          // console.log('data nueva', {
+          //   restaurant,
+          //   distance: res.data.rows[0].elements[0].distance.text,
+          // });
+        })
+        .catch(e => {
+          console.log(`KM error ${e}`);
+        });
+    });
+  };
+
+  console.log('estoy en el console', newRestaurants.distance);
+
   useEffect(() => {
     getRestaurants();
+    getCurrentLocation(); // user location
   }, []);
+
+  useEffect(() => {
+    if (restaurants && restaurants.length > 0) {
+      getKilometers();
+    }
+  }, [location, restaurants]); // obtengo los km del restaurante
+
   useEffect(() => {
     let comidasTemp = [];
     restaurants.map(restaurant => {

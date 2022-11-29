@@ -23,20 +23,14 @@ const PerfilUsuario = ({navigation}) => {
   const [visibleUserEdited, setVisibleUserEdited] = useState(false);
   const [visibleDeleteUser, setVisibleDeleteUser] = useState(false);
   const [user, setUser] = useState('');
+  const [imageToUpload, setImageToUpload] = useState('');
 
   const {id, correo, contrasenia, duenio, activo} = userInfo;
-  //console.log('estoy en el perfil del usuairo: ', userInfo);
 
   //Images
   const [image, setImage] = useState();
-  const [showImage, setShowImage] = useState(true);
 
   const addImage = () => {
-    // const options = {
-    //   selectionLimit: 1,
-    //   mediaType: 'photo',
-    //   includeBase64: false,
-    // };
     launchImageLibrary(
       {
         height: 100,
@@ -48,14 +42,17 @@ const PerfilUsuario = ({navigation}) => {
         }
         const _response = response.assets;
         let _resultUri = _response.map(a => a.uri);
-        // let _resultType = _response.map(a => a.type);
-        // let _resultfileName = _response.map(a => a.fileName);
+        let _resultType = _response.map(a => a.type);
+        let _resultfileName = _response.map(a => a.fileName);
+        let _resultfileSize = _response.map(a => a.fileSize);
         const img = {
           imagen: _resultUri.toString(),
-          //type: _resultType,
-          //name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
+          type: _resultType.toString(),
+          name: _resultfileName.toString(),
+          size: Number(_resultfileSize.toString()),
         };
-
+        console.log(img);
+        setImageToUpload(img);
         setImage(img.imagen);
       },
     );
@@ -63,7 +60,6 @@ const PerfilUsuario = ({navigation}) => {
 
   // Obtengo los datos de usuario
   const getUserInfo = () => {
-    //Enviar los datos al back
     const USER_URL = `/user${userInfo.id}`;
     setIsLoading(true);
     axios
@@ -83,8 +79,9 @@ const PerfilUsuario = ({navigation}) => {
 
   // Cambio los datos del usuario
   const onChangeUserData = async () => {
-    //Enviar los datos al back
     //if (!Helper.isEmpty(nombreUsuario) || Helper.isEmpty(image)) return;
+    //console.log('resultado', result);
+    await getImageUrl()
     const USER_URL = '/user';
     setIsLoading(true);
     const sendData = {
@@ -92,11 +89,11 @@ const PerfilUsuario = ({navigation}) => {
       nombre: nombreUsuario,
       correo: correo,
       contrasenia: contrasenia,
-      imagen: image,
+      imagen: imageToUpload.imagen,
       duenio: duenio,
       activo: activo,
     };
-    //console.log('IMAGEN', image?.imagen);
+    console.log('IMAGEN', sendData);
     await axios
       .put(USER_URL, sendData)
       .then(res => {
@@ -106,6 +103,33 @@ const PerfilUsuario = ({navigation}) => {
         console.log(`Edited error ${e}`);
       });
     setVisibleUserEdited(true);
+    setIsLoading(false);
+  };
+
+  const getImageUrl = async () => {
+    setIsLoading(true);
+
+    const formData = new FormData();
+    formData.append('file', {
+      uri: imageToUpload.imagen,
+      type: imageToUpload.type,
+      name: imageToUpload.name,
+    });
+    formData.append('upload_preset', 'morfando_upload_images');
+
+    const options = {
+      method: 'POST',
+      body: formData,
+      'X-Requested-With': 'XMLHttpRequest',
+      'Allow-Control-Allow-Origin': '*',
+    };
+    fetch('https://api.cloudinary.com/v1_1/drzh7bbzz/image/upload', options)
+      .then(res => res.json())
+      .then(res => {
+        console.log(res.url);
+        setImageToUpload(res.url);
+      })
+      .catch(err => console.log(err));
     setIsLoading(false);
   };
 
@@ -136,7 +160,6 @@ const PerfilUsuario = ({navigation}) => {
 
   useEffect(() => {
     getUserInfo();
-    //console.log("useEffect", image)
   }, [image, nombreUsuario]);
 
   return (

@@ -107,6 +107,8 @@ const CrearRestaurante = ({navigation}) => {
   };
 
   const gerImagesUrl = async () => {
+
+    //mapear todas las imagenes con un foreach
     setIsLoading(true);
 
     const formData = new FormData();
@@ -127,7 +129,7 @@ const CrearRestaurante = ({navigation}) => {
       'https://api.cloudinary.com/v1_1/drzh7bbzz/image/upload',
       options,
     )
-      //.then(res => res.json())
+      .then(res => res.json())
       .then(res => console.log("estoy en el res este", res.url))
       .catch(err => console.log(err));
     setIsLoading(false);
