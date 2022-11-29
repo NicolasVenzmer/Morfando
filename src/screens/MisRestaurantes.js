@@ -256,7 +256,7 @@ const MisRestaurantes = ({navigation}) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          Nuevo
+          Crear Restaurante
         </Text>
       </Pressable>
     </SafeAreaView>

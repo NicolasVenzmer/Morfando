@@ -8,58 +8,58 @@ import axios from '../api/axios';
 import GetLocation from 'react-native-get-location';
 
 const CardRestauranteConsumidor = ({restaurant, addFavorite, navigation}) => {
-  // console.log(
-  //   'estoy en la card de restaurante del consumidor',
-  //   restaurant,
-  // );
+  console.log(
+    'estoy en la card de restaurante del consumidor',
+    restaurant.distance,
+  );
 
   const [loading, setIsLoading] = useState(false);
-  const [kilometers, setKilometers] = useState('');
-  const [location, setLocation] = useState('');
+  // const [kilometers, setKilometers] = useState('');
+  // const [location, setLocation] = useState('');
 
-  const getCurrentLocation = () => {
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 5000,
-    })
-      .then(location => {
-        const data = {
-          latitude: location.latitude,
-          longitude: location.longitude,
-        };
-        setLocation(data);
-        //console.log(data);
-      })
-      .catch(error => {
-        const {code, message} = error;
-        console.warn(code, message);
-      });
-  };
+  // const getCurrentLocation = () => {
+  //   GetLocation.getCurrentPosition({
+  //     enableHighAccuracy: true,
+  //     timeout: 5000,
+  //   })
+  //     .then(location => {
+  //       const data = {
+  //         latitude: location.latitude,
+  //         longitude: location.longitude,
+  //       };
+  //       setLocation(data);
+  //       //console.log(data);
+  //     })
+  //     .catch(error => {
+  //       const {code, message} = error;
+  //       console.warn(code, message);
+  //     });
+  // };
 
-  const getKilometers = () => {
-    const sendData = {
-      latitudUsuario: location.latitude,
-      longitudUsuario: location.longitude,
-      latitudRestaurant: restaurant.latitud,
-      longitudRestaurant: restaurant.longitud,
-    };
-    //console.log('Datos a enviar al back: ', sendData);
-    const GEOLOCATION_URL = '/geolocation';
-    axios
-      .post(GEOLOCATION_URL, sendData)
-      .then(res => {
-        //console.log('KM GET Data: ', res.data.rows[0].elements[0].distance.text);
-        setKilometers(res.data.rows[0].elements[0].distance.text);
-      })
-      .catch(e => {
-        console.log(`KM error ${e}`);
-      });
-  };
+  // const getKilometers = () => {
+  //   const sendData = {
+  //     latitudUsuario: location.latitude,
+  //     longitudUsuario: location.longitude,
+  //     latitudRestaurant: restaurant.latitud,
+  //     longitudRestaurant: restaurant.longitud,
+  //   };
+  //   //console.log('Datos a enviar al back: ', sendData);
+  //   const GEOLOCATION_URL = '/geolocation';
+  //   axios
+  //     .post(GEOLOCATION_URL, sendData)
+  //     .then(res => {
+  //       //console.log('KM GET Data: ', res.data.rows[0].elements[0].distance.text);
+  //       setKilometers(res.data.rows[0].elements[0].distance.text);
+  //     })
+  //     .catch(e => {
+  //       console.log(`KM error ${e}`);
+  //     });
+  // };
 
-  useEffect(() => {
-    getCurrentLocation();
-  }, []);
-  useEffect(getKilometers, [location]);
+  // useEffect(() => {
+  //   getCurrentLocation();
+  // }, []);
+  // useEffect(getKilometers, [location]);
 
   return (
     <>
@@ -136,7 +136,7 @@ const CardRestauranteConsumidor = ({restaurant, addFavorite, navigation}) => {
                 fontWeight: '500',
                 flexWrap: 'wrap',
               }}>
-              {kilometers}
+              {restaurant?.distance}
             </Text>
             <MaterialIcons
               name="menu-book"

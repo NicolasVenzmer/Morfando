@@ -37,10 +37,7 @@ const Login = ({navigation}) => {
   };
 
   useEffect(() => {
-    if (error === ErrorReference[404]) {
-      console.log(ErrorReference[404]);
-      setVisible(true);
-    }
+    setVisible(!!error);
   }, [error]);
 
   return (
@@ -88,7 +85,7 @@ const Login = ({navigation}) => {
                 fontSize: Theme.fonts.LARGE,
                 color: Theme.colors.SECONDARY,
               }}>
-              {ErrorReference[404]}
+              {error}
             </Text>
             <View
               style={{

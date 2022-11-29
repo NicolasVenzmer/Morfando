@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -14,17 +14,18 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Feather from 'react-native-vector-icons/Feather';
 import {Checkbox} from 'react-native-paper';
 
-const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
+const CardEditarPlato = ({plato, onDelete, onUpdate, categories}) => {
   const [showCategories, setShowCategories] = useState(false);
   const onChangeName = name => {
     onUpdate({...plato, nombre: name});
   };
   const updateCategory = callback => {
-    const id = callback()
+    const id = callback();
 
     onUpdate({...plato, categoria_id: id});
   };
   const onUpdateImages = function (images) {
+    //console.log("OnUpdateImages: ", images)
     onUpdate({...plato, imagenes: images});
   };
   const onChangePrice = price => {
@@ -65,16 +66,26 @@ const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
           //name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
         };
 
-        onUpdateImages([...(plato?.imagenes||[]), img]);
+        onUpdateImages([...(plato?.imagenes || []), img]);
       },
     );
   };
 
   const onDeleteImageFn = image => {
     return function () {
-      onUpdateImages(plato?.imagenes?.filter(el => el.imagen !== image.imagen)||[]);
+      onUpdateImages(
+        plato?.imagenes?.filter(el => el.imagen !== image.imagen) || [],
+      );
     };
   };
+
+  // useEffect(()=>{
+  //   console.log('estas son las wqewqe', plato.imagen[0]);
+  //   const imagenRecibida = JSON.stringify({imagen: plato.imagen[0].imagen});
+  //     //console.log("useEffect",imagenRecibida.imagen);
+
+  //     onUpdateImages([...(plato?.imagenes || []), imagenRecibida]);
+  // },[])
 
   DropDownPicker.setLanguage('ES');
   DropDownPicker.addTranslation('ES', {
@@ -83,6 +94,7 @@ const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
       1: '(1) tipo de comida seleccionado',
       2: '(2) tipos de comida seleccionads',
       3: '(3) tipos de comida seleccionados',
+      // Feel free to add more
       n: '{count} tipo de comida seleccionado',
     },
   });
@@ -182,7 +194,7 @@ const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
             onChangeText={onChangeIngredients}
             placeholder="Ingredientes / Descripcion del plato"
             placeholderTextColor="black"
-            value={plato.ingredientes}
+            value={plato.ingredientes} 
           />
           <View
             style={{
@@ -328,4 +340,4 @@ const CardCrearPlato = ({plato, onDelete, onUpdate, categories}) => {
   );
 };
 
-export default CardCrearPlato;
+export default CardEditarPlato;

@@ -13,7 +13,7 @@ export const AuthContext = createContext();
 
 export const ErrorReference = {
   500: 'Error de servidor',
-  400: 'Usuario inactivo. Chequee su casilla de mail',
+  400: 'El usuario esta inactivo, por favor verifique su email.',
   404: 'Usuario no encontrado con ese correo o contraseña.',
 };
 

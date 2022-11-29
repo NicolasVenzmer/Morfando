@@ -161,52 +161,29 @@ const RestaurantesDisponibles = ({navigation}) => {
       });
   };
 
-  const getKilometers = () => {
-    restaurants?.forEach((restaurant, index) => {
+  const getKilometers = async () => {
+    const updatedRestaurants = await Promise.all(restaurants?.map(restaurant => {
       const sendData = {
         latitudUsuario: location.latitude,
         longitudUsuario: location.longitude,
         latitudRestaurant: restaurant.latitud,
         longitudRestaurant: restaurant.longitud,
       };
-      //console.log('Datos a enviar al back: ', sendData);
+      console.log('Datos a enviar al back: ', sendData);
       const GEOLOCATION_URL = '/geolocation';
-      axios
-        .post(GEOLOCATION_URL, sendData)
-        .then(res => {
-          // setRestaurants(
-          //   ...restaurants.slice(0, index),
-          //   {
-          //     restaurant,
-          //     distance: res.data.rows[0].elements[0].distance.text,
-          //   },
-          //   ...restaurants.slice(index + 1),
-          // );
-          if (!newRestaurants) {
-            console.log('entre al 1234');
-            setNewRestaurants({
-              restaurant,
-              distance: res.data.rows[0].elements[0].distance.text,
-            });
-          } else {
-            setNewRestaurants(...newRestaurants, {
-              restaurant,
-              distance: res.data.rows[0].elements[0].distance.text,
-            });
-          }
-
-          // console.log('data nueva', {
-          //   restaurant,
-          //   distance: res.data.rows[0].elements[0].distance.text,
-          // });
-        })
-        .catch(e => {
-          console.log(`KM error ${e}`);
-        });
-    });
+      const res = axios.post(GEOLOCATION_URL, sendData).catch(e => {
+        console.log(`KM error ${e}`);
+      });
+      return {
+        ...restaurant,
+        distance: res?.data?.rows[0]?.elements[0]?.distance?.text,
+      }
+    }));
+ 
+      setNewRestaurants(updatedRestaurants); 
   };
 
-  console.log('estoy en el console', newRestaurants.distance);
+  console.log('estoy en el console', newRestaurants);
 
   useEffect(() => {
     getRestaurants();
@@ -423,7 +400,7 @@ const RestaurantesDisponibles = ({navigation}) => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              {searchQuery?.map(restaurant => (
+              {newRestaurants?.map(restaurant => (
                 <CardRestauranteConsumidor
                   key={restaurant.id}
                   addFavorite={() => addFavorite(restaurant)}

@@ -850,7 +850,7 @@ const CrearRestaurante = ({navigation}) => {
           backgroundColor: '#E14852',
           borderRadius: 30,
         }}
-        onPress={() => gerImagesUrl()}>
+        onPress={() => createRestaurant()}>
         <Text
           style={{
             color: '#fdfdfd',

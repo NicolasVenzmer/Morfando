@@ -3,7 +3,8 @@ import Feather from 'react-native-vector-icons/Feather';
 import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png'; ;
 
 const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
   //console.log("estoy en la card de restaurante: ", restaurant?.imagenes[0]?.imagen);
@@ -34,6 +35,16 @@ const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
               }}>
               {restaurant?.nombre}
             </Text>
+            <Ionicons
+              name="add-circle"
+              style={{
+                color: '#E14852',
+                fontSize: 19,
+                top: 10,
+                right: 30,
+              }}
+              onPress={() => navigation.navigate('CrearMenu', {restaurant})}
+            />
             <MaterialIcons
               name="menu-book"
               style={{
@@ -42,7 +53,7 @@ const CardRestaurante = ({restaurant, navigation, deleteRestaurant}) => {
                 top: 10,
                 right: 25,
               }}
-              onPress={() => navigation.navigate('CrearMenu', {restaurant})}
+              onPress={() => navigation.navigate('EditarMenu', {restaurant})}
             />
             <MaterialCommunityIcons
               name="circle-edit-outline"

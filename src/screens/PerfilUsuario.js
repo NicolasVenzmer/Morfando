@@ -81,7 +81,7 @@ const PerfilUsuario = ({navigation}) => {
   const onChangeUserData = async () => {
     //if (!Helper.isEmpty(nombreUsuario) || Helper.isEmpty(image)) return;
     //console.log('resultado', result);
-    await getImageUrl()
+    const imageURL =  await getImageUrl(imageToUpload.imagen,imageToUpload.type,imageToUpload.name);
     const USER_URL = '/user';
     setIsLoading(true);
     const sendData = {
@@ -89,7 +89,7 @@ const PerfilUsuario = ({navigation}) => {
       nombre: nombreUsuario,
       correo: correo,
       contrasenia: contrasenia,
-      imagen: imageToUpload.imagen,
+      imagen: imageURL,
       duenio: duenio,
       activo: activo,
     };
@@ -106,7 +106,7 @@ const PerfilUsuario = ({navigation}) => {
     setIsLoading(false);
   };
 
-  const getImageUrl = async () => {
+  const getImageUrl_old =  () => {
     setIsLoading(true);
 
     const formData = new FormData();
@@ -123,6 +123,7 @@ const PerfilUsuario = ({navigation}) => {
       'X-Requested-With': 'XMLHttpRequest',
       'Allow-Control-Allow-Origin': '*',
     };
+    
     fetch('https://api.cloudinary.com/v1_1/drzh7bbzz/image/upload', options)
       .then(res => res.json())
       .then(res => {
@@ -131,6 +132,33 @@ const PerfilUsuario = ({navigation}) => {
       })
       .catch(err => console.log(err));
     setIsLoading(false);
+  };
+
+  const getImageUrl = async (image,type,name) => {
+    setIsLoading(true);
+
+    const formData = new FormData();
+    formData.append('file', {
+      uri: image,
+      type: type,
+      name: name,
+    });
+    formData.append('upload_preset', 'morfando_upload_images');
+
+    const options = {
+      method: 'POST',
+      body: formData,
+      'X-Requested-With': 'XMLHttpRequest',
+      'Allow-Control-Allow-Origin': '*',
+    };
+    const res = await fetch(
+      'https://api.cloudinary.com/v1_1/drzh7bbzz/image/upload',
+      options,
+    );
+    const payload = await res.json();
+    console.log("payload",payload)
+    setIsLoading(false);
+    return payload.url;
   };
 
   // Elimino el usuario
