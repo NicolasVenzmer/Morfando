@@ -13,8 +13,8 @@ export const AuthContext = createContext();
 
 export const ErrorReference = {
   500: 'Error de servidor',
-  400: 'El usuario esta inactivo, por favor verifique su email.',
-  404: 'Usuario no encontrado con ese correo o contraseña.',
+  404: 'El usuario esta inactivo, por favor verifique su email.',
+  400: 'Usuario no encontrado con ese correo o contraseña.',
 };
 
 export const AuthProvider = ({children}) => {

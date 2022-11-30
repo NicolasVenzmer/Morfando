@@ -46,16 +46,12 @@ const OpinarSobreRestaurante = ({navigation}) => {
       comentario: opinion,
       calificacion: calificacion,
     };
-    console.log('Datos a enviar al back: ', sendData);
     const CREATE_OPINION_URL = '/opinion';
     axios
       .post(CREATE_OPINION_URL, sendData)
       .then(res => {
         setOpinions([...opinions, opinion]);
-        console.log("opiniones", opinions)
-          // navigation.navigate('Opiniones', {opinions});
-        
-        console.log('Opinion Created Data: ', res.data);
+        navigation.navigate('RestaurantesDisponibles');
       })
       .catch(e => {
         console.log(`Opinion error ${e}`);

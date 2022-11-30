@@ -217,8 +217,6 @@ const DetalleRestaurante = ({navigation}) => {
   }, []);
   useEffect(getCurrentLocation, [restaurant]);
 
-  console.log("ESTOY EN LOS HORARIOS", horarios)
-
   return (
     <SafeAreaView
       style={{

@@ -75,55 +75,28 @@ const EditarMenu = ({navigation}) => {
   useEffect(getRestaurant, [restaurant]);
   useEffect(getMenus, [restaurant]);
 
-  const getImageUrl = async (imagenes) => {
-    setIsLoading(true);
-    //console.log("entre: ", imagenes)
-    const listOfImages = Promise.all(imagenes.map(async(image) => {
-      const formData = new FormData();
-      formData.append('file', {
-        uri: image.image,
-        type: image.type,
-        name: image.name,
-      });
-      console.log(formData._parts[0].file)
-      formData.append('upload_preset', 'morfando_upload_images');
-      const options = {
-        method: 'POST',
-        body: formData,
-        'X-Requested-With': 'XMLHttpRequest',
-        'Allow-Control-Allow-Origin': '*',
-      };
-      const res = await fetch(
-        'https://api.cloudinary.com/v1_1/drzh7bbzz/image/upload',
-        options,
-      );
-      const payload = await res.json();
-      //console.log('payload', payload);
-      setIsLoading(false);
-      console.log({imagen: payload.url});
-      return {imagen:payload.url};
-    }))
-   return listOfImages
-  };
-
   const editarMenu = async () => {
     setVisiblePlatoEditado(true);
     setIsLoading(true);
 
-    //const resPlatosEliminados = await eliminarMenu();
+    const resPlatosEliminados = await eliminarMenu();
 
     const platos = platosTemp.map(
       ({category, createdAt, updatedAt, imagen, ...keepAttrs}) => keepAttrs,
     );
-    
-    const imagesWithUrl = await Promise.all(
-      platos.map(async({imagenes}) => {
-          const imagesUrl = await getImageUrl(imagenes);
-          return {imagenes: imagesUrl};
+    console.log('json: ', platos);
+    const newPlatos = await Promise.all(
+      platos.map(async ({imagenes, ...plato}) => {
+        const newImages = await Promise.all(
+          imagenes.map(imagen => {
+            return getImageUrl(imagen.imagen, imagen.type, imagen.name);
+          }),
+        );
+        return {...plato, imagenes: newImages};
       }),
     );
-    
-    console.log("imagesWithUrl",imagesWithUrl);
+
+    console.log('newPlatos', newPlatos);
     // console.log('Datos editados a enviar al back: ', platos);
     // const resEditedPlates = await Promise.all(
     //   platos.map(plato => {
@@ -168,6 +141,33 @@ const EditarMenu = ({navigation}) => {
     );
     setIsLoading(false);
     return resDeletedPlates;
+  };
+
+  const getImageUrl = async (image, type, name) => {
+    setIsLoading(true);
+    //console.log("entre: ", imagenes)
+
+    const formData = new FormData();
+    formData.append('file', {
+      uri: image,
+      type: type,
+      name: name,
+    });
+    console.log(formData._parts[0].file);
+    formData.append('upload_preset', 'morfando_upload_images');
+    const options = {
+      method: 'POST',
+      body: formData,
+      'X-Requested-With': 'XMLHttpRequest',
+      'Allow-Control-Allow-Origin': '*',
+    };
+    const res = await fetch(
+      'https://api.cloudinary.com/v1_1/drzh7bbzz/image/upload',
+      options,
+    );
+    const payload = await res.json();
+    setIsLoading(false);
+    return payload.url;
   };
 
   const deletePlatoFn = plato => {

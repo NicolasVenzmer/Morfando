@@ -12,6 +12,7 @@ const CardStarRating = ({
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
 
   const onChangeNumberOfStars = item => {
+    console.log("entre al on change")
     onChangeCalificacion(item);
     setDefaultRating(item);
   };
@@ -29,6 +30,7 @@ const CardStarRating = ({
         alignItems: 'center',
       }}>
       {maxRating.map((item, key) => {
+        console.log("entre a stars")
         return (
           <TouchableOpacity
             activeOpacity={0.7}

@@ -7,15 +7,10 @@ import {
   ScrollView,
   Pressable,
 } from 'react-native';
-import CardRestauranteConsumidor from '../components/CardRestauranteConsumidor';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import axios from '../api/axios';
-import CardFavoritos from '../components/CardFavoritos';
-import {AuthContext, ErrorReference} from '../context/AuthContext';
+import {AuthContext} from '../context/AuthContext';
 import {useRoute} from '@react-navigation/native';
 import CardOpinion from '../components/CardOpinion';
-import StarRating from '../components/CardStarRating';
-import {set} from 'react-native-reanimated';
 
 const Opiniones = ({navigation}) => {
   const route = useRoute();
@@ -37,19 +32,9 @@ const Opiniones = ({navigation}) => {
         comentario: comentario,
       }),
     );
-    //console.log('estoy en datalist', dataList);
     setOpinions(dataList);
     setRestaurant(restaurant);
-    //getOpinions()
-    // if (opinions) {
-    //   setOpinions([...opinions, opinions]);
-    // }
   }, [route.params]);
-
-  // console.log(
-  //   'Estoy en Opiniones, las opiniones del restaurante son: ',
-  //   opinions,
-  // );
 
   return (
     <SafeAreaView

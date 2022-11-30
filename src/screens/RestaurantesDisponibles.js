@@ -16,9 +16,9 @@ import axios from '../api/axios';
 import {Searchbar} from 'react-native-paper';
 import {AuthContext} from '../context/AuthContext';
 import GetLocation from 'react-native-get-location';
-import CardStarRating from '../components/CardStarRating';
 import {Chip} from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const ModalPoup = ({visible, children}) => {
   const [showModal, setShowModal] = useState(visible);
@@ -42,6 +42,58 @@ const ModalPoup = ({visible, children}) => {
   );
 };
 
+const CardStarRating = ({
+  givenWidth,
+  givenHeight,
+  left,
+  onChangeCalificacion,
+}) => {
+  const [defaultRating, setDefaultRating] = useState(1);
+  const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
+
+  const onChangeNumberOfStars = item => {
+    console.log('entre al on change');
+    onChangeCalificacion(item);
+    setDefaultRating(item);
+  };
+  const starImgFilled =
+    'https://github.com/tranhonghan/images/blob/main/star_filled.png?raw=true';
+  const starImgCorner =
+    'https://github.com/tranhonghan/images/blob/main/star_corner.png?raw=true';
+
+  return (
+    <View
+      style={{
+        left: left,
+        justifyContent: 'center',
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}>
+      {maxRating.map((item, key) => {
+        return (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            key={item}
+            onPress={() => onChangeNumberOfStars(item)}>
+            <Image
+              style={{
+                width: givenWidth,
+                height: givenHeight,
+                resizeMode: 'cover',
+              }}
+              source={
+                item <= defaultRating
+                  ? {uri: starImgFilled}
+                  : {uri: starImgCorner}
+              }
+            />
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+};
+
 const RestaurantesDisponibles = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const [visibleFilters, setVisibleFilters] = useState(false);
@@ -58,10 +110,13 @@ const RestaurantesDisponibles = ({navigation}) => {
   const [filtroDeDistancia, setFiltroDeDistancia] = useState('');
   const [location, setLocation] = useState('');
   const [newRestaurants, setNewRestaurants] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState([]);
+  const [items, setItems] = useState([]);
 
   const onChangeSearch = query => {
     if (query) {
-      const newData = restaurants.filter(restaurant => {
+      const newData = newRestaurants.filter(restaurant => {
         //console.log('estoy en el searching', restaurant);
         const itemData = restaurant.nombre
           ? restaurant.nombre.toUpperCase()
@@ -71,9 +126,19 @@ const RestaurantesDisponibles = ({navigation}) => {
       });
       setSearchQuery(newData);
     } else {
-      setSearchQuery(restaurants);
+      setSearchQuery(newRestaurants);
     }
   };
+
+  const handleFilterTipoDeComida = () => {
+    // console.log('value', value);
+    // console.log('allData', newRestaurants);
+    return [
+      ...new Set(newRestaurants.map(restaurant => restaurant.categorias)),
+    ];
+  };
+
+  handleFilterTipoDeComida();
 
   DropDownPicker.setLanguage('ES');
   DropDownPicker.addTranslation('ES', {
@@ -86,9 +151,6 @@ const RestaurantesDisponibles = ({navigation}) => {
       n: '{count} tipo de comida seleccionado',
     },
   });
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState();
-  const [items, setItems] = useState([]);
 
   const changeSelectedChip = num => {
     if (num === 1) {
@@ -134,7 +196,6 @@ const RestaurantesDisponibles = ({navigation}) => {
       .then(res => {
         //console.log(res.data);
         setRestaurants(res.data);
-        setSearchQuery(res.data);
       })
       .catch(e => {
         console.log(`Restaurants GET error ${e}`);
@@ -162,25 +223,28 @@ const RestaurantesDisponibles = ({navigation}) => {
   };
 
   const getKilometers = async () => {
-    const updatedRestaurants = await Promise.all(restaurants?.map(async restaurant => {
-      const sendData = {
-        latitudUsuario: location.latitude,
-        longitudUsuario: location.longitude,
-        latitudRestaurant: restaurant.latitud,
-        longitudRestaurant: restaurant.longitud,
-      };
-      //console.log('Datos a enviar al back: ', sendData);
-      const GEOLOCATION_URL = '/geolocation';
-      const res = await axios.post(GEOLOCATION_URL, sendData).catch(e => {
-        console.log(`KM error ${e}`);
-      });
-      return {
-        ...restaurant,
-        distance: res?.data?.rows[0]?.elements[0]?.distance?.text,
-      }
-    }));
- 
-      setNewRestaurants(updatedRestaurants); 
+    const updatedRestaurants = await Promise.all(
+      restaurants?.map(async restaurant => {
+        const sendData = {
+          latitudUsuario: location.latitude,
+          longitudUsuario: location.longitude,
+          latitudRestaurant: restaurant.latitud,
+          longitudRestaurant: restaurant.longitud,
+        };
+        //console.log('Datos a enviar al back: ', sendData);
+        const GEOLOCATION_URL = '/geolocation';
+        const res = await axios.post(GEOLOCATION_URL, sendData).catch(e => {
+          console.log(`KM error ${e}`);
+        });
+        return {
+          ...restaurant,
+          distance: res?.data?.rows[0]?.elements[0]?.distance?.text,
+        };
+      }),
+    );
+
+    setNewRestaurants(updatedRestaurants);
+    setSearchQuery(updatedRestaurants);
   };
 
   useEffect(() => {
@@ -192,7 +256,7 @@ const RestaurantesDisponibles = ({navigation}) => {
     if (restaurants && restaurants.length > 0) {
       getKilometers();
     }
-  }, [location, restaurants]); 
+  }, [location, restaurants]);
 
   useEffect(() => {
     let comidasTemp = [];
@@ -310,7 +374,7 @@ const RestaurantesDisponibles = ({navigation}) => {
           width: '100%',
           height: '100%',
         }}>
-        {!restaurants?.length > 0 ? (
+        {!newRestaurants?.length > 0 ? (
           <View
             style={{
               width: '100%',
@@ -398,7 +462,7 @@ const RestaurantesDisponibles = ({navigation}) => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              {newRestaurants?.map(restaurant => (
+              {searchQuery?.map(restaurant => (
                 <CardRestauranteConsumidor
                   key={restaurant.id}
                   addFavorite={() => addFavorite(restaurant)}
@@ -498,9 +562,9 @@ const RestaurantesDisponibles = ({navigation}) => {
                 borderWidth: 1,
                 width: '70%',
               }}
-              onChangeText={setFiltroDeDistancia}
               placeholder="Cantidad de KM a filtrar..."
               placeholderTextColor="black"
+              onChangeText={text => setFiltroDeDistancia(text)}
               value={filtroDeDistancia}
             />
           </View>
@@ -512,7 +576,7 @@ const RestaurantesDisponibles = ({navigation}) => {
                 fontSize: 15,
                 fontFamily: 'Roboto',
               }}>
-              Categoria
+              Tipo de comida
             </Text>
             <View
               style={{
