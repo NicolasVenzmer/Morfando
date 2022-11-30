@@ -153,7 +153,7 @@ const RestaurantesDisponibles = ({navigation}) => {
           longitude: location.longitude,
         };
         setLocation(data);
-        console.log(location);
+        //console.log(location);
       })
       .catch(error => {
         const {code, message} = error;
@@ -183,18 +183,16 @@ const RestaurantesDisponibles = ({navigation}) => {
       setNewRestaurants(updatedRestaurants); 
   };
 
-  //console.log('estoy en el console', newRestaurants);
-
   useEffect(() => {
     getRestaurants();
-    getCurrentLocation(); // user location
+    getCurrentLocation();
   }, []);
 
   useEffect(() => {
     if (restaurants && restaurants.length > 0) {
       getKilometers();
     }
-  }, [location, restaurants]); // obtengo los km del restaurante
+  }, [location, restaurants]); 
 
   useEffect(() => {
     let comidasTemp = [];

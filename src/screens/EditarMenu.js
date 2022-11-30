@@ -1,10 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Pressable, SafeAreaView, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  Image,
+} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CardEditarPlato from '../components/CardEditarPlato';
 import axios from '../api/axios';
 import {useRoute} from '@react-navigation/native';
 import ModalPoup from '../components/ModalPopUp';
+import { AsyncStorage } from 'react-native';
 
 const EditarMenu = ({navigation}) => {
   const route = useRoute();
@@ -14,6 +22,7 @@ const EditarMenu = ({navigation}) => {
   const [platosAEliminar, setPlatosAEliminar] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [platoEditado, setVisiblePlatoEditado] = useState(false);
+  const [imageToUpload, setImageToUpload] = useState([]);
 
   const getRestaurant = () => {
     if (!restaurant?.id) return;
@@ -46,7 +55,8 @@ const EditarMenu = ({navigation}) => {
           imagenes: el.imagen,
           imagen: undefined,
         }));
-        setPlatosTemp(plates);
+        platosActivos = plates.filter(plato => plato.activo === true);
+        setPlatosTemp(platosActivos);
       })
       .catch(e => {
         console.log(`Menus GET error ${e}`);
@@ -66,27 +76,69 @@ const EditarMenu = ({navigation}) => {
   useEffect(getRestaurant, [restaurant]);
   useEffect(getMenus, [restaurant]);
 
-  const editarMenu = async () => {
-    //setVisiblePlatoEditado(true);
+  const getImageUrl = async (imagenes) => {
     setIsLoading(true);
+    //console.log("entre: ", imagenes)
+    const listOfImages = Promise.all(imagenes.map(async(image) => {
+      const formData = new FormData();
+      formData.append('file', {
+        uri: image.image,
+        type: image.type,
+        name: image.name,
+      });
+      console.log(formData._parts[0].file)
+      formData.append('upload_preset', 'morfando_upload_images');
+      const options = {
+        method: 'POST',
+        body: formData,
+        'X-Requested-With': 'XMLHttpRequest',
+        'Allow-Control-Allow-Origin': '*',
+      };
+      const res = await fetch(
+        'https://api.cloudinary.com/v1_1/drzh7bbzz/image/upload',
+        options,
+      );
+      const payload = await res.json();
+      //console.log('payload', payload);
+      setIsLoading(false);
+      console.log({imagen: payload.url});
+      return {imagen:payload.url};
+    }))
+   return listOfImages
+  };
+
+  const editarMenu = async () => {
+    setVisiblePlatoEditado(true);
+    setIsLoading(true);
+
+    //const resPlatosEliminados = await eliminarMenu();
+
     const platos = platosTemp.map(
       ({category, createdAt, updatedAt, imagen, ...keepAttrs}) => keepAttrs,
     );
-
-    console.log('Datos editados a enviar al back: ', platos);
-    const resEditedPlates = await Promise.all(
-      platos.map(plato => {
-        console.log('Datos editados a enviar al back: ', plato);
-
-        const EDIT_PLATE_URL = '/plate';
-        const res = axios.put(EDIT_PLATE_URL, plato).catch(e => {
-          console.log(`Plate Delete error ${e}`);
-        });
-        return res;
+    
+    const imagesWithUrl = await Promise.all(
+      platos.map(async({imagenes}) => {
+          const imagesUrl = await getImageUrl(imagenes);
+          return {imagenes: imagesUrl};
       }),
     );
-    console.log("Edited plates with status: ", resEditedPlates[0].status);
-    navigation.navigate('MisRestaurantes');
+    
+    console.log("imagesWithUrl",imagesWithUrl);
+    // console.log('Datos editados a enviar al back: ', platos);
+    // const resEditedPlates = await Promise.all(
+    //   platos.map(plato => {
+    //     console.log('Datos editados a enviar al back: ', plato);
+
+    //     const EDIT_PLATE_URL = '/plate';
+    //     const res = axios.put(EDIT_PLATE_URL, plato).catch(e => {
+    //       console.log(`Plate Delete error ${e}`);
+    //     });
+    //     return res;
+    //   }),
+    // );
+    // console.log("Edited plates with status: ", resEditedPlates[0].status);
+    // navigation.navigate('MisRestaurantes');
 
     setIsLoading(false);
   };
@@ -108,15 +160,15 @@ const EditarMenu = ({navigation}) => {
 
         const DELETE_PLATE_URL = '/plate';
         const res = axios
-          .delete(DELETE_PLATE_URL, {sendData: sendData})
+          .delete(DELETE_PLATE_URL, {data: sendData})
           .catch(e => {
             console.log(`Plate Delete error ${e}`);
           });
         return res;
       }),
     );
-    console.log(resDeletedPlates);
     setIsLoading(false);
+    return resDeletedPlates;
   };
 
   const deletePlatoFn = plato => {
@@ -206,16 +258,38 @@ const EditarMenu = ({navigation}) => {
           width: '100%',
           height: '80%',
         }}>
-        {platosTemp?.map((plato, index) => (
-          <CardEditarPlato
-            key={index}
-            id={index}
-            plato={plato}
-            categories={categoryOptions}
-            onUpdate={updatePlateFn(plato)}
-            onDelete={deletePlatoFn(plato)}
-          />
-        ))}
+        {!platosTemp?.length > 0 ? (
+          <View
+            style={{
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{
+                position: 'absolute',
+                fontSize: 20,
+                fontWeight: '450',
+                textAlign: 'center',
+              }}>
+              No hay menus para editar.
+            </Text>
+            <Image source={require('../assets/Images/empty-restaurants.png')} />
+          </View>
+        ) : (
+          <>
+            {platosTemp?.map((plato, index) => (
+              <CardEditarPlato
+                key={index}
+                id={index}
+                plato={plato}
+                categories={categoryOptions}
+                onUpdate={updatePlateFn(plato)}
+                onDelete={deletePlatoFn(plato)}
+              />
+            ))}
+          </>
+        )}
       </ScrollView>
 
       <ModalPoup visible={platoEditado}>
@@ -253,7 +327,7 @@ const EditarMenu = ({navigation}) => {
               {
                 editarMenu();
               }
-              setVisiblePlatoCreado(false);
+              setVisiblePlatoEditado(false);
             }}>
             <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
           </Pressable>

@@ -1,78 +1,10 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React from 'react';
 import {View, Text, Image, Pressable} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
-import axios from '../api/axios';
-import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
-import GetLocation from 'react-native-get-location';
 
 const CardFavoritos = ({favorito, navigation, deleteFavorite}) => {
-  //console.log("Card de Favoritos: ",favorito.restaurante.imagenes[0].imagen)
-  const [restaurant, setRestaurant] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [kilometers, setKilometers] = useState('');
-  const [location, setLocation] = useState('');
-
-  const getRestaurants = async () => {
-    const GET_RESTAURANT_URL = `/restaurant${favorito.restaurante.id}`;
-    axios
-      .get(GET_RESTAURANT_URL)
-      .then(res => {
-        //console.log(res.data[0]);
-        setRestaurant(res.data[0]);
-      })
-      .catch(e => {
-        console.log(`Restaurants GET error ${e}`);
-      });
-    setLoading(false);
-  };
-
-
-  const getCurrentLocation = () => {
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 15000,
-    })
-      .then(location => {
-        const data = {
-          latitude: location.latitude,
-          longitude: location.longitude,
-        };
-        setLocation(data);
-        //console.log(data);
-      })
-      .catch(error => {
-        const {code, message} = error;
-        console.warn(code, message);
-      });
-  };
-
-  const getKilometers = () => {
-    const sendData = {
-      latitudUsuario: location.latitude,
-      longitudUsuario: location.longitude,
-      latitudRestaurant: restaurant.latitud,
-      longitudRestaurant: restaurant.longitud,
-    };
-    //console.log('Datos a enviar al back: ', sendData);
-    const GEOLOCATION_URL = '/geolocation';
-    axios
-      .post(GEOLOCATION_URL, sendData)
-      .then(res => {
-        //console.log('KM GET Data: ', res.data.rows[0].elements[0].distance.text);
-        setKilometers(res.data.rows[0].elements[0].distance.text);
-      })
-      .catch(e => {
-        console.log(`KM error ${e}`);
-      });
-  };
-
-  useEffect(() => {
-    getRestaurants();
-    getCurrentLocation();
-  }, []);
-
-  useEffect(getKilometers, [location]);
+  //console.log("Card de Favoritos: ",favorito)
 
   return (
     <>
@@ -149,7 +81,7 @@ const CardFavoritos = ({favorito, navigation, deleteFavorite}) => {
                 fontWeight: '500',
                 flexWrap: 'wrap',
               }}>
-              {kilometers}
+              {favorito?.distance}
             </Text>
             <MaterialIcons
               name="menu-book"

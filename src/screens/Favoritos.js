@@ -12,6 +12,7 @@ import axios from '../api/axios';
 import CardFavoritos from '../components/CardFavoritos';
 import {AuthContext} from '../context/AuthContext';
 import ModalPoup from '../components/ModalPopUp';
+import GetLocation from 'react-native-get-location';
 
 const Favoritos = ({navigation}) => {
   const {userInfo} = useContext(AuthContext);
@@ -19,6 +20,51 @@ const Favoritos = ({navigation}) => {
   const [favoritos, setFavoritos] = useState([]);
   const [visible, setVisible] = useState(false);
   const [confirm, setConfirm] = useState({ok: () => {}, cancel: () => {}});
+  const [location, setLocation] = useState('');
+  const [newRestaurants, setNewRestaurants] = useState([]);
+
+  const getCurrentLocation = () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then(location => {
+        const data = {
+          latitude: location.latitude,
+          longitude: location.longitude,
+        };
+        setLocation(data);
+      })
+      .catch(error => {
+        const {code, message} = error;
+        console.warn(code, message);
+      });
+  };
+
+  const getKilometers = async () => {
+    console.log("fav", favoritos)
+    const updatedRestaurants = await Promise.all(
+      favoritos?.map(async restaurant => {
+        const sendData = {
+          latitudUsuario: location.latitude,
+          longitudUsuario: location.longitude,
+          latitudRestaurant: restaurant.restaurante.latitud,
+          longitudRestaurant: restaurant.restaurante.longitud,
+        };
+        console.log('Datos a enviar al back: ', sendData);
+        const GEOLOCATION_URL = '/geolocation';
+        const res = await axios.post(GEOLOCATION_URL, sendData).catch(e => {
+          console.log(`KM error ${e}`);
+        });
+        return {
+          ...restaurant,
+          distance: res?.data?.rows[0]?.elements[0]?.distance?.text,
+        };
+      }),
+    );
+
+    setNewRestaurants(updatedRestaurants);
+  };
 
   // Obtengo los favoritos
   const getFavorites = async () => {
@@ -77,7 +123,14 @@ const Favoritos = ({navigation}) => {
 
   useEffect(() => {
     getFavorites();
+    getCurrentLocation();
   }, []);
+  useEffect(() => {
+    if (favoritos && favoritos.length > 0) {
+      getKilometers();
+    }
+  }, [location, favoritos]);
+
   return (
     <SafeAreaView
       style={{
@@ -214,7 +267,7 @@ const Favoritos = ({navigation}) => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              {favoritos?.map(favorito => (
+              {newRestaurants?.map(favorito => (
                 <CardFavoritos
                   key={favorito.id}
                   favorito={favorito}

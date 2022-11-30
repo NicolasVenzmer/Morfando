@@ -13,7 +13,6 @@ const VerMenuConsumidor = ({navigation}) => {
     const plates = route.params.restaurant.categorias;
     setMenus(plates);
     if (!!menus) {
-      setEmptyMenus(false);
     }
   }, [route.params]);
 

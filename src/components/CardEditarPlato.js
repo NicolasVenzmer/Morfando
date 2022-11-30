@@ -60,10 +60,12 @@ const CardEditarPlato = ({plato, onDelete, onUpdate, categories}) => {
         let _resultUri = _response.map(a => a.uri);
         let _resultType = _response.map(a => a.type);
         let _resultfileName = _response.map(a => a.fileName);
+        let _resultfileSize = _response.map(a => a.fileSize);
         const img = {
           imagen: _resultUri.toString(),
-          //type: _resultType,
-          //name: _resultfileName, // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
+          type: _resultType.toString(),
+          name: _resultfileName.toString(), // || response.uri.substr(response.uri.lastIndexOf('/') + 1),
+          size: Number(_resultfileSize.toString()),
         };
 
         onUpdateImages([...(plato?.imagenes || []), img]);

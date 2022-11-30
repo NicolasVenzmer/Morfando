@@ -8,10 +8,10 @@ import axios from '../api/axios';
 import GetLocation from 'react-native-get-location';
 
 const CardRestauranteConsumidor = ({restaurant, addFavorite, navigation}) => {
-  console.log(
-    'estoy en la card de restaurante del consumidor',
-    restaurant.distance,
-  );
+  // console.log(
+  //   'estoy en la card de restaurante del consumidor',
+  //   restaurant.distance,
+  // );
 
   const [loading, setIsLoading] = useState(false);
   // const [kilometers, setKilometers] = useState('');

@@ -16,7 +16,7 @@ const PlatoType = plato => {
           alignItems: 'flex-end',
           justifyContent: 'flex-end',
           width: '50%',
-          marginRight:10
+          marginRight: 10,
         }}>
         <Image
           style={{
@@ -88,90 +88,93 @@ const PlatoType = plato => {
 
 const Plato = ({plato}) => {
   const [image, setImage] = useState();
-  //console.log("estoy en plato", plato?.imagen[0]?.imagen)
+  const [activo, setActivo] = useState();
+  console.log('estoy en plato', plato);
   useEffect(() => {
     setImage(plato?.imagen[0]?.imagen);
+    setActivo(plato.activo);
   }, []);
   return (
     <>
-      <View
-        style={{
-          width: '80%',
-          alignSelf: 'center',
-          borderRadius: 10,
-          shadowColor: 'black',
-          shadowOpacity: 0.26,
-          shadowOffset: {width: 0, height: 1},
-          shadowRadius: 10,
-          elevation: 2,
-          backgroundColor: 'white',
-          marginBottom: 10,
-          minHeight: 150,
-          position: 'relative',
-          alignSelf: 'center',
-          justifyContent: 'center',
-        }}>
+      {activo ? (
         <View
           style={{
-            width: '100%',
-            height: 100,
-            flexDirection: 'row',
+            width: '80%',
+            alignSelf: 'center',
+            borderRadius: 10,
+            shadowColor: 'black',
+            shadowOpacity: 0.26,
+            shadowOffset: {width: 0, height: 1},
+            shadowRadius: 10,
+            elevation: 2,
+            backgroundColor: 'white',
+            marginBottom: 10,
+            minHeight: 150,
+            position: 'relative',
             alignSelf: 'center',
             justifyContent: 'center',
           }}>
-          <Image
-            style={{
-              width: 100,
-              height: 100,
-              margin: 5,
-              borderRadius: 30,
-              alignSelf: 'center',
-              justifyContent: 'center',
-            }}
-            source={
-              image ? {uri: plato?.imagen[0]?.imagen} : DefaultRestaurantImage
-            }
-          />
           <View
             style={{
-              width: '65%',
+              width: '100%',
               height: 100,
+              flexDirection: 'row',
+              alignSelf: 'center',
+              justifyContent: 'center',
             }}>
-            <Text
+            <Image
               style={{
-                color: 'black',
-                fontWeight: '400',
-              }}>
-              {plato?.nombre}
-            </Text>
-            <Text
+                width: 100,
+                height: 100,
+                margin: 5,
+                borderRadius: 30,
+                alignSelf: 'center',
+                justifyContent: 'center',
+              }}
+              source={
+                image ? {uri: plato?.imagen[0]?.imagen} : DefaultRestaurantImage
+              }
+            />
+            <View
               style={{
-                color: 'grey',
-                fontWeight: '250',
-                bottom: 0,
-                fontSize: 12,
-                mrginLeft: 5,
-                marginRight: 5,
+                width: '65%',
+                height: 100,
               }}>
-              {plato?.ingredientes}
-            </Text>
-            <Text
-              style={{
-                color: 'red',
-                fontWeight: '250',
-                position: 'absolute',
-                bottom: 0,
-                mrginLeft: 5,
-                marginRight: 5,
-              }}>
-              {`$${plato.precio}` || 'No disponible'}
-            </Text>
-            <PlatoType {...plato} />
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: '400',
+                }}>
+                {plato?.nombre}
+              </Text>
+              <Text
+                style={{
+                  color: 'grey',
+                  fontWeight: '250',
+                  bottom: 0,
+                  fontSize: 12,
+                  mrginLeft: 5,
+                  marginRight: 5,
+                }}>
+                {plato?.ingredientes}
+              </Text>
+              <Text
+                style={{
+                  color: 'red',
+                  fontWeight: '250',
+                  position: 'absolute',
+                  bottom: 0,
+                  mrginLeft: 5,
+                  marginRight: 5,
+                }}>
+                {`$${plato.precio}` || 'No disponible'}
+              </Text>
+              <PlatoType {...plato} />
+            </View>
           </View>
         </View>
-      </View>
+      ) : null}
     </>
-    // </View>
   );
 };
 
