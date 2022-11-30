@@ -16,6 +16,7 @@ const CrearMenu = ({navigation}) => {
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [platoCreado, setVisiblePlatoCreado] = useState(false);
   const [visibleEmpty, setVisibleEmpty] = useState(false);
+  const [emptyPlates, setEmptyPlates] = useState(false);
 
   const getRestaurant = () => {
     if (!restaurant?.id) return;
@@ -64,47 +65,21 @@ const CrearMenu = ({navigation}) => {
   };
 
   const crearMenu = async () => {
-    //setIsLoading(true);
-    // const platos = platosTemp.map(({id, ...keepAttrs}) => keepAttrs);
-    // const sendData = {
-    //   restaurante_id: restaurant.id,
-    //   platos,
-    // };
-    //console.log('Datos a enviar al back: ', sendData);
-    // platos.map(plato => {
-    //   if (
-    //     Helper.isEmpty(plato.categoria_id) ||
-    //     Helper.isEmpty(plato.imagenes) ||
-    //     Helper.isEmpty(plato.ingredientes) ||
-    //     Helper.isEmpty(plato.nombre) ||
-    //     Helper.isEmpty(plato.precio)
-    //   ) {
-    //     setVisibleEmpty(true);
-    //   } else {
-    // setVisiblePlatoCreado(true);
-    // const CREATE_PLATE_URL = '/plate';
-    // if (setVisiblePlatoCreado) {
-    //   axios
-    //     .post(CREATE_PLATE_URL, sendData)
-    //     .then(res => {
-    //       navigation.navigate('MisRestaurantes', {sendData});
-    //       console.log('Plate Created Data: ', res.data);
-    //     })
-    //     .catch(e => {
-    //       console.log(`Plate error ${e}`);
-    //     });
-    // }
-    // //   }
-    // // });
-
-    // setIsLoading(false);
-
-    //////////////////
-
     setIsLoading(true);
-    setVisiblePlatoCreado(true);
 
     const platos = platosTemp.map(({id, ...keepAttrs}) => keepAttrs);
+    platos.map(plato => {
+      if (
+        Helper.isEmpty(plato.categoria_id) ||
+        Helper.isEmpty(plato.imagenes) ||
+        Helper.isEmpty(plato.ingredientes) ||
+        Helper.isEmpty(plato.nombre) ||
+        Helper.isEmpty(plato.precio)
+      ) {
+        setVisibleEmpty(true);
+        throw 'exit';
+      }
+    });
 
     setVisiblePlatoCreado;
     const newPlatos = await Promise.all(
@@ -130,7 +105,8 @@ const CrearMenu = ({navigation}) => {
       restaurante_id: restaurant.id,
       platos: newPlatos,
     };
-    console.log('Estos son los platos a crear: ', sendData);
+    //console.log('Estos son los platos a crear: ', sendData);
+    setVisiblePlatoCreado(true);
 
     const CREATE_PLATE_URL = '/plate';
     axios
@@ -142,26 +118,7 @@ const CrearMenu = ({navigation}) => {
       .catch(e => {
         console.log(`Plate Post error ${e}`);
       });
-
-    // const resCreatedPlates = await Promise.all(
-    //   newPlatos.map(platoACrear => {
-    //     console.log('Datos editados a enviar al back: ', platoACrear);
-    //     const sendData = {
-    //       restaurante_id: restaurant.id,
-    //       platoACrear
-    //     };
-    //     console.log('Estos son los platos a crear: ', sendData);
-
-    //     const CREATE_PLATE_URL = '/plate';
-    //     const res = axios.post(CREATE_PLATE_URL, sendData).catch(e => {
-    //       console.log(`Plate Post error ${e}`);
-    //     });
-    //     return res;
-    //   }),
-    // );
-    //console.log('El estado de los platos editados es: ', resCreatedPlates);
     setIsLoading(false);
-   
   };
 
   const getImageUrl = async (image, type, name) => {
