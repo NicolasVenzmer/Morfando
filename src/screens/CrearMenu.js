@@ -63,41 +63,132 @@ const CrearMenu = ({navigation}) => {
     setPlatosTemp(newPlatos);
   };
 
-  const crearMenu = () => {
+  const crearMenu = async () => {
+    //setIsLoading(true);
+    // const platos = platosTemp.map(({id, ...keepAttrs}) => keepAttrs);
+    // const sendData = {
+    //   restaurante_id: restaurant.id,
+    //   platos,
+    // };
+    //console.log('Datos a enviar al back: ', sendData);
+    // platos.map(plato => {
+    //   if (
+    //     Helper.isEmpty(plato.categoria_id) ||
+    //     Helper.isEmpty(plato.imagenes) ||
+    //     Helper.isEmpty(plato.ingredientes) ||
+    //     Helper.isEmpty(plato.nombre) ||
+    //     Helper.isEmpty(plato.precio)
+    //   ) {
+    //     setVisibleEmpty(true);
+    //   } else {
+    // setVisiblePlatoCreado(true);
+    // const CREATE_PLATE_URL = '/plate';
+    // if (setVisiblePlatoCreado) {
+    //   axios
+    //     .post(CREATE_PLATE_URL, sendData)
+    //     .then(res => {
+    //       navigation.navigate('MisRestaurantes', {sendData});
+    //       console.log('Plate Created Data: ', res.data);
+    //     })
+    //     .catch(e => {
+    //       console.log(`Plate error ${e}`);
+    //     });
+    // }
+    // //   }
+    // // });
+
+    // setIsLoading(false);
+
+    //////////////////
+
     setIsLoading(true);
+    setVisiblePlatoCreado(true);
+
     const platos = platosTemp.map(({id, ...keepAttrs}) => keepAttrs);
+
+    setVisiblePlatoCreado;
+    const newPlatos = await Promise.all(
+      platos.map(async ({imagenes, ...plato}) => {
+        const newImages = await Promise.all(
+          imagenes.map(async imagen => {
+            const imageUrl = await getImageUrl(
+              imagen.imagen,
+              imagen.type,
+              imagen.name,
+            );
+
+            return {imagen: imageUrl};
+          }),
+        );
+        return {...plato, imagenes: newImages};
+      }),
+    );
+
+    console.log('Plato procesado: ', newPlatos);
+
     const sendData = {
       restaurante_id: restaurant.id,
-      platos,
+      platos: newPlatos,
     };
-    //console.log('Datos a enviar al back: ', sendData);
-    platos.map(plato => {
-      if (
-        Helper.isEmpty(plato.categoria_id) ||
-        Helper.isEmpty(plato.imagenes) ||
-        Helper.isEmpty(plato.ingredientes) ||
-        Helper.isEmpty(plato.nombre) ||
-        Helper.isEmpty(plato.precio)
-      ) {
-        setVisibleEmpty(true);
-      } else {
-        setVisiblePlatoCreado(true);
-        const CREATE_PLATE_URL = '/plate';
-        if (setVisiblePlatoCreado) {
-          axios
-            .post(CREATE_PLATE_URL, sendData)
-            .then(res => {
-              navigation.navigate('MisRestaurantes', {sendData});
-              console.log('Plate Created Data: ', res.data);
-            })
-            .catch(e => {
-              console.log(`Plate error ${e}`);
-            });
-        }
-      }
-    });
+    console.log('Estos son los platos a crear: ', sendData);
 
+    const CREATE_PLATE_URL = '/plate';
+    axios
+      .post(CREATE_PLATE_URL, sendData)
+      .then(res => {
+        navigation.navigate('MisRestaurantes', {sendData});
+        console.log('Plate Created Data: ', res.data);
+      })
+      .catch(e => {
+        console.log(`Plate Post error ${e}`);
+      });
+
+    // const resCreatedPlates = await Promise.all(
+    //   newPlatos.map(platoACrear => {
+    //     console.log('Datos editados a enviar al back: ', platoACrear);
+    //     const sendData = {
+    //       restaurante_id: restaurant.id,
+    //       platoACrear
+    //     };
+    //     console.log('Estos son los platos a crear: ', sendData);
+
+    //     const CREATE_PLATE_URL = '/plate';
+    //     const res = axios.post(CREATE_PLATE_URL, sendData).catch(e => {
+    //       console.log(`Plate Post error ${e}`);
+    //     });
+    //     return res;
+    //   }),
+    // );
+    //console.log('El estado de los platos editados es: ', resCreatedPlates);
     setIsLoading(false);
+   
+  };
+
+  const getImageUrl = async (image, type, name) => {
+    setIsLoading(true);
+    //console.log("entre: ", imagenes)
+
+    const formData = new FormData();
+    formData.append('file', {
+      uri: image,
+      type: type,
+      name: name,
+    });
+    console.log(formData._parts[0].file);
+    formData.append('upload_preset', 'morfando_upload_images');
+    const options = {
+      method: 'POST',
+      body: formData,
+      'X-Requested-With': 'XMLHttpRequest',
+      'Allow-Control-Allow-Origin': '*',
+    };
+    const res = await fetch(
+      'https://api.cloudinary.com/v1_1/drzh7bbzz/image/upload',
+      options,
+    );
+    const payload = await res.json();
+    setIsLoading(false);
+    return payload.url;
   };
 
   const deletePlatoFn = plato => {

@@ -12,6 +12,7 @@ import CardEditarPlato from '../components/CardEditarPlato';
 import axios from '../api/axios';
 import {useRoute} from '@react-navigation/native';
 import ModalPoup from '../components/ModalPopUp';
+import Helper from '../helper/helper';
 
 const EditarMenu = ({navigation}) => {
   const route = useRoute();
@@ -79,45 +80,99 @@ const EditarMenu = ({navigation}) => {
     setVisiblePlatoEditado(true);
     setIsLoading(true);
 
-    const resPlatosEliminados = await eliminarMenu();
+    if (Helper.isEmpty(platosAEliminar)) {
+      const platos = platosTemp.map(
+        ({category, createdAt, updatedAt, imagen, ...keepAttrs}) => keepAttrs,
+      );
 
-    const platos = platosTemp.map(
-      ({category, createdAt, updatedAt, imagen, ...keepAttrs}) => keepAttrs,
-    );
-    console.log('json: ', platos);
-    const newPlatos = await Promise.all(
-      platos.map(async ({imagenes, ...plato}) => {
-        const newImages = await Promise.all(
-          imagenes.map(imagen => {
-            return getImageUrl(imagen.imagen, imagen.type, imagen.name);
-          }),
-        );
-        return {...plato, imagenes: newImages};
-      }),
-    );
+      const newPlatos = await Promise.all(
+        platos.map(async ({imagenes, ...plato}) => {
+          const newImages = await Promise.all(
+            imagenes.map(async imagen => {
+              const imageUrl = await getImageUrl(
+                imagen.imagen,
+                imagen.type,
+                imagen.name,
+              );
 
-    console.log('newPlatos', newPlatos);
-    // console.log('Datos editados a enviar al back: ', platos);
-    // const resEditedPlates = await Promise.all(
-    //   platos.map(plato => {
-    //     console.log('Datos editados a enviar al back: ', plato);
+              return {imagen: imageUrl};
+            }),
+          );
+          return {...plato, imagenes: newImages};
+        }),
+      );
 
-    //     const EDIT_PLATE_URL = '/plate';
-    //     const res = axios.put(EDIT_PLATE_URL, plato).catch(e => {
-    //       console.log(`Plate Delete error ${e}`);
-    //     });
-    //     return res;
-    //   }),
-    // );
-    // console.log("Edited plates with status: ", resEditedPlates[0].status);
-    // navigation.navigate('MisRestaurantes');
+      console.log('Plato procesado: ', newPlatos);
 
+      const resEditedPlates = await Promise.all(
+        newPlatos.map(platoAEditar => {
+          console.log('Datos editados a enviar al back: ', platoAEditar);
+
+          const EDIT_PLATE_URL = '/plate';
+          const res = axios.put(EDIT_PLATE_URL, platoAEditar).catch(e => {
+            console.log(`Plate Delete error ${e}`);
+          });
+          return res;
+        }),
+      );
+      setIsLoading(false);
+
+      console.log(
+        'El estado de los platos editados es: ',
+        resEditedPlates,
+      );
+      navigation.navigate('MisRestaurantes');
+    } else {
+      const resPlatosEliminados = await eliminarMenu();
+      console.log(
+        'El estado de los platos eliminardos es: ',
+        resPlatosEliminados,
+      );
+      const platos = platosTemp.map(
+        ({category, createdAt, updatedAt, imagen, ...keepAttrs}) => keepAttrs,
+      );
+      console.log('json: ', platos);
+      const newPlatos = await Promise.all(
+        platos.map(async ({imagenes, ...plato}) => {
+          const newImages = await Promise.all(
+            imagenes.map(async imagen => {
+              //return {imagen: getImageUrl(imagen.imagen, imagen.type, imagen.name)}
+              const imageUrl = await getImageUrl(
+                imagen.imagen,
+                imagen.type,
+                imagen.name,
+              );
+
+              return {imagen: imageUrl};
+            }),
+          );
+          return {...plato, imagenes: newImages};
+        }),
+      );
+
+      const resEditedPlates = await Promise.all(
+        newPlatos.map(platoAEditar => {
+          console.log('Datos editados a enviar al back: ', platoAEditar);
+
+          const EDIT_PLATE_URL = '/plate';
+          const res = axios.put(EDIT_PLATE_URL, platoAEditar).catch(e => {
+            console.log(`Plate Delete error ${e}`);
+          });
+          return res;
+        }),
+      );
+      setIsLoading(false);
+
+      console.log(
+        'El estado de los platos editados es: ',
+        resEditedPlates,
+      );
+      navigation.navigate('MisRestaurantes');
+    }
     setIsLoading(false);
   };
 
   const eliminarMenu = async () => {
-    //setVisiblePlatoCreado(true);
-
     console.log('Estos son los platos a eliminar: ', platosAEliminar);
     setIsLoading(true);
 
@@ -128,7 +183,7 @@ const EditarMenu = ({navigation}) => {
           restaurante_id: restaurant.id,
           activo: false,
         };
-        console.log('Datos editados a enviar al back: ', sendData);
+        console.log('Datos editados a enviar al back ELIMINAR: ', sendData);
 
         const DELETE_PLATE_URL = '/plate';
         const res = axios
