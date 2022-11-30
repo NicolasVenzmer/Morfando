@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, Image, Pressable} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
+import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
 
 const CardFavoritos = ({favorito, navigation, deleteFavorite}) => {
   //console.log("Card de Favoritos: ",favorito)

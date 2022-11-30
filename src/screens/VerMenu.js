@@ -3,6 +3,7 @@ import {View, Text, SafeAreaView, ScrollView, Image} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Plato from '../components/Plato';
 import {useRoute} from '@react-navigation/native';
+import Helper from '../helper/helper';
 
 const VerMenu = ({navigation}) => {
   const route = useRoute();
@@ -16,8 +17,6 @@ const VerMenu = ({navigation}) => {
       setEmptyMenus(false);
     }
   }, [route.params]);
-
-  //console.log('Ya cargue los menus: ', menus);
 
   return (
     <SafeAreaView
@@ -101,7 +100,7 @@ const VerMenu = ({navigation}) => {
                     {nombre}
                   </Text>
                   {platos.map((item, i) => (
-                      <Plato key={i} plato={item} />
+                    <Plato key={i} plato={item} />
                   ))}
                 </>
               ))}

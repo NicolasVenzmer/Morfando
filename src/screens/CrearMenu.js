@@ -5,6 +5,8 @@ import CardCrearPlato from '../components/CardCrearPlato';
 import axios from '../api/axios';
 import {useRoute} from '@react-navigation/native';
 import ModalPoup from '../components/ModalPopUp';
+import Helper from '../helper/helper';
+import Theme from '../assets/fonts/Theme';
 
 const CrearMenu = ({navigation}) => {
   const route = useRoute();
@@ -13,6 +15,7 @@ const CrearMenu = ({navigation}) => {
   const [platosTemp, setPlatosTemp] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [platoCreado, setVisiblePlatoCreado] = useState(false);
+  const [visibleEmpty, setVisibleEmpty] = useState(false);
 
   const getRestaurant = () => {
     if (!restaurant?.id) return;
@@ -62,26 +65,38 @@ const CrearMenu = ({navigation}) => {
 
   const crearMenu = () => {
     setIsLoading(true);
-    setVisiblePlatoCreado(true);
-    console.log('estoy creando el menu');
     const platos = platosTemp.map(({id, ...keepAttrs}) => keepAttrs);
     const sendData = {
       restaurante_id: restaurant.id,
       platos,
     };
-    console.log('Datos a enviar al back: ', sendData);
-    const CREATE_PLATE_URL = '/plate';
-    if (setVisiblePlatoCreado) {
-      axios
-        .post(CREATE_PLATE_URL, sendData)
-        .then(res => {
-          navigation.navigate('MisRestaurantes', {sendData});
-          console.log('Plate Created Data: ', res.data);
-        })
-        .catch(e => {
-          console.log(`Plate error ${e}`);
-        });
-    }
+    //console.log('Datos a enviar al back: ', sendData);
+    platos.map(plato => {
+      if (
+        Helper.isEmpty(plato.categoria_id) ||
+        Helper.isEmpty(plato.imagenes) ||
+        Helper.isEmpty(plato.ingredientes) ||
+        Helper.isEmpty(plato.nombre) ||
+        Helper.isEmpty(plato.precio)
+      ) {
+        setVisibleEmpty(true);
+      } else {
+        setVisiblePlatoCreado(true);
+        const CREATE_PLATE_URL = '/plate';
+        if (setVisiblePlatoCreado) {
+          axios
+            .post(CREATE_PLATE_URL, sendData)
+            .then(res => {
+              navigation.navigate('MisRestaurantes', {sendData});
+              console.log('Plate Created Data: ', res.data);
+            })
+            .catch(e => {
+              console.log(`Plate error ${e}`);
+            });
+        }
+      }
+    });
+
     setIsLoading(false);
   };
 
@@ -100,7 +115,7 @@ const CrearMenu = ({navigation}) => {
     };
   };
 
-  console.log('Estos son los platos a crear: ', platosTemp);
+  //console.log('Estos son los platos a crear: ', platosTemp);
 
   return (
     <SafeAreaView
@@ -251,6 +266,51 @@ const CrearMenu = ({navigation}) => {
               setVisiblePlatoCreado(false);
             }}>
             <Text style={{color: 'white', textAlign: 'center'}}>Aceptar</Text>
+          </Pressable>
+        </View>
+      </ModalPoup>
+      <ModalPoup visible={visibleEmpty}>
+        <View style={{alignItems: 'flex-start'}}>
+          <Text
+            style={{
+              fontSize: Theme.fonts.LARGE,
+              color: Theme.colors.SECONDARY,
+            }}>
+            Hay datos sin completar, por favor verificar.
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: '2%',
+              marginBottom: '2%',
+              marginHorizontal: '5%',
+            }}
+          />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: '1%',
+            marginBottom: '1%',
+            marginHorizontal: '1%',
+          }}>
+          <Pressable
+            style={{
+              alignSelf: 'center',
+              width: '100%',
+              marginVertical: 10,
+              paddingVertical: 10,
+              backgroundColor: Theme.colors.PRIMARY,
+              borderRadius: 30,
+            }}
+            onPress={() => {
+              setVisibleEmpty(false);
+            }}>
+            <Text style={{color: Theme.colors.THIRD, textAlign: 'center'}}>
+              Aceptar
+            </Text>
           </Pressable>
         </View>
       </ModalPoup>

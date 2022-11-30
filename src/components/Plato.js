@@ -89,7 +89,6 @@ const PlatoType = plato => {
 const Plato = ({plato}) => {
   const [image, setImage] = useState();
   const [activo, setActivo] = useState();
-  console.log('estoy en plato', plato);
   useEffect(() => {
     setImage(plato?.imagen[0]?.imagen);
     setActivo(plato.activo);
