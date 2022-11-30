@@ -175,7 +175,7 @@ const Favoritos = ({navigation}) => {
           width: '100%',
           height: '100%',
         }}>
-        {!favoritos?.length > 0 ? (
+        {newRestaurants?.length > 0 ? (
           <>
             <Pressable
               style={{

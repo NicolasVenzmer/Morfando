@@ -12,7 +12,6 @@ import CardEditarPlato from '../components/CardEditarPlato';
 import axios from '../api/axios';
 import {useRoute} from '@react-navigation/native';
 import ModalPoup from '../components/ModalPopUp';
-import { AsyncStorage } from 'react-native';
 
 const EditarMenu = ({navigation}) => {
   const route = useRoute();
