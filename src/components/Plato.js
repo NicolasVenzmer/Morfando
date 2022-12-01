@@ -127,6 +127,7 @@ const Plato = ({plato}) => {
               }}>
               <Text
                 style={{
+                  marginTop: 10,
                   color: 'black',
                   fontSize: 15,
                   fontWeight: '400',
