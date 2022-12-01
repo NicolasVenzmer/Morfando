@@ -88,6 +88,8 @@ const Plato = ({plato}) => {
             minHeight: 200,
             width: '80%',
             alignSelf: 'center',
+            alignItems: 'center',
+            justifyContent: 'center',
             borderRadius: 10,
             shadowColor: 'black',
             shadowOpacity: 0.26,
@@ -114,30 +116,33 @@ const Plato = ({plato}) => {
                 alignSelf: 'center',
                 justifyContent: 'center',
               }}
-              source={
-                image ? {uri: plato?.imagen[0]?.imagen} : DefaultRestaurantImage
-              }
+              source={{uri: plato?.imagen[0]?.imagen}}
             />
             <View
               style={{
                 width: '65%',
                 minHeight: 200,
+                alignItems: 'center',
+                justifyContent: 'flex-start',
               }}>
               <Text
                 style={{
                   color: 'black',
                   fontWeight: '400',
+                  alignSelf: 'flex-start',
                 }}>
                 {plato?.nombre}
               </Text>
               <Text
                 style={{
+                  alignSelf: 'flex-start',
                   color: 'grey',
                   fontWeight: '250',
                   bottom: 0,
                   fontSize: 12,
                   mrginLeft: 5,
                   marginRight: 5,
+                  marginTop: 5,
                 }}>
                 {plato?.ingredientes}
               </Text>
@@ -145,17 +150,21 @@ const Plato = ({plato}) => {
                 style={{
                   flexDirection: 'row',
                   width: '100%',
+                  position: 'absolute',
                   bottom: 0,
                   marginTop: 5,
                   mrginLeft: 5,
-                  marginRight: 5,
+                  marginRight: 10,
+                  marginBottom: 5,
+                  height: 30,
+                  alignSelf: 'flex-start',
                   alignItems: 'center',
-                  justifyContent: 'center',
                 }}>
                 <Text
                   style={{
                     color: 'red',
                     fontWeight: '250',
+                    alignSelf: 'flex-start',
                   }}>
                   {`$${plato.precio}` || 'No disponible'}
                 </Text>

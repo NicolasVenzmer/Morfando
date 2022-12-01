@@ -8,7 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AuthContext} from '../context/AuthContext';
 import DefaultImageUser from '../assets/Images/default-user-image.png';
 import axios from '../api/axios';
-const MINUTE_MS = 8000;
+const MINUTE_MS = 15000;
 
 const CustomDrawer = props => {
   const {logout, userInfo} = useContext(AuthContext);
@@ -42,7 +42,6 @@ const CustomDrawer = props => {
     getUserInfo();
     const interval = setInterval(() => {
       getUserInfo();
-      console.log('estoy en el timer');
     }, MINUTE_MS);
 
     return () => clearInterval(interval);

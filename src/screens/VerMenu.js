@@ -93,6 +93,7 @@ const VerMenu = ({navigation}) => {
                     style={{
                       color: 'black',
                       fontWeight: '350',
+                      fontSize: 20,
                       width: '80%',
                       alignSelf: 'center',
                       left: 5,
