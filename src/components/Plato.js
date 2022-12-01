@@ -128,6 +128,7 @@ const Plato = ({plato}) => {
               <Text
                 style={{
                   color: 'black',
+                  fontSize: 15,
                   fontWeight: '400',
                   alignSelf: 'flex-start',
                 }}>
