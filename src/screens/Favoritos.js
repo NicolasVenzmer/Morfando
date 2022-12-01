@@ -115,6 +115,7 @@ const Favoritos = ({navigation}) => {
         const dataDelete = [...favoritos];
         const filteredData = dataDelete.filter(el => el.id != favorito.id);
         setFavoritos(filteredData);
+        setNewRestaurants(filteredData)
       })
       .catch(e => {
         console.log(`Restaurants DELETE error ${e}`);

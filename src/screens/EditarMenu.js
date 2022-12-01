@@ -34,7 +34,10 @@ const EditarMenu = ({navigation}) => {
       .then(res => {
         const categorias = res.data[0].categorias;
         const dataList = categorias;
-        setCategoryOptions(dataList);
+        categoriaActiva = dataList.filter(
+          categoria => categoria.activo === true,
+        );
+        setCategoryOptions(categoriaActiva);
       })
       .catch(e => {
         console.log(`Restaurant GET error ${e}`);
@@ -117,10 +120,7 @@ const EditarMenu = ({navigation}) => {
       );
       setIsLoading(false);
 
-      console.log(
-        'El estado de los platos editados es: ',
-        resEditedPlates,
-      );
+      console.log('El estado de los platos editados es: ', resEditedPlates);
       navigation.navigate('MisRestaurantes');
     } else {
       const resPlatosEliminados = await eliminarMenu();
@@ -163,10 +163,7 @@ const EditarMenu = ({navigation}) => {
       );
       setIsLoading(false);
 
-      console.log(
-        'El estado de los platos editados es: ',
-        resEditedPlates,
-      );
+      console.log('El estado de los platos editados es: ', resEditedPlates);
       navigation.navigate('MisRestaurantes');
     }
     setIsLoading(false);

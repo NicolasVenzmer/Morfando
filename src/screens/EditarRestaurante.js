@@ -84,9 +84,7 @@ const EditarRestaurante = ({navigation}) => {
       axios
         .put(EDIT_RESTAURANT_URL, sendData)
         .then(res => {
-          if (res.status === 200) {
             navigation.navigate('MisRestaurantes', sendData);
-          }
           //console.log('Restaurant Edited Data: ', res.data);
         })
         .catch(e => {

@@ -28,7 +28,9 @@ const CrearMenu = ({navigation}) => {
       .then(res => {
         const categorias = res.data[0].categorias;
         const dataList = categorias;
-        setCategoryOptions(dataList);
+        categoriaActiva = dataList.filter(categoria => categoria.activo === true);
+        setCategoryOptions(categoriaActiva);
+        console.log("categorias",categoryOptions)
       })
       .catch(e => {
         console.log(`Restaurant GET error ${e}`);
