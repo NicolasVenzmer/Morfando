@@ -11,12 +11,9 @@ const PlatoType = plato => {
       <View
         style={{
           flexDirection: 'row',
-          bottom: 0,
-          alignSelf: 'flex-end',
-          alignItems: 'flex-end',
           justifyContent: 'flex-end',
-          width: '50%',
-          marginRight: 10,
+          alignSelf: 'flex-end',
+          marginLeft: 'auto',
         }}>
         <Image
           style={{
@@ -41,14 +38,9 @@ const PlatoType = plato => {
       <View
         style={{
           flexDirection: 'row',
-          bottom: 0,
           justifyContent: 'flex-end',
-          width: '50%',
-          heigh: '100%',
-          position: 'absolute',
-          bottom: 0,
-          right: 0,
-          marginRight: 10,
+          alignSelf: 'flex-end',
+          marginLeft: 'auto',
         }}>
         <Image
           style={{
@@ -66,14 +58,9 @@ const PlatoType = plato => {
     <View
       style={{
         flexDirection: 'row',
-        bottom: 0,
         justifyContent: 'flex-end',
-        width: '50%',
-        heigh: '100%',
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        marginRight: 10,
+        alignSelf: 'flex-end',
+        marginLeft: 'auto',
       }}>
       <Image
         style={{
@@ -98,6 +85,7 @@ const Plato = ({plato}) => {
       {activo ? (
         <View
           style={{
+            minHeight: 200,
             width: '80%',
             alignSelf: 'center',
             borderRadius: 10,
@@ -108,15 +96,11 @@ const Plato = ({plato}) => {
             elevation: 2,
             backgroundColor: 'white',
             marginBottom: 10,
-            minHeight: 150,
-            position: 'relative',
-            alignSelf: 'center',
-            justifyContent: 'center',
           }}>
           <View
             style={{
               width: '100%',
-              height: 100,
+              minHeight: 100,
               flexDirection: 'row',
               alignSelf: 'center',
               justifyContent: 'center',
@@ -124,7 +108,7 @@ const Plato = ({plato}) => {
             <Image
               style={{
                 width: 100,
-                height: 100,
+                minHeight: 100,
                 margin: 5,
                 borderRadius: 30,
                 alignSelf: 'center',
@@ -137,7 +121,7 @@ const Plato = ({plato}) => {
             <View
               style={{
                 width: '65%',
-                height: 100,
+                minHeight: 200,
               }}>
               <Text
                 style={{
@@ -157,18 +141,26 @@ const Plato = ({plato}) => {
                 }}>
                 {plato?.ingredientes}
               </Text>
-              <Text
+              <View
                 style={{
-                  color: 'red',
-                  fontWeight: '250',
-                  position: 'absolute',
+                  flexDirection: 'row',
+                  width: '100%',
                   bottom: 0,
+                  marginTop: 5,
                   mrginLeft: 5,
                   marginRight: 5,
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}>
-                {`$${plato.precio}` || 'No disponible'}
-              </Text>
-              <PlatoType {...plato} />
+                <Text
+                  style={{
+                    color: 'red',
+                    fontWeight: '250',
+                  }}>
+                  {`$${plato.precio}` || 'No disponible'}
+                </Text>
+                <PlatoType {...plato} />
+              </View>
             </View>
           </View>
         </View>

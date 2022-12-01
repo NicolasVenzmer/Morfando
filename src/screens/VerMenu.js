@@ -12,7 +12,8 @@ const VerMenu = ({navigation}) => {
 
   useEffect(() => {
     const plates = route.params.restaurant.categorias;
-    setMenus(plates);
+    const categoriaActiva = plates.filter(categoria => categoria.activo === true && categoria.platos.length);
+    setMenus(categoriaActiva);
     if (!!menus) {
       setEmptyMenus(false);
     }

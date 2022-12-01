@@ -11,7 +11,10 @@ const VerMenuConsumidor = ({navigation}) => {
 
   useEffect(() => {
     const plates = route.params.restaurant.categorias;
-    setMenus(plates);
+    const categoriaActiva = plates.filter(
+      categoria => categoria.activo === true && categoria.platos.length,
+    );
+    setMenus(categoriaActiva);
     if (!!menus) {
     }
   }, [route.params]);
@@ -80,31 +83,31 @@ const VerMenuConsumidor = ({navigation}) => {
             <Image source={require('../assets/Images/empty-restaurants.png')} />
           </View>
         ) : (
-            <View
-              style={{
-                width: '100%',
-              }}>
-              {menus.map(({nombre, platos}, index) => (
-                <>
-                  <Text
-                    key={index}
-                    style={{
-                      color: 'black',
-                      fontWeight: '350',
-                      width: '80%',
-                      alignSelf: 'center',
-                      left: 5,
-                      fontSize: 20,
-                      marginBottom: 5,
-                    }}>
-                    {nombre}
-                  </Text>
-                  {platos?.map((item, i) => (
-                    <Plato key={i} plato={item} />
-                  ))}
-                </>
-              ))}
-            </View>
+          <View
+            style={{
+              width: '100%',
+            }}>
+            {menus.map(({nombre, platos}, index) => (
+              <>
+                <Text
+                  key={index}
+                  style={{
+                    color: 'black',
+                    fontWeight: '350',
+                    width: '80%',
+                    alignSelf: 'center',
+                    left: 5,
+                    fontSize: 20,
+                    marginBottom: 5,
+                  }}>
+                  {nombre}
+                </Text>
+                {platos?.map((item, i) => (
+                  <Plato key={i} plato={item} />
+                ))}
+              </>
+            ))}
+          </View>
         )}
       </ScrollView>
     </SafeAreaView>
