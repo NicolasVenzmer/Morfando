@@ -55,6 +55,7 @@ const OpinarSobreRestaurante = ({navigation}) => {
       })
       .catch(e => {
         console.log(`Opinion error ${e}`);
+        navigation.navigate('RestaurantesDisponibles');
       });
     setVisibleOpinionCreada(true);
     setIsLoading(false);

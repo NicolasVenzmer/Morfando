@@ -167,6 +167,7 @@ const DetalleRestaurante = ({navigation}) => {
 
   useEffect(() => {
     const restaurant = route.params.restaurant;
+    console.log("esto es detalle: ", restaurant)
     setHorarios(
       restaurant?.horas.map(horario => ({
         dia: horario.dia.toUpperCase(),

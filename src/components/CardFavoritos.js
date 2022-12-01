@@ -1,11 +1,31 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image, Pressable} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
-import DefaultRestaurantImage from '../assets/Images/default-restaurant-image.png';
+import axios from '../api/axios';
 
 const CardFavoritos = ({favorito, navigation, deleteFavorite}) => {
-  //console.log("Card de Favoritos: ",favorito)
+  //console.log('Card de Favoritos: ', favorito);
+
+  const [restaurant, setRestaurant] = useState('');
+
+  const getRestaurants = async () => {
+    const GET_RESTAURANT_URL = `/restaurant${favorito.restaurante.id}`;
+    axios
+      .get(GET_RESTAURANT_URL)
+      .then(res => {
+        //console.log(res.data[0]);
+        setRestaurant(res.data[0]);
+      })
+      .catch(e => {
+        console.log(`Restaurants GET error ${e}`);
+      });
+      console.log('Card de Favoritos: ', restaurant);
+  };
+
+  useEffect(() => {
+    getRestaurants();
+  }, []);
 
   return (
     <>
